@@ -48,7 +48,7 @@ class LoginWeb extends Model
             $user = $this->getUser();
 
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
+                $this->addError($attribute, 'Usuario o contraseña incorrecta.');
                 Yii::$app->session->remove('user');
             }
         }
@@ -61,7 +61,7 @@ class LoginWeb extends Model
     public function login()
     {
         if ($this->validate()) {
-            //return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
             $this->getUser();
             return true;
         }
@@ -76,8 +76,9 @@ class LoginWeb extends Model
     public function getUser()
     {
         $session = Yii::$app->session;
+
         if (empty(Yii::$app->session->get('user'))) {
-            $usuario = Usuarios::findOne(['email' => $this->username, 'estado' => 1]);
+            $usuario = Usuarios::findOne(['usuario' => $this->username, 'estado' => 1]);
             if ($usuario)
                 $session->set('user', $usuario);
         }

@@ -42,10 +42,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombre', 'apellido', 'pais', 'ciudad', 'email', 'contrasena'], 'required'],
+            [['nombrecompleto',  'pais', 'ciudad', 'email', 'contrasena'], 'required'],
             [['fecha_nacimiento', 'fecha_registro'], 'safe'],
-            [['nombre'], 'string', 'max' => 250],
-            [['apellido'], 'string', 'max' => 255],
+            [['nombrecompleto'], 'string', 'max' => 250],
             [['direccion', 'email', 'movil'], 'string', 'max' => 100],
             [['telefono', 'pais', 'ciudad'], 'string', 'max' => 50],
             [['contrasena'], 'string', 'max' => 240],
@@ -62,8 +61,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             'idusuario' => 'Idusuario',
-            'nombre' => 'Nombre',
-            'apellido' => 'Apellido',
+            'nombrecompleto' => 'Nombre',
             'direccion' => 'Direccion',
             'telefono' => 'Telefono',
             'pais' => 'Pais',
@@ -82,7 +80,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     //
     public static function findIdentity($id)
     {
-        return static::findOne(['idusuario' => $id, 'estado' => true]);
+        return static::findOne(['idusuario' => $id, 'estado' => '1']);
     }
 
     /**
@@ -137,7 +135,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function generateAuthKey()
     {
-        $this->authKey = Security::generateRandomKey();
+        $this->authKey = (new \yii\base\Security)->generateRandomKey();
     }
 
     /**
@@ -166,7 +164,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $conf = Configuracion::find()->one();
         $mensaje = "";
-        $mensaje = $mensaje . "usuario: " . $this->nombre . ' ' . $this->apellido;
+        $mensaje = $mensaje . "usuario: " . $this->nombrecompleto;
         $mensaje = $mensaje . "<br>email: " . $this->email;
 
         if ($this->validate()) {

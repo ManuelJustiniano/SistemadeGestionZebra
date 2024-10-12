@@ -2,8 +2,8 @@
 
 namespace app\controllers;
 
-use app\models\Diseño;
-use app\models\DiseñoSearch;
+use app\models\Tareas;
+use app\models\TareasSearch;
 use app\models\Noticias;
 use app\models\NoticiasGaleria;
 use app\models\NoticiasSearch;
@@ -51,7 +51,7 @@ class DiseñoController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new DiseñoSearch();
+        $searchModel = new TareasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setSort([
             'defaultOrder' => ['idevento' => SORT_DESC]]);
@@ -80,7 +80,7 @@ class DiseñoController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Diseño();
+        $model = new Tareas();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->fecha_registro = date('Y-m-d H:i:s');
@@ -145,7 +145,7 @@ class DiseñoController extends Controller
     {
         if (!Yii::$app->request->isAjax)
             $this->redirect(['index']);
-        $model = new Diseño();
+        $model = new Tareas();
         $model = $model->findOne(['idevento' => $id]);
         $model->estado = (string)!$model->estado;
         $model->save();

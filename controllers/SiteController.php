@@ -1,19 +1,26 @@
 <?php
 
 namespace app\controllers;
-use app\components\Correos;
-use app\models\ContactForm;
-use app\models\Diseño;
+use app\components\AuthService;
+use app\components\InterfaceAuth;
 use app\models\LoginWeb;
-use app\models\Noticias;
-use app\models\Noticias_Search;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\services\InterfaceService;
+use app\components\InterfaceComponents;
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
-    private $eventService;
+    private $authService;
+    public function init()
+    {
+        parent::init();
+        $this->authService = Yii::$container->get('app\components\InterfaceAuth');
+    }
+    public function behaviors()
+    {
+        return [];
+    }
     public function actions()
     {
         return [
@@ -33,39 +40,25 @@ class SiteController extends Controller
      * @return string
      */
 
-
-    public function __construct($id, $module, InterfaceService $eventService, $config = [])
-    {
-        $this->eventoService = $eventService;
-        parent::__construct($id, $module, $config);
-    }
-
-
     public function actionIndex()
     {
         return $this->render('index');
     }
-
     /**
      * Login action.
      *
      * @return string
      */
-
-
     public function actionLogin()
     {
         $model = new LoginWeb();
-        if (!empty(Yii::$app->session->get('user'))) {
-            return $this->goHome();
+        if ($this->authService->login($model)) {
+            return $this->redirect(['cuenta/cuenta']);
         }
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(Yii::$app->request->referre0opr);
-        }
-        return $this->render('login', ['model' => $model]);
+        return $this->render('login', [
+            'model' => $model,
+        ]);
     }
-
-
     /**
      * Logout action.
      *
@@ -73,26 +66,8 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        $sess = Yii::$app->session;
-        if ($sess->has('user')) {
-            $sess->remove('user');
-            //unset($sess['user']);
-        }
-        return $this->goHome();
-    }
-
-
-    public function actionEventos()
-    {
-        //return $this->refresh();
-        return $this->render('eventos');
-    }
-
-    public function actionRegistrareventos()
-    {
-        $model = new Diseño();
-        $this->eventoService->nuevosEventos($model);
-        return $this->render('registrareventos', ['model' => $model]);
+        $this->authService->logout();
+        return $this->redirect(['login']);
     }
 
 }

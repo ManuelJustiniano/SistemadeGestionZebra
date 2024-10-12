@@ -9,7 +9,7 @@ return [
     'id' => 'practical-b-tests',
     'basePath' => dirname(__DIR__),    
     'language' => 'en-US',
-    'services' => [
+    'components' => [
         'db' => $db,
         'mailer' => [
             'useFileTransport' => true,

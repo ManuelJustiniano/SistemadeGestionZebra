@@ -12,7 +12,7 @@ $config = [
         '@images'=> __DIR__.'/../imagen',
         '@imagesUrl'=>'/imagen',
     ],*/
-    'services' => [
+    'components' => [
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
@@ -28,12 +28,6 @@ $config = [
             ],
         ],
 
-        'container' => [
-            'definitions' => [
-                \app\services\EventService::class => \app\services\EventService::class,
-            ],
-        ],
-
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'PEi6ICsok3vWiJSJJtQV2JZ6D-jk5gkh',
@@ -45,9 +39,14 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Usuarios', // Clase que maneja la autenticación
             'enableAutoLogin' => true,
+            'loginUrl' => ['site/login'],
+            'idParam' => 'user_id', // Parámetro para la sesión del usuario
         ],
+
+
+
         /*'session' => [
             'savePath' => __DIR__ . '/../runtime/sessions'
         ],*/
@@ -119,6 +118,7 @@ $config = [
 
 
     ],
+
     'modules' => [
         'gridview' => [
             'class' => '\kartik\grid\Module'
@@ -148,4 +148,6 @@ if (YII_ENV_DEV) {
     ];
 }
 
+Yii::$container->set('app\components\InterfaceAuth', 'app\components\AuthService');
+Yii::$container->set('app\components\InterfaceTarea', 'app\components\TareasService');
 return $config;

@@ -107,8 +107,8 @@ class ConfiguracionController extends Controller
                     return $this->redirect(['index']);
                 } else {
                     if ($model->foto) {
-                        if (file_exists(Yii::$app->basePath . "/imagen/banners/" . $model->foto)) {
-                            unlink(Yii::$app->basePath . "/imagen/banners/" . $model->foto);
+                        if (file_exists(Yii::$app->basePath . "/imagen/cliente/" . $model->foto)) {
+                            unlink(Yii::$app->basePath . "/imagen/cliente/" . $model->foto);
                         }
                     }
                 }
@@ -136,8 +136,8 @@ class ConfiguracionController extends Controller
             if ($model->validate()) {
 
                 if ($model->upload($name)) {
-                    if (file_exists(Yii::$app->basePath . "/imagen/banners/" . $model->foto)) {
-                        unlink(Yii::$app->basePath . "/imagen/banners/" . $model->foto);
+                    if (file_exists(Yii::$app->basePath . "/imagen/cliente/" . $model->foto)) {
+                        unlink(Yii::$app->basePath . "/imagen/cliente/" . $model->foto);
                     }
                     $model->foto = $name . '.' . $model->file->extension;
                 }

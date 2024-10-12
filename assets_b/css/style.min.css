@@ -374,8 +374,8 @@ a:hover, a:focus {
 }
 
 .header {
-    border-top: 0.3rem solid #f0c2df;
-    background-color: #fff
+
+    background-color: #262625
 }
 
 .header .container, .header .container-fluid {
@@ -1073,7 +1073,7 @@ a:hover, a:focus {
 }
 
 .header-contact a {
-    color: inherit
+    color: #1f5f96
 }
 
 .header-contact a:hover, .header-contact a:focus {
@@ -1473,10 +1473,10 @@ a:hover, a:focus {
 
 .menu > li > a {
     ont-weight: 500;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-family: "Oswald", sans-serif;
     background-color: transparent;
-    color: #1e41a2;
+    color: white;
     padding: 1.25rem 2rem;
     letter-spacing: .05rem;
 }
@@ -1568,8 +1568,9 @@ a:hover, a:focus {
 }
 
 .menu > li:hover > a, .menu > li.show > a, .menu > li.active > a {
-    color: #282d3b;
-    background-color: #fff
+    color: #1f5f96;
+    background-color: TRANSPARENT;
+
 }
 
 .menu.sf-arrows > li.show > a.sf-with-ul::before {
@@ -1914,7 +1915,7 @@ a:hover, a:focus {
 .footer {
     flex: 0 0 auto;
     color: #fff;
-    background-color: #000;
+    background-color: #262625;
     font-size: 1.3rem;
     line-height: 1.4
 }
@@ -10867,3 +10868,13 @@ label {
 
 .spacitop {
     padding: 20px 50px;}
+
+
+.mobile-menu-toggler{
+    position: absolute;
+    right: 0;
+}
+
+.navto ul.nav.nav-pills{
+    display: block;
+}

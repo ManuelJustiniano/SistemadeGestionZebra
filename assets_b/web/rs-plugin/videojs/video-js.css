@@ -639,7 +639,7 @@ control positioning and full window mode. **
 
   font-family: Arial, sans-serif;
   /* Turn off user selection (text highlighting) by default.
-     The majority of player services will not be text blocks.
+     The majority of player components will not be text blocks.
      Text areas will need to turn user selection back on. */
 
   /* user-select */

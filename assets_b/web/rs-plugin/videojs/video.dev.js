@@ -1214,7 +1214,7 @@ vjs.Component = vjs.CoreObject.extend({
     this.childIndex_ = {};
     this.childNameIndex_ = {};
 
-    // Add any child services in options
+    // Add any child components in options
     this.initChildren();
 
     this.ready(ready);
@@ -1224,7 +1224,7 @@ vjs.Component = vjs.CoreObject.extend({
 });
 
 /**
- * Dispose of the component and all child services.
+ * Dispose of the component and all child components.
  */
 vjs.Component.prototype.dispose = function(){
   this.trigger('dispose');
@@ -1282,7 +1282,7 @@ vjs.Component.prototype.options_;
  * Whenever a property is an object on both options objects
  * the two properties will be merged using vjs.obj.deepMerge.
  *
- * This is used for merging options for child services. We
+ * This is used for merging options for child components. We
  * want it to be easy to override individual options on a child
  * component without having to rewrite all the other default options.
  *
@@ -1396,14 +1396,14 @@ vjs.Component.prototype.name = function(){
 };
 
 /**
- * Array of child services
+ * Array of child components
  * @type {Array}
  * @private
  */
 vjs.Component.prototype.children_;
 
 /**
- * Returns array of all child services.
+ * Returns array of all child components.
  * @return {Array}
  */
 vjs.Component.prototype.children = function(){
@@ -1411,7 +1411,7 @@ vjs.Component.prototype.children = function(){
 };
 
 /**
- * Object of child services by ID
+ * Object of child components by ID
  * @type {Object}
  * @private
  */
@@ -1426,7 +1426,7 @@ vjs.Component.prototype.getChildById = function(id){
 };
 
 /**
- * Object of child services by Name
+ * Object of child components by Name
  * @type {Object}
  * @private
  */
@@ -1528,7 +1528,7 @@ vjs.Component.prototype.removeChild = function(component){
 };
 
 /**
- * Initialize default child services from options
+ * Initialize default child components from options
  */
 vjs.Component.prototype.initChildren = function(){
   var options = this.options_;
@@ -1536,13 +1536,13 @@ vjs.Component.prototype.initChildren = function(){
   if (options && options['children']) {
     var self = this;
 
-    // Loop through services and add them to the player
+    // Loop through components and add them to the player
     vjs.obj.each(options['children'], function(name, opts){
-      // Allow for disabling default services
+      // Allow for disabling default components
       // e.g. vjs.options['children']['posterImage'] = false
       if (opts === false) return;
 
-      // Allow waiting to add services until a specific event is called
+      // Allow waiting to add components until a specific event is called
       var tempAdd = function(){
         // Set property name on player. Could cause conflicts with other prop names, but it's worth making refs easy.
         self[name] = self.addChild(name, opts);
@@ -1622,7 +1622,7 @@ vjs.Component.prototype.isReady_;
 /**
  * Trigger ready as soon as initialization is finished.
  *   Allows for delaying ready. Override on a sub class prototype.
- *   If you set this.isReadyOnInitFinish_ it will affect all services.
+ *   If you set this.isReadyOnInitFinish_ it will affect all components.
  *   Specially used when waiting for the Flash player to asynchrnously load.
  *   @type {Boolean}
  *   @private
@@ -2440,7 +2440,7 @@ vjs.Player = vjs.Component.extend({
 
     // Run base component initializing with new options.
     // Builds the element through createEl()
-    // Inits and embeds any child services in opts
+    // Inits and embeds any child components in opts
     vjs.Component.call(this, this, options, ready);
 
     // Update controls className. Can't do this when the controls are initially
@@ -3321,7 +3321,7 @@ vjs.Player.prototype.error = function(){ return this.techGet('error'); };
 vjs.Player.prototype.ended = function(){ return this.techGet('ended'); };
 vjs.Player.prototype.seeking = function(){ return this.techGet('seeking'); };
 
-// When the player is first initialized, trigger activity so services
+// When the player is first initialized, trigger activity so components
 // like the control bar show themselves if needed
 vjs.Player.prototype.userActivity_ = true;
 vjs.Player.prototype.reportUserActivity = function(event){
