@@ -37,7 +37,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
     <?php echo $form->field($model, 'idcategoria')->widget(Select2::classname(), [
 
-        'data' => \app\models\Categoria::getSelectMenu('noticias'),
+        'data' => \app\models\Tareas::getSelectMenu('noticias'),
         'language' => 'es',
         'options' => [
             'placeholder' => 'Categorias',

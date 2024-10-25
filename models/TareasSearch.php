@@ -6,7 +6,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * NoticiasSearch represents the model behind the search form about `app\models\Noticias`.
+ * TareasSearch represents the model behind the search form about `app\models\Tareas`.
  */
 class TareasSearch extends Tareas
 {
@@ -16,8 +16,8 @@ class TareasSearch extends Tareas
     public function rules()
     {
         return [
-            [['idtarea'], 'integer'],
-            [['titulo', 'descripcion', 'fechainicio', 'fechavencimiento', 'titulo', 'descripcion', 'prioridad','idproyecto', 'idusuario'], 'safe'],
+            [['idtarea',  'modulo'], 'integer'],
+            [['titulo', 'descripcion', 'estado'], 'safe'],
         ];
     }
 
@@ -58,14 +58,12 @@ class TareasSearch extends Tareas
         // grid filtering conditions
         $query->andFilterWhere([
             'idtarea' => $this->idtarea,
-            'idproyecto' => $this->idproyecto,
-            'fecha_registro' => $this->fecha_registro,
-            'fechainicio' => $this->fechafin,
-            'prioridad' => $this->prioridad,
+            'modulo' => $this->modulo,
         ]);
 
         $query->andFilterWhere(['like', 'titulo', $this->titulo])
-            ->andFilterWhere(['like', 'descripcion', $this->descripcion])           ;
+            ->andFilterWhere(['like', 'descripcion', $this->descripcion])
+            ->andFilterWhere(['like', 'estado', $this->estado]);
 
         return $dataProvider;
     }

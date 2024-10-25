@@ -17,7 +17,7 @@ class UsuariosSearch extends Usuarios
     {
         return [
             [['idusuario'], 'integer'],
-            [['nombre', 'apellido', 'direccion', 'telefono', 'pais', 'ciudad', 'email', 'contrasena', 'fecha_nacimiento', 'movil', 'fecha_registro', 'estado', 'sexo', 'activo'], 'safe'],
+            [['nombrecompleto', 'direccion', 'telefono', 'pais', 'ciudad', 'email', 'contrasena', 'fecha_nacimiento', 'movil', 'fecha_registro', 'estado', 'sexo', 'cargo', 'usuario', 'empresa'], 'safe'],
         ];
     }
 
@@ -59,11 +59,11 @@ class UsuariosSearch extends Usuarios
         $query->andFilterWhere([
             'idusuario' => $this->idusuario,
             'fecha_nacimiento' => $this->fecha_nacimiento,
-            'fecha_registro' => $this->fecha_registro,
+            'nombrecompleto' => $this->nombrecompleto,
         ]);
 
-        $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'apellido', $this->apellido])
+        $query->andFilterWhere(['like', 'nombrecompleto', $this->nombrecompleto])
+            ->andFilterWhere(['like', 'usuario', $this->usuario])
             ->andFilterWhere(['like', 'direccion', $this->direccion])
             ->andFilterWhere(['like', 'telefono', $this->telefono])
             ->andFilterWhere(['like', 'pais', $this->pais])
@@ -73,7 +73,8 @@ class UsuariosSearch extends Usuarios
             ->andFilterWhere(['like', 'movil', $this->movil])
             ->andFilterWhere(['like', 'estado', $this->estado])
             ->andFilterWhere(['like', 'sexo', $this->sexo])
-            ->andFilterWhere(['like', 'activo', $this->activo]);
+            ->andFilterWhere(['like', 'tipo_usuario', $this->tipo_usuario])
+            ->andFilterWhere(['like', 'empresa', $this->empresa]);
 
         return $dataProvider;
     }

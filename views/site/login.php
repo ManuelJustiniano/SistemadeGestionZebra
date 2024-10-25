@@ -1,93 +1,93 @@
 <?php
-
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-
-/* @var $model app\models\LoginWeb */
-
+use app\assets_b\AppAsset;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
-
-
-
+use yii\helpers\Url;
+use yii\bootstrap\NavBar;
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
+AppAsset::register($this);
 ?>
 
-
-
-
 <div class="container">
-    <div class="row">
-        <br> <br>
-        <div class="col-md-6 col-md-offset-3">
-
-            <div class="panel panel-default carw">
-                <div class="panel-heading">
-                    <h1 class="text-center">Iniciar Session</h1>
-                </div>
-
-                <div class="panel-body">
-                    <br>
+    <div class="row g-0 app-auth-wrapper">
+        <div class="col-12 auth-main-col text-center p-5">
+            <div class="d-flex flex-column align-content-end">
+                <div class="app-auth-body mx-auto">
+                    <h2 class="auth-heading text-center mb-5">INICIAR SESION</h2>
+                    <div class="auth-form-container text-start">
 
 
-                    <?php $form = ActiveForm::begin(['class' => 'form-signin']); ?>
 
-                    <?= $form->field($model, 'username', [
-                        'inputOptions' => ['placeholder' => 'Usuario'],
-                        'inputTemplate' => '<div class="form-group has-feedback">{input}<span class="glyphicon glyphicon-user form-control-feedback"></span></div>',
-                    ])->label(false) ?>
-                    <?= $form->field($model, 'password', [
-                        'inputOptions' => ['placeholder' => 'Contraseña'],
-                        'inputTemplate' => '<div class="form-group has-feedback">{input}<span class="glyphicon glyphicon-lock form-control-feedback"></span></div>',
-                    ])->label(false)->passwordInput() ?>
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <div class="checkbox icheck">
-                                <label>
-                                    <input type="checkbox" value="remember-me"> Recordarme
-                                </label>
+
+                        <?php $form = ActiveForm::begin(['class' => 'auth-form login-form']); ?>
+
+                            <div class="email mb-3">
+
+
+                                <?= $form->field($model, 'username', [
+                                    'inputOptions' => ['placeholder' => 'Usuario', 'class' => 'form-control signin-email'],
+                                ])->label(false) ?>
+
+                            </div><!--//form-group-->
+                            <div class="password mb-3">
+
+                                <?= $form->field($model, 'password', [
+                                    'inputOptions' => ['placeholder' => 'Contraseña', 'class' =>'form-control signin-password' ],
+
+                                ])->label(false)->passwordInput() ?>
+
+
+
+                                <div class="extra mt-3 row justify-content-between">
+                                    <div class="col-6">
+
+
+                                        <?= $form->field($model, 'rememberMe')->checkbox([
+                                            'template' => "<div class=\"\">{input} <label>Recuerdame</label></div>\n<div class=\"col-lg-12\">{error}</div>",
+
+                                        ]) ?>
+
+
+
+
+
+                                    </div><!--//col-6-->
+                                    <div class="col-6">
+                                        <div class="forgot-password text-end">
+                                            <?= Html::a('¿Has olvidado tu contraseña?',['/cuenta/forget'],['class'=>'olvidaste'])?>
+                                        </div>
+                                    </div><!--//col-6-->
+                                </div><!--//extra-->
+                            </div><!--//form-group-->
+                            <div class="text-center">
+                                <?= Html::submitButton('Ingresar', ['class' => 'btn app-btn-primary w-100 theme-btn mx-auto', 'name' => 'login-button']) ?>
                             </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">Ingresar</button>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-
-                    <?php ActiveForm::end(); ?>
-
-
-                    <?php $form = ActiveForm::begin([
-                        'id' => 'login-form',
-                        'layout' => 'horizontal',
-                        'fieldConfig' => [
-                            'template' => "{label}\n<div class=\"col-lg-8 col-md-10\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-                            'labelOptions' => ['class' => 'col-lg-3 col-md-3 control-label'],
-                        ],
-                    ]); ?>
+                        <?php ActiveForm::end(); ?>
 
 
 
 
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-8  col-lg-offset-3">
-                            <?= Html::a('¿Has olvidado tu contraseña?',['/cuenta/forget'],['class'=>'olvidaste'])?>
-                        </div>
 
 
-                    </div>
+                        <!-- <div class="auth-option text-center pt-5">No Account? Sign up <a class="text-link" href="signup.html" >here</a>.</div> -->
+                    </div><!--//auth-form-container-->
+
+                </div><!--//auth-body-->
 
 
-                    <?php ActiveForm::end(); ?>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
+            </div><!--//flex-column-->
+        </div><!--//auth-main-col-->
 
 
-<br> <br>
+    </div><!--//row-->
+
+
+
+
+
+
+
+
+
+

@@ -1,18 +1,27 @@
+<?php
+$user = Yii::$app->session->get('user');
+?>
 
-        <div class="row top-spacing4 bottom-spacing3 navto">
-            <div class="col-sm-4">
-                <?= $this->render('menu') ?>
-            </div>
-            <div class="col-sm-8 pad50">
+<?= $this->render('widgets/menu') ?>
+
+
+
+
+<div class="app-wrapper">
+
+
 
                 <?php
                 if (isset($render)) {
                     switch ($render) {
-                        case 'datos':
-                            echo $this->render('datos', ['model' => $model]);
+                        case 'cuenta':
+                            echo $this->render('cuenta', ['model' => $model]);
                             break;
-                        case 'deseos':
-                            $this->render('deseos');
+                        case 'updateperfil':
+                            echo $this->render('updateperfil', ['model' => $model]);
+                            break;
+                        case 'updatepasswordperfil':
+                            echo $this->render('updatepasswordperfil', ['model' => $model]);
                             break;
                         case 'historial':
                             echo $this->render('historial', ['model' => $model]);
@@ -20,6 +29,7 @@
                     }
                 }
                 ?>
-                </div>
-            </div>
-        </div>
+                <!--/container-main-->
+
+
+            </div><!--//app-wrapper-->

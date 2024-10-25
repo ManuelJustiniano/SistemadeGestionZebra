@@ -2,139 +2,83 @@
 
 namespace app\models;
 
-use yii\base\Security;
-use yii\db\ActiveRecord;
-use yii\web\IdentityInterface;
+use Yii;
+use yii\base\Model;
 
 /**
- * This is the model class for table "administrador".
+ * LoginForm is the model behind the login form.
  *
- * @property integer $idadmin
- * @property string $nombre
- * @property string $mail
- * @property string $usuario
- * @property string $contrasena
- * @property string $fecha_registro
- * @property string $estado
- * @property integer $tipo_admin
- * @property string $authKey
- * @property string $accessToken
+ * @property User|null $user This property is read-only.
+ *
  */
-class Administrador extends ActiveRecord implements IdentityInterface
+class Administrador extends Model
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'administrador';
-    }
+    public $username;
+    public $password;
+    public $rememberMe = true;
+
+    private $_user = false;
+
 
     /**
-     * @inheritdoc
+     * @return array the validation rules.
      */
     public function rules()
     {
         return [
-            [['fecha_registro', 'authKey', 'accessToken'], 'required'],
-            [['fecha_registro'], 'safe'],
-            [['tipo_admin'], 'integer'],
-            [['nombre'], 'string', 'max' => 150],
-            [['mail'], 'string', 'max' => 50],
-            [['usuario'], 'string', 'max' => 25],
-            [['contrasena'], 'string', 'max' => 100],
-            [['estado'], 'string', 'max' => 1],
-            [['authKey', 'accessToken'], 'string', 'max' => 255],
+            // username and password are both required
+            [['username', 'password'], 'required'],
+            // rememberMe must be a boolean value
+            ['rememberMe', 'boolean'],
+            // password is validated by validatePassword()
+            ['password', 'validatePassword'],
         ];
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'idadmin' => 'Idadmin',
-            'nombre' => 'Nombre',
-            'mail' => 'Mail',
-            'usuario' => 'Usuario',
-            'contrasena' => 'Contrasena',
-            'fecha_registro' => 'Fecha Registro',
-            'estado' => 'Estado',
-            'tipo_admin' => 'Tipo Admin',
-            'authKey' => 'Auth Key',
-            'accessToken' => 'Access Token',
-        ];
-    }
-
-    //
-    public static function findIdentity($id)
-    {
-        return static::findOne(['idadmin' => $id, 'estado' => true]);
-    }
-
-    /**
-     * Finds user by username
+     * Validates the password.
+     * This method serves as the inline validation for password.
      *
-     * @param  string $username
-     * @return static|null
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
      */
-    public static function findByUsername($usuario)
+    public function validatePassword($attribute, $params)
     {
-        return static::findOne(['usuario' => $usuario]);
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+
+            if (!$user || !$user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Incorrect username or password.');
+            }
+        }
     }
 
     /**
-     * Finds an identity by the given token.
+     * Logs in a user using the provided username and password.
+     * @return bool whether the user is logged in successfully
+     */
+    public function login()
+    {
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+        }
+        return false;
+    }
+
+    /**
+     * Finds user by [[username]]
      *
-     * @param string $token the token to be looked for
-     * @return IdentityInterface|null the identity object that matches the given token.
+     * @return User|null
      */
-    public static function findIdentityByAccessToken($token, $type = null)
+
+    public function getUser()
     {
-        return static::findOne(['accessToken' => $token]);
+        if ($this->_user === false) {
+            $this->_user = Administrador::findByUsername($this->username);
+        }
+
+        return $this->_user;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
 
-    /**
-     * @return string current user auth key
-     */
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    /**
-     * @param string $authKey
-     * @return boolean if auth key is valid for current user
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAuthKey() === $authKey;
-    }
-
-    /**
-     * Generates "remember me" authentication key
-     */
-    public function generateAuthKey()
-    {
-        $this->authKey = Security::generateRandomKey();
-    }
-
-    /**
-     * Validates password
-     * @param  string $password password to validate
-     * @return boolean if password provided is valid for current user
-     */
-    public function validatePassword($contrasena)
-    {
-        return $this->contrasena === md5($contrasena);
-    }
 }

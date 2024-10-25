@@ -2,8 +2,8 @@
 
 namespace app\modules\admin\controllers;
 
-use app\models\Categoria;
-use app\models\CategoriaSearch;
+use app\models\Tareas;
+use app\models\TareasSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
@@ -11,7 +11,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /**
- * CategoriasController implements the CRUD actions for Categoria model.
+ * CategoriasController implements the CRUD actions for Tareas model.
  */
 class CategoriasController extends Controller
 {
@@ -41,12 +41,12 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Lists all Categoria models.
+     * Lists all Tareas models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new CategoriaSearch();
+        $searchModel = new TareasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -56,7 +56,7 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Displays a single Categoria model.
+     * Displays a single Tareas model.
      * @param integer $id
      * @return mixed
      */
@@ -68,13 +68,13 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Creates a new Categoria model.
+     * Creates a new Tareas model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Categoria();
+        $model = new Tareas();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->idpadre = (int)$model->idpadre;
@@ -88,7 +88,7 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Updates an existing Categoria model.
+     * Updates an existing Tareas model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -107,7 +107,7 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Deletes an existing Categoria model.
+     * Deletes an existing Tareas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -120,15 +120,15 @@ class CategoriasController extends Controller
     }
 
     /**
-     * Finds the Categoria model based on its primary key value.
+     * Finds the Tareas model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Categoria the loaded model
+     * @return Tareas the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Categoria::findOne($id)) !== null) {
+        if (($model = Tareas::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -140,7 +140,7 @@ class CategoriasController extends Controller
         //$out[] = ['id' => 0, 'name' => ''];
         if (isset($_POST['depdrop_parents'])) {
             $id = end($_POST['depdrop_parents']);
-            $list = Categoria::findAll(['modulo' => $id]);
+            $list = Tareas::findAll(['modulo' => $id]);
             $selected = null;
             if ($id != null && count($list) > 0) {
                 $selected = '';

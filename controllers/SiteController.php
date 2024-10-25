@@ -1,13 +1,8 @@
 <?php
-
 namespace app\controllers;
-use app\components\AuthService;
-use app\components\InterfaceAuth;
 use app\models\LoginWeb;
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\components\InterfaceComponents;
 
 class SiteController extends BaseController
 {
@@ -42,6 +37,7 @@ class SiteController extends BaseController
 
     public function actionIndex()
     {
+        $this->checkUserAuthentication();
         return $this->render('index');
     }
     /**
@@ -51,10 +47,17 @@ class SiteController extends BaseController
      */
     public function actionLogin()
     {
+
+        $this->layout = "login";
         $model = new LoginWeb();
-        if ($this->authService->login($model)) {
-            return $this->redirect(['cuenta/cuenta']);
+
+
+        if ($model->load(Yii::$app->request->post()) && $this->authService->login($model)) {
+            $user = Yii::$app->session->get('user');
+            return $this->redirect($this->authService->getRedirectRoute($user));
         }
+
+
         return $this->render('login', [
             'model' => $model,
         ]);

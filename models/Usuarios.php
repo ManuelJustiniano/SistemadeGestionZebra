@@ -42,8 +42,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombrecompleto',  'pais', 'ciudad', 'email', 'contrasena'], 'required'],
-            [['fecha_nacimiento', 'fecha_registro'], 'safe'],
+            [['nombrecompleto',  'tipo_usuario', 'telefono', 'email', 'contrasena', 'usuario', 'empresa'], 'required'],
+            [['fecha_nacimiento', 'fecha_registro', 'cargo'], 'safe'],
             [['nombrecompleto'], 'string', 'max' => 250],
             [['direccion', 'email', 'movil'], 'string', 'max' => 100],
             [['telefono', 'pais', 'ciudad'], 'string', 'max' => 50],
@@ -60,22 +60,44 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'idusuario' => 'Idusuario',
-            'nombrecompleto' => 'Nombre',
+            'idusuario' => 'ID',
+            'nombrecompleto' => 'Nombre completo',
             'direccion' => 'Direccion',
-            'telefono' => 'Telefono',
+            'telefono' => 'Telefono Fijo',
             'pais' => 'Pais',
             'ciudad' => 'Ciudad',
             'email' => 'Email',
-            'contrasena' => 'Contrasena',
+            'contrasena' => 'Contraseña',
             'fecha_nacimiento' => 'Fecha Nacimiento',
-            'movil' => 'Movil',
+            'movil' => 'Celular',
             'fecha_registro' => 'Fecha Registro',
             'estado' => 'Estado',
             'sexo' => 'Sexo',
+            'cargo' => 'Puesto de trabajo',
         ];
     }
 
+
+    public static function getSelectCliente()
+    {
+        $result =[];
+        $temp = Usuarios::find()->where(['tipo_usuario' => '4'])->all();
+        foreach ($temp as $item) {
+            $result[$item->idusuario]="".$item->nombrecompleto." - ".$item->empresa;
+        }
+        return $result;
+    }
+
+
+    public static function getSelectConsultor()
+    {
+        $result =[];
+        $temp = Usuarios::find()->where(['tipo_usuario' => '3'])->all();
+        foreach ($temp as $item) {
+            $result[$item->idusuario]="".$item->nombrecompleto." - ".$item->empresa;
+        }
+        return $result;
+    }
 
     //
     public static function findIdentity($id)

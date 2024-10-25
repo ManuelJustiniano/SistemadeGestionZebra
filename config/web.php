@@ -38,15 +38,13 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+
+
+
         'user' => [
-            'identityClass' => 'app\models\Usuarios', // Clase que maneja la autenticación
+            'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-            'loginUrl' => ['site/login'],
-            'idParam' => 'user_id', // Parámetro para la sesión del usuario
         ],
-
-
-
         /*'session' => [
             'savePath' => __DIR__ . '/../runtime/sessions'
         ],*/
@@ -149,5 +147,12 @@ if (YII_ENV_DEV) {
 }
 
 Yii::$container->set('app\components\InterfaceAuth', 'app\components\AuthService');
+Yii::$container->set('app\components\InterfaceCuenta', 'app\components\CuentaService');
 Yii::$container->set('app\components\InterfaceTarea', 'app\components\TareasService');
+Yii::$container->set('app\components\InterfaceAdmin', 'app\components\AdminService');
+Yii::$container->set('app\components\InterfaceNoti', 'app\components\NotiService');
+Yii::$container->set('app\components\InterfaceCorreos', 'app\components\Correos');
+Yii::$container->set('app\components\InterfaceGestor', 'app\components\GestorService');
+Yii::$container->set('app\components\InterfaceProyectos', 'app\components\ProyectosService');
+Yii::$container->set('app\components\InterfaceCorreos', 'app\components\Correos');
 return $config;

@@ -70,7 +70,7 @@ class ReCaptchaValidator extends Validator
     {
         $message = $this->uncheckedMessage ?: Yii::t(
             'yii',
-            '{attribute} cannot be blank.',
+            '{attribute} no puede estar vacio.',
             ['attribute' => $model->getAttributeLabel($attribute)]
         );
 

@@ -17,19 +17,27 @@ class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot/assets_b';
     public $baseUrl = '@web/assets_b';
-    public $css = [            
+    public $css = [
+        'css/portal.css',
 
-    'css/bootstrap.min.css',
-    'css/style.min.css',
+
+
+
     ];
     public $js = [
+        'plugins/fontawesome/js/all.min.js',
+  'plugins/popper.min.js',
+  'plugins/bootstrap/js/bootstrap.min.js',
+  'plugins/chart.js/chart.min.js',
+  'js/index-charts.js',
+  'js/app.js',
 
 
-   'js/bootstrap.bundle.min.js',
-   'js/plugins.min.js',
-   'js/main.min.js',
 
-    ];
+
+
+
+        ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',

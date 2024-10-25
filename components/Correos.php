@@ -8,8 +8,29 @@ use yii\base\Component;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class Correos extends Component
+class Correos implements InterfaceCorreos
 {
+
+
+
+    public function enviarCorreoBienvenida($model, $password)
+    {
+        $conf = Configuracion::find()->one();
+        $mensaje = Html::tag('h1', '¡Te damos la bienvenida, ' . $model->nombrecompleto . '!');
+        $mensaje .= Html::tag('p', 'Gracias por ser parte de Zebra Brand Consulting');
+        $mensaje .= Html::tag('h5', 'Tus datos de acceso son:');
+        $mensaje .= Html::tag('p', Html::tag('strong', 'Usuario:') . ' ' . $model->usuario);
+        $mensaje .= Html::tag('p', Html::tag('strong', 'Contraseña:') . ' ' . $password);
+        $mensaje .= Html::tag('p', 'Puedes entrar a tu perfil <a target="_blank" href="' . Url::to(['cliente/cuenta'], true) . '">clic aquí</a>');
+
+        Yii::$app->mailer->compose()
+            ->setTo($model->email)
+            ->setFrom([$conf->email => $conf->titulo_pagina])
+            ->setSubject($conf->titulo_pagina . ' - Registro completo')
+            ->setHtmlBody($mensaje)
+            ->send();
+    }
+
 
 
     static public function nuevoEvento($model)
@@ -28,9 +49,7 @@ class Correos extends Component
         $mensaje2 .= Html::tag('p', Html::tag('strong', 'Email:') . ' ' . Html::encode($model->email));
 
 
-        /*/$mensaje2 .= Html::tag('p', 'sigue el link para ver el recalamo completo <a target="_blank" href="' . Url::to(['admin/reclamos/view?id='.$model->idreclamo], true) . '">clic aquí</a>');
-*/
-                   // Asegúrate de que el correo electrónico está definido
+
 
                   return Yii::$app->mailer->compose('layouts/template2', [
                     'content' => $mensaje2,

@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\components\InterfaceCuenta;
+use app\models\ChangePasswordForm;
 use app\models\Configuracion;
 use app\models\Forget;
 use app\models\Usuarios;
+use app\models\Usuariosperfil;
 use app\models\UsuariosSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -15,6 +18,8 @@ use yii\web\UploadedFile;
 
 class CuentaController extends Controller
 {
+
+    private $cuentaService;
     /**
      * @inheritdoc
      */
@@ -29,52 +34,69 @@ class CuentaController extends Controller
     }
 
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionView()
+
+    public function __construct($id, $module, InterfaceCuenta $cuentaService, $config = [])
     {
-        $searchModel = new UsuariosSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->setSort([
-            'defaultOrder' => ['fecha_registro' => SORT_ASC]]);
-        return $this->render('cuenta/view', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $this->cuentaService = $cuentaService;
+        parent::__construct($id, $module, $config);
     }
-
-    /**
-     * Login action.
-     *
-     * @return string
-     */
-
-
 
 
     public function actionCuenta()
     {
-        if (Yii::$app->user->isGuest) {
+        $model = $this->cuentaService->obtenerUsuarioSesion();
+        if ($model === null) {
             return $this->redirect(['site/login']);
         }
-        $userId = Yii::$app->user->identity->idusuario; // Usa la propiedad identity para obtener el usuario autenticado
-        $model = Usuarios::findOne(['idusuario' => $userId]);
-        if ($model->load(Yii::$app->request->post())) {
-            if (Yii::$app->session->get('user')['contrasena'] != md5($model->contrasena)) {
-                $model->contrasena = md5($model->contrasena);
-            }
-            if ($model->save()) {
-                Yii::$app->session->setFlash('mensaje', ['message' => 'Registro Realizado', 'type' => 'success']);
-                $this->redirect(Yii::$app->request->referrer);
-            }
-        }
-        return $this->render('cuenta', [
+        return $this->render('perfil', [
             'model' => $model,
+            'render' => 'perfil',
         ]);
     }
+
+
+    public function actionUpdateperfil()
+    {
+        $model = $this->cuentaService->obtenerUsuarioSesion();
+        if ($model === null) {
+            return $this->redirect(['site/login']);
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($this->cuentaService->actualizarUsuario($model)) {
+                Yii::$app->session->setFlash('mensaje', ['message' => 'Tu perfil ha sido actualizado correctamente.', 'type' => 'success']);
+                return $this->redirect(['cuenta']);
+            }
+        }
+
+        return $this->render('cuenta', [
+            'model' => $model,
+            'render' => 'updateperfil',
+        ]);
+    }
+
+
+    public function actionUpdatepasswordperfil()
+    {
+        $model = $this->cuentaService->obtenerUsuarioSesion();
+        if ($model === null) {
+            return $this->redirect(['site/login']);
+        }
+
+        $changePasswordForm = new ChangePasswordForm();
+        if ($changePasswordForm->load(Yii::$app->request->post()) && $changePasswordForm->validate()) {
+            if ($this->cuentaService->cambiarPassword($model, $changePasswordForm->newPassword)) {
+                Yii::$app->session->setFlash('mensaje', ['message' => 'Tu contraseña ha sido actualizada correctamente1222.', 'type' => 'success']);
+                return $this->redirect(['cuenta']);
+            }
+        }
+
+        return $this->render('cuenta', [
+            'model' => $changePasswordForm,
+            'render' => 'updatepasswordperfil',
+        ]);
+    }
+
 
 
 
