@@ -23,6 +23,7 @@ class AdministradorController extends Controller
 
     private $adminService;
     private $cuentaService;
+    private $notiService;
     /**
      * @inheritdoc
      */
@@ -38,10 +39,11 @@ class AdministradorController extends Controller
 
 
 
-    public function __construct($id, $module, InterfaceAdmin $adminService, InterfaceCuenta $cuentaService, $config = [])
+    public function __construct($id, $module, InterfaceAdmin $adminService,  InterfaceCuenta $cuentaService, InterfaceNoti $notiService,$config = [])
     {
         $this->adminService = $adminService;
         $this->cuentaService = $cuentaService;
+        $this->notiService = $notiService;
         parent::__construct($id, $module, $config);
     }
 
@@ -91,13 +93,11 @@ class AdministradorController extends Controller
             Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
             return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
         }
-        $model = new Usuarios();  // Crear un nuevo usuario
-        // Obtener la contraseña desde el POST
+        $model = new Usuarios();
         $password = Yii::$app->request->post('password');
-
-
         $resultado = $this->adminService->nuevoUsuario($model, $password);
-        if ($resultado['success']) {
+
+        if ($resultado['exito']) {
             return $this->redirect(['index']);
         }
         return $this->render('cuenta', [
@@ -143,13 +143,5 @@ class AdministradorController extends Controller
             'render' => 'updatepasswordperfil',
         ]);
     }
-
-
-
-
-
-
-
-
 
 }

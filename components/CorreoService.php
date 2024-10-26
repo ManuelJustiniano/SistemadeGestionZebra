@@ -8,17 +8,17 @@ use yii\base\Component;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-class Correos implements InterfaceCorreos
+class CorreoService implements InterfaceCorreos
 {
 
 
 
-    public function enviarCorreoBienvenida($model, $password)
+    public function enviarCorreodeBienvenida($model, $password)
     {
         $conf = Configuracion::find()->one();
         $mensaje = Html::tag('h1', '¡Te damos la bienvenida, ' . $model->nombrecompleto . '!');
         $mensaje .= Html::tag('p', 'Gracias por ser parte de Zebra Brand Consulting');
-        $mensaje .= Html::tag('h5', 'Tus datos de acceso son:');
+        $mensaje .= Html::tag('h5', 'Sus datos de acceoso:');
         $mensaje .= Html::tag('p', Html::tag('strong', 'Usuario:') . ' ' . $model->usuario);
         $mensaje .= Html::tag('p', Html::tag('strong', 'Contraseña:') . ' ' . $password);
         $mensaje .= Html::tag('p', 'Puedes entrar a tu perfil <a target="_blank" href="' . Url::to(['cliente/cuenta'], true) . '">clic aquí</a>');

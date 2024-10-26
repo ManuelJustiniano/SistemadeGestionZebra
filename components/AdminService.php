@@ -10,11 +10,13 @@ use Yii;
 class AdminService implements InterfaceAdmin
 {
 
-    private $correos;
+    private $correoService;
+    private $notiService;
 
-    public function __construct(InterfaceCorreos $correos)
+    public function __construct(InterfaceCorreos $correoService, InterfaceNoti $notiService)
     {
-        $this->correos = $correos;
+        $this->correoService = $correoService;
+        $this->notiService = $notiService;
     }
 
     public function obtenerUsuarioSesion()
@@ -53,23 +55,22 @@ class AdminService implements InterfaceAdmin
 
     public function nuevoUsuario($model, $password)
     {
-
+      $mensajeExito = 'El usuario ha sido creado correctamente.';
+      $mensajeError = 'El usuario no se ha sido podido crear correctamente.';
       $model = new Usuarios();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-            $this->correos->enviarCorreoBienvenida($model, $password);
-
-            Yii::$app->session->setFlash('mensaje', [
-                'message' => 'Se creó el usuario correctamente.',
-                'type' => 'success'
-            ]);
+            $this->correoService->enviarCorreodeBienvenida($model, $password);
+            $this->notiService->setFlashMensaje($mensajeExito, 'success');
             return [
-                'success' => true,
+                'exito' => true,
+                'mensaje' => $mensajeExito,
                 'model' => $model,
             ];
         }
+        $this->notiService->setFlashMensaje($mensajeError, 'danger');
         return [
-            'success' => false,
+            'exito' => false,
+            'mensaje' => $mensajeError,
             'model' => $model,
         ];
 

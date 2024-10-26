@@ -10,7 +10,7 @@ class Validaciones extends Component
 
 
         if ($model->save(false)) {
-            Correos::nuevoEvento($model);
+            CorreoService::nuevoEvento($model);
             Yii::$app->session->setFlash('mensaje', [
                 'type' => 'success',
                 'message' => 'Evento registrado! Se revisará la información proporcionada y se le notificará si el evento fue aprobado o denegado y si tiene alguna observación.',
