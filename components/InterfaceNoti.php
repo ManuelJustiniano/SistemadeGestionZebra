@@ -3,6 +3,7 @@ namespace app\components;
 
 interface InterfaceNoti
 {
-    public function setFlashMensaje($mensaje,  $tipo);
+    public function agregarMensajeExito($mensaje);
+    public function agregarMensajeError($mensaje);
 
 }

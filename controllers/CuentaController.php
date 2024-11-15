@@ -76,6 +76,30 @@ class CuentaController extends Controller
     }
 
 
+    public function actionForget()
+    {
+        $this->layout = "login";
+        $model = new Forget();
+        if ($model->load(Yii::$app->request->post())) {
+            $resultadoRecuperacion = $this->cuentaService->recuperacionCuenta($model->email);
+            if ($resultadoRecuperacion['exito']) {
+                Yii::$app->session->setFlash('success', ['message' => $resultadoRecuperacion['mensaje'], 'type' => 'success']);
+            } else {
+                Yii::$app->session->setFlash('error', ['message' => $resultadoRecuperacion['mensaje']]);
+
+            }
+            return $this->refresh();
+
+        }
+
+        return $this->render('forget', [
+            'model' => $model,
+        ]);
+    }
+
+
+
+
     public function actionUpdatepasswordperfil()
     {
         $model = $this->cuentaService->obtenerUsuarioSesion();

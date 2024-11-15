@@ -95,3 +95,21 @@ if (searchMobileTrigger && searchBox) {
 		}
 	});
 }
+document.getElementById('toggle-password').addEventListener('click', function () {
+	const passwordField = document.getElementById('usuarios-contrasena');
+	const icon = this.querySelector('svg'); // Cambiar para buscar el SVG
+
+	if (icon) {
+		if (passwordField.type === 'password') {
+			passwordField.type = 'text';
+			// Cambiar el ícono de "mostrar" a "ocultar"
+			icon.classList.remove('fa-eye');
+			icon.classList.add('fa-eye-slash');
+		} else {
+			passwordField.type = 'password';
+			// Cambiar el ícono de "ocultar" a "mostrar"
+			icon.classList.remove('fa-eye-slash');
+			icon.classList.add('fa-eye');
+		}
+	}
+});

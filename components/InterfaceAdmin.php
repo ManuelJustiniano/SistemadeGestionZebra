@@ -7,6 +7,7 @@ interface InterfaceAdmin
 
     public function listUsuarios($queryParams);
 
-    public function nuevoUsuario($model, $password);
+    public function nuevoUsuario($postData);
+    public function actualizarUsuario($dates, $id);
 
 }

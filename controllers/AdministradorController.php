@@ -39,11 +39,10 @@ class AdministradorController extends Controller
 
 
 
-    public function __construct($id, $module, InterfaceAdmin $adminService,  InterfaceCuenta $cuentaService, InterfaceNoti $notiService,$config = [])
+    public function __construct($id, $module, InterfaceAdmin $adminService,  InterfaceCuenta $cuentaService,$config = [])
     {
         $this->adminService = $adminService;
         $this->cuentaService = $cuentaService;
-        $this->notiService = $notiService;
         parent::__construct($id, $module, $config);
     }
 
@@ -53,57 +52,14 @@ class AdministradorController extends Controller
     }
     public function actionCuenta()
     {
-
         $model = $this->adminService->obtenerUsuarioSesion();
         if ($model === null) {
             Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
             return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
         }
-
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'perfil',
-        ]);
-    }
-
-
-    public function actionUsuarioslist()
-    {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
-
-        $resultadoBusqueda = $this->adminService->listUsuarios(Yii::$app->request->queryParams);
-        return $this->render('listau', [
-            'searchModel' => $resultadoBusqueda['searchModel'],
-            'dataProvider' => $resultadoBusqueda['dataProvider'],
-            'render' => 'listau',
-        ]);
-
-    }
-
-
-    public function actionCreate()
-    {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-        $model = new Usuarios();
-        $password = Yii::$app->request->post('password');
-        $resultado = $this->adminService->nuevoUsuario($model, $password);
-
-        if ($resultado['exito']) {
-            return $this->redirect(['index']);
-        }
-        return $this->render('cuenta', [
-            'model' => $resultado['model'],
-            'render' => 'createusuario',
-
         ]);
     }
 
@@ -126,8 +82,6 @@ class AdministradorController extends Controller
         ]);
     }
 
-
-
     public function actionUpdatepasswordperfil()
     {
         $model = $this->adminService->obtenerUsuarioSesion();
@@ -143,5 +97,87 @@ class AdministradorController extends Controller
             'render' => 'updatepasswordperfil',
         ]);
     }
+
+
+    public function actionUsuarioslist()
+    {
+        $modelu = $this->adminService->obtenerUsuarioSesion();
+        if ($modelu === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
+        }
+        $resultadoBusqueda = $this->adminService->listUsuarios(Yii::$app->request->queryParams);
+        return $this->render('listau', [
+            'searchModel' => $resultadoBusqueda['searchModel'],
+            'dataProvider' => $resultadoBusqueda['dataProvider'],
+            'render' => 'listau',
+        ]);
+
+    }
+
+
+    public function actionCreate()
+    {
+        $modelu = $this->adminService->obtenerUsuarioSesion();
+        if ($modelu === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
+        }
+
+        $resultado = $this->adminService->nuevoUsuario(Yii::$app->request->post());
+        if ($resultado['exito']) {
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('cuenta', [
+            'model' => $resultado['model'] ?? new Usuarios(),
+            'render' => 'createusuario',
+
+        ]);
+    }
+
+    public function actionView($id)
+    {
+        $modelu = $this->adminService->obtenerUsuarioSesion();
+        if ($modelu === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
+        }
+        $model = $this->adminService->obtenerCliente($id);
+        if ($model === null) {
+            Yii::$app->session->setFlash('error', 'Cliente no encontrado.');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('cuenta', [
+            'model' => $model,
+            'render' => 'verusuario',
+
+        ]);
+
+
+
+
+    }
+
+    public function actionUpdate($id)
+    {
+        $modelu = $this->adminService->obtenerUsuarioSesion();
+        if ($modelu === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
+        }
+        $resultado = $this->adminService->actualizarUsuario(Yii::$app->request->post(), $id);
+        if ($resultado['exito']) {
+            return $this->redirect(['view', 'id' => $id]);
+        }
+        return $this->render('cuenta', [
+            'model' => $resultado['model'] ?? new Usuarios(),
+            'render' => 'updateusuario',
+
+        ]);
+    }
+
+
 
 }

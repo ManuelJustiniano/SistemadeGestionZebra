@@ -43,19 +43,6 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 
 
-        <div class="form-group password-wrapper">
-            <?= $form->field($model, 'contrasena', [
-                'template' => "{label}\n<div class=\"\">{input}
-            <div class=\"input-group-append\">
-                <button type=\"button\" id=\"toggle-password\" class=\"btn btn-secondary\">
-                    <i class=\"fas fa-eye\"></i>
-                </button>
-            </div></div>\n{error}",
-                'options' => ['class' => 'flex-grow-1 mb-0'] // Ajuste para ocupar espacio necesario
-            ])->passwordInput(['class' => 'form-control']) ?>
-        </div>
-
-
 
 
 

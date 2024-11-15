@@ -8,7 +8,7 @@ $this->title = 'ACTUALIZAR PASSWORD';
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
-        <h1 class="app-page-title">Actualizar mi contraseña</h1>
+        <h1 class="app-page-title">Cambiar contraseña usuario</h1>
         <hr class="mb-4">
         <div class="row g-4 settings-section">
 
@@ -18,12 +18,11 @@ $this->title = 'ACTUALIZAR PASSWORD';
                     <div class="app-card-body">
 
 
-                            <?php $form = ActiveForm::begin([
-                                'id' => 'frmContact',
-                                'class' => 'settings-form',
-                                'action' => ['administrador/updatepasswordperfil'],
-                                'method' => 'post'
-                            ]); ?>
+                        <?php $form = ActiveForm::begin([
+                            'id' => 'frmContact',
+                            'class' => 'settings-form',
+                            'method' => 'post'
+                        ]); ?>
                         <div class="col-12 col-lg-12">
                             <div class="mb-3">
                                 <?= $form->field($model, 'currentPassword')->passwordInput(['class' => 'form-control', 'placeholder' => '']) ?>

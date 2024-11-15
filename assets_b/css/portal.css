@@ -6646,6 +6646,18 @@ textarea.form-control-lg {
     }
 }
 
+@media (max-width: 767px) {
+    .mspeo .col-sm-9 {
+        width: 100%!important;
+    }
+
+    #toggle-password{
+        position: absolute!important;
+        right: 2%;
+        margin-top: -36px;
+    }
+}
+
 @media (max-width: 575.98px) {
     .offcanvas-sm.offcanvas-start {
         top: 0;
@@ -14750,4 +14762,78 @@ th a, td, th {
 
 .form-group {
     margin-bottom: 5px;
+}
+
+
+ .panel-default.carw h1 {
+     color: white;
+
+ }
+ .panel-default.carw {
+     margin-top: 80px;
+ }
+ .panel-default.carw .panel-heading {
+    color: #ffffff;
+    background-color: #21517a;
+    border-color: #21517a;
+}
+
+ .labellefto label.control-label{
+     text-align: left!important;
+ }
+
+
+ .btform{
+
+
+ padding: 10px 30px;
+font-size: 18px;
+margin-top: 20px;  }
+
+
+
+
+
+
+/* Flexbox para alinear el input de contraseña y el botón */
+.password-wrapper {
+    display: flex;
+    align-items: center;
+}
+.flex-grow-1.mb-0 .col-sm-9{
+
+}
+.password-wrapper .form-control {
+}
+
+#toggle-password {
+    outline: none; /* Elimina el contorno por defecto */
+}
+
+#toggle-password:focus {
+    box-shadow: 0 0 5px #0056b3; /* Agrega un contorno sombreado para indicar foco */
+    border-color: #0056b3; /* Cambia el color del borde si lo prefieres */
+}
+
+#toggle-password {
+    position: relative;
+    margin-left: -51px;
+    outline: none;
+    background: #21517a;
+    color: white !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 0;
+    height: 36px; /* Ajustar al tamaño del campo de entrada */
+}
+
+.flex-grow-1 {
+    flex-grow: 1; /* Hacer que el campo de contraseña crezca según sea necesario */
+}
+
+
+.svg-inline--fa {
+
+    color: white!important;
 }

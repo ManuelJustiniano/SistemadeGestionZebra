@@ -42,13 +42,16 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['nombrecompleto',  'tipo_usuario', 'telefono', 'email', 'contrasena', 'usuario', 'empresa'], 'required'],
+            [['nombrecompleto',  'tipo_usuario', 'telefono', 'email', 'usuario', 'empresa'], 'required'],
+            [['email'], 'unique', 'message' => 'Este correo ya se encuentra registrado.'],
+            [['usuario'], 'unique', 'message' => 'Este usuario ya se encuentra registrado.'],
             [['fecha_nacimiento', 'fecha_registro', 'cargo'], 'safe'],
-            [['nombrecompleto'], 'string', 'max' => 250],
+            [['nombrecompleto', 'contrasena'], 'string', 'max' => 250],
             [['direccion', 'email', 'movil'], 'string', 'max' => 100],
             [['telefono', 'pais', 'ciudad'], 'string', 'max' => 50],
-            [['contrasena'], 'string', 'max' => 240],
-            [['estado'], 'string', 'max' => 1],
+            ['contrasena', 'string', 'min' => 8, 'max' => 255], // Asegúrate de que la longitud máxima sea suficiente
+            [['contrasena'], 'string', 'min' => 8, 'message' => 'La contraseña debe tener al menos 8 caracteres.'],
+            ['contrasena', 'match', 'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/', 'message' => 'La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.'],[['estado'], 'string', 'max' => 1],
             [['sexo'], 'string', 'max' => 10],
             [['email'], 'email'],
         ];
@@ -75,6 +78,19 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             'sexo' => 'Sexo',
             'cargo' => 'Puesto de trabajo',
         ];
+    }
+
+
+    public static function getTipoUsuario()
+    {
+        $result =[];
+        $prioridad = [
+            '2' =>'Gestor de Proyecto',
+            '3' => 'Consultor de Marketing',
+            '4' => 'Cliente',
+        ];
+        $result = $prioridad;
+        return $result;
     }
 
 
@@ -165,9 +181,9 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
      * @param  string $password password to validate
      * @return boolean if password provided is valid for current user
      */
-    public function validatePassword($contrasena)
+    public function validatePassword($password)
     {
-        return $this->contrasena === md5($contrasena);
+        return Yii::$app->security->validatePassword($password, $this->contrasena);
     }
 
 
@@ -182,39 +198,5 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
         return ($tmp > 0);
     }
 
-    public function send()
-    {
-        $conf = Configuracion::find()->one();
-        $mensaje = "";
-        $mensaje = $mensaje . "usuario: " . $this->nombrecompleto;
-        $mensaje = $mensaje . "<br>email: " . $this->email;
 
-        if ($this->validate()) {
-
-            Yii::$app->mailer->compose('layouts/template', [
-                'titulo' => 'Gracias por Registrate',
-                'titulo2' => '',
-                'contenido' => $mensaje,
-                'config' => Configuracion::find()->one(),
-            ])
-                ->setTo($this->email)
-                ->setFrom([$conf['email'] => $conf['nombre_empresa']])
-                ->setSubject($conf->titulo_pagina . ' -Registro completo')
-                ->send();
-
-            Yii::$app->mailer->compose('layouts/template', [
-                'titulo' => 'Registro de un usuario',
-                'titulo2' => '',
-                'contenido' => $mensaje,
-                'config' => $conf,
-            ])
-                ->setTo($conf['email'])
-                ->setFrom([$conf['email'] => $conf['nombre_empresa']])
-                ->setSubject($conf->titulo_pagina . ' -Registro Realizado')
-                ->send();
-
-            return true;
-        }
-        return false;
-    }
 }

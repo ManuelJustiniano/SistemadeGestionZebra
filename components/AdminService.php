@@ -6,6 +6,7 @@ use app\models\TareasSearch;
 use app\models\Usuarios;
 use app\models\UsuariosSearch;
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class AdminService implements InterfaceAdmin
 {
@@ -25,7 +26,6 @@ class AdminService implements InterfaceAdmin
         if (empty($user)) {
             return null;
         }
-
 
         $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
 
@@ -53,29 +53,75 @@ class AdminService implements InterfaceAdmin
 
     }
 
-    public function nuevoUsuario($model, $password)
+    public function obtenerCliente($id)
     {
-      $mensajeExito = 'El usuario ha sido creado correctamente.';
-      $mensajeError = 'El usuario no se ha sido podido crear correctamente.';
-      $model = new Usuarios();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->correoService->enviarCorreodeBienvenida($model, $password);
-            $this->notiService->setFlashMensaje($mensajeExito, 'success');
-            return [
-                'exito' => true,
-                'mensaje' => $mensajeExito,
-                'model' => $model,
-            ];
+        return $this->findModel($id);
+    }
+
+    public function nuevoUsuario($postData)
+    {
+
+        $model = new Usuarios();
+        if ($model->load($postData) && $model->validate()) {
+            $password = $postData['contrasena'] ?? '';
+            $model->contrasena = Yii::$app->security->generatePasswordHash($password);
+            if ($model->save()) {
+                $correoEnviado = $this->correoService->enviarCorreodeBienvenida($model);
+                if ($correoEnviado) {
+                    $this->notiService->agregarMensajeExito('El usuario ha sido creado correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }
+            } else {
+                $this->notiService->agregarMensajeError('Error al crear usuario. Inténtelo más tarde.');
+                return ['exito' => false, 'model' => $model];
+            }
         }
-        $this->notiService->setFlashMensaje($mensajeError, 'danger');
-        return [
-            'exito' => false,
-            'mensaje' => $mensajeError,
-            'model' => $model,
-        ];
+        //$this->notiService->agregarMensajeError('Error al validar usuario.');
+        return ['exito' => false, 'model' => $model];
 
 
 
     }
+
+
+
+    public function actualizarUsuario($dates, $id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load($dates) && $model->validate()) {
+            if ($model->save()) {
+                $this->notiService->agregarMensajeExito('El cliente ha sido actualizado correctamente.');
+                return [
+                    'exito' => true,
+                    'model' => $model
+                ];
+            } else {
+                $this->notiService->agregarMensajeError('Error al actualizar el cliente. Inténtelo más tarde.');
+                return [
+                    'exito' => false,
+                    'model' => $model
+                ];
+            }
+        }
+       /* $this->notiService->agregarMensajeError('Error al validar los datos del cliente.');
+        return [
+            'exito' => false,
+            'model' => $model
+        ];*/
+    }
+
+
+    public function findModel($id)
+    {
+        if (($model = Usuarios::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('La página solicitada no existe.');
+        }
+    }
+
 
 }

@@ -21,8 +21,8 @@ class Forget extends Model
     public function rules()
     {
         return [
-            [['email'], 'required'],
-            ['email', 'email'],
+            [['email'], 'required', 'message' => 'El correo electrónico no puede estar vacío.'],
+            [['email'], 'email', 'message' => 'Por favor, introduce un correo electrónico válido.'],
         ];
     }
 
@@ -33,29 +33,5 @@ class Forget extends Model
         ];
     }
 
-    public function send($id)
-    {
-        $pass = Usuarios::findOne(['idusuario' => $id]);
-        $conf = Configuracion::find()->one();
-        $randomString = Yii::$app->getSecurity()->generateRandomString(6);
-        $pass['contrasena'] = md5($randomString);
 
-        if ($this->validate()) {
-            Yii::$app->mailer->compose('layouts/template', [
-                'titulo' => 'Recuperacion de contraseña',
-                'titulo2' => 'Estimado Usuario se reinicio su contraseña a una nueva.',
-                'contenido' => "<p><strong>Nombre: </strong>{$pass->nombrecompleto}</p>" .
-                    "<p><strong>Correo: </strong>{$this->email}</p>" .
-                    "<p><strong>Contraseña:</strong>{$randomString}</p>",
-                'config' => Configuracion::find()->one(),
-            ])
-                ->setTo($this->email)
-                ->setFrom([$conf->email => $conf->nombre_empresa])
-                ->setSubject('Recuperacion de contraseña')
-                ->send();
-            $pass->save();
-            return true;
-        }
-        return false;
-    }
 }

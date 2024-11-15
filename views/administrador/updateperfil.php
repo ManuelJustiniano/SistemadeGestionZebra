@@ -5,12 +5,7 @@ use yii\helpers\Html;
 $this->title = 'ACTUALIZAR CUENTA';
 ?>
 
-<style>
-    .help-block {
 
-        display: none;
-    }
-</style>
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">

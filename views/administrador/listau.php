@@ -80,6 +80,33 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
                                             'columns' => [
                                                 ['class' => 'yii\grid\SerialColumn'],
                                                 'nombrecompleto',
+                                                'email',
+                                                [
+                                                    'header' => 'tipo usuario',
+                                                    'value' => function ($model) {
+                                                        $tiposUsuario = \app\models\Usuarios::getTipoUsuario();
+                                                        if (!empty($model->tipo_usuario) && isset($tiposUsuario[$model->tipo_usuario])) {
+                                                            return $tiposUsuario[$model->tipo_usuario];
+                                                        }
+                                                        return '';
+                                                    },
+                                                    'filter' => \kartik\widgets\Select2::widget([
+                                                        'model' => $searchModel,
+                                                        'attribute' => 'tipo_usuario',
+                                                        'data' => \app\models\Usuarios::getTipoUsuario(),
+                                                        'language' => 'es',
+                                                        'options' => [
+                                                            'placeholder' => 'Tipo Usuario',
+                                                            //'multiple' => true,
+                                                        ],
+                                                        'pluginOptions' => [
+                                                            'templateResult' => new \yii\web\JsExpression('format'),
+                                                            'templateSelection' => new \yii\web\JsExpression('format'),
+                                                            'escapeMarkup' => $escape,
+                                                            'allowClear' => true
+                                                        ],
+                                                    ])
+                                                ],
 
 
 

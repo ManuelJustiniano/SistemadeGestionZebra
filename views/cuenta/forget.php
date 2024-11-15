@@ -7,10 +7,11 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-
+\app\assets_b\AppAsset::register($this);
 $model = new  \app\models\Forget();
-$this->title = 'Login';
+$this->title = 'Recuperar Contraseña';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -18,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="container">
     <div class="row">
-        <br> <br>
         <div class="col-md-6 col-md-offset-3">
 
             <div class="panel panel-default carw">
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p> Ingrese su correo electronico para realizar la recuperacion de contrase&ntilde;a, recuerde que la
                             informacion
                             proporcionada sera via correo electronico.</p>
-                        <br><br>
+                        <br>
                         <?php $form = ActiveForm::begin([
                             'id' => 'login-form',
                             'layout' => 'horizontal',
@@ -47,11 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-11 text-center">
-                                <?= Html::submitButton('Ingresar', ['class' => 'btn btn-default ', 'name' => 'login-button']) ?>
-                            </div>
+                                <br>
+                                <div class="col-sm-6 col-xs-12">
+                                <?= Html::a('Volver atras', Url::to(['site/login']), ['class' => 'btn app-btn-primary w-100 theme-btn mx-auto']); ?>
+                            </div>  <div class="col-sm-6 col-xs-12">
+                                <?= Html::submitButton('ENVIAR', ['class' => 'btn app-btn-primary w-100 theme-btn mx-auto ', 'name' => 'login-button']) ?>
+                        </div> </div>
                         </div>
 
                         <?php ActiveForm::end(); ?>
+                    <br>
 
                 </div>
             </div>
@@ -60,3 +65,26 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 
+<?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
+    <?php /*= \kartik\widgets\Growl::widget([
+        'type' => (!empty($message['type'])) ? $message['type'] : 'danger',
+        'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+        'body' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
+        'delay' => 1, //This delay is how long before the message shows
+        'pluginOptions' => [
+            'delay' => (!empty($message['duration'])) ? $message['duration'] : 5000, //This delay is how long the message shows for
+            'placement' => [
+                'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
+                'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
+            ]
+        ]
+    ]);*/
+    \yii2mod\alert\Alert::widget([
+        'useSessionFlash' => false,
+        'options' => [
+            'type' => (!empty($message['type'])) ? $message['type'] : 'error',
+            'title' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
+            'animation' => "slide-from-top",
+        ],
+    ]); ?>
+<?php endforeach; ?>

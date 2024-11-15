@@ -10,9 +10,12 @@ use yii\helpers\Html;
 
 
 $model = new  \app\models\Forget();
-$this->title = 'Login';
+$this->title = 'Recuperar contraseña';
 $this->params['breadcrumbs'][] = $this->title;
+\app\assets_b\AppAsset::register($this);
 ?>
+
+
 
 
 
@@ -36,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php $form = ActiveForm::begin([
                             'id' => 'login-form',
                             'layout' => 'horizontal',
+                            'action' => ['cuenta/forget'],
                             'fieldConfig' => [
                                 'template' => "{label}\n<div class=\"col-md-8\">{input}</div>\n<div class=\"col-md-8\">{error}</div>",
                                 'labelOptions' => ['class' => 'col-md-4 control-label'],
@@ -59,4 +63,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+
 

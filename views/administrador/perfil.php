@@ -34,15 +34,6 @@ $this->title = 'MI CUENTA';
         ],
     ]); ?>
 <?php endforeach; ?>
-
-
-
-
-
-
-
-
-
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
         <div class="col-12 col-sm-6">

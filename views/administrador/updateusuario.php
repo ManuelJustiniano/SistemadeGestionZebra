@@ -1,9 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-$this->title = 'Nuevo Usuario';
-$this->params['breadcrumbs'][] = ['label' => 'Usuarios', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Actualizar : ' . $model->nombrecompleto;
+$this->params['breadcrumbs'][] = ['label' => 'Actualizar', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->nombrecompleto, 'url' => ['view', 'id' => $model->idusuario]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
 
 
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-12">
                 <div class="app-card app-card-settings shadow-sm p-5">
                     <div class="app-card-body labellefto">
-                        <?= $this->render('_form', [
+                        <?= $this->render('_form2', [
                             'model' => $model,
                         ]) ?>
 

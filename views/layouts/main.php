@@ -23,6 +23,8 @@ $conf = \app\models\Configuracion::find()->one();
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/png" href="<?= \yii\helpers\Url::to('@web/assets_b/images/icon.jpg') ?>"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
         <?php $this->head() ?>
     </head>
     <body>
@@ -40,12 +42,7 @@ $conf = \app\models\Configuracion::find()->one();
 
         </div>
     </footer><!--//app-footer-->
-    <style>
-        .form-group.has-error .help-block {
-            font-size: 1.4rem;
-            display: none;
-        }
-    </style>
+
 
 
 

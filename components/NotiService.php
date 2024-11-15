@@ -7,9 +7,14 @@ use Yii;
 class NotiService implements InterfaceNoti
 {
 
-    public function setFlashMensaje($mensaje, $tipo)
+    public function agregarMensajeExito($mensaje)
     {
-        Yii::$app->session->setFlash('mensaje', ['message' => $mensaje, 'type' => $tipo]);
+        Yii::$app->session->setFlash('success', ['message' => $mensaje, 'type' => 'success']);
+    }
+
+    public function agregarMensajeError($mensaje)
+    {
+        Yii::$app->session->setFlash('error', ['message' => $mensaje]);
     }
 
 }

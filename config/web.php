@@ -44,6 +44,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'authTimeout' => 1800,
         ],
         /*'session' => [
             'savePath' => __DIR__ . '/../runtime/sessions'
@@ -76,6 +77,7 @@ $config = [
                 ],
             ],
         ],
+        'language' => 'es',
         'i18n' => [
             'translations' => [
                 '*' => [
@@ -135,7 +137,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        //'allowedIPs' => ['127.0.0.1', '::1'],co
     ];
 
     $config['bootstrap'][] = 'gii';

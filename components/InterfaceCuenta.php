@@ -6,4 +6,5 @@ interface InterfaceCuenta
     public function actualizarUsuario($model, $datosPost);
     public function cambiarPassword($usuario, $newPassword);
     public function procesarFormularioCambioPassword($model, $datosPost);
+    public function recuperacionCuenta($email);
 }

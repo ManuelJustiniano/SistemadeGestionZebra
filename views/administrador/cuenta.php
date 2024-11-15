@@ -26,8 +26,15 @@ $user = Yii::$app->session->get('user');
                         case 'listau':
                             echo $this->render('listau', ['model' => $model]);
                             break;
+                        case 'verusuario':
+                            echo $this->render('verusuario', ['model' => $model]);
+                            break;
+
                         case 'createusuario':
                             echo $this->render('createusuario', ['model' => $model]);
+                            break;
+                        case 'updateusuario':
+                            echo $this->render('updateusuario', ['model' => $model]);
                             break;
 
                         case 'perfil':

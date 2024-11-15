@@ -3,5 +3,6 @@ namespace app\components;
 
 interface InterfaceCorreos
 {
-    public function enviarCorreodeBienvenida($model, $password);
+    public function enviarCorreodeBienvenida($model);
+    public function enviarCorreoRecuperacion($id, $password);
 }
