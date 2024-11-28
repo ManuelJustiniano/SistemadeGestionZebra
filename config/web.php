@@ -157,4 +157,6 @@ Yii::$container->set('app\components\InterfaceCorreos', 'app\components\CorreoSe
 Yii::$container->set('app\components\InterfaceGestor', 'app\components\GestorService');
 Yii::$container->set('app\components\InterfaceProyectos', 'app\components\ProyectosService');
 Yii::$container->set('app\components\InterfaceCorreos', 'app\components\CorreoService');
+Yii::$container->set('app\components\InterfaceAsignacion', 'app\components\AsignacionService');
+Yii::$container->set('app\components\InterfaceGestionProyecto', 'app\components\GestionProyectoAService');
 return $config;

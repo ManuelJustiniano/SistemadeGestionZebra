@@ -47,7 +47,8 @@ if ($tipo_usuario == '1') {
     echo $this->render('../widgets/menu', [
         'lista' => [
             'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['administrador/cuenta'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Mi cuenta', 'url' => ['administrador/list'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Usuarios', 'url' => ['administrador/usuarioslist'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Mensajes', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
@@ -76,8 +77,11 @@ if ($tipo_usuario == '1') {
                     <div class="col-12 optionstable">
                         <h1><?= Html::encode($this->title) ?> </h1>
                         <?= Html::a('Nuevo Proyecto', ['create'], ['class' => 'btn btn-success btncreate']) ?>
-
                     </div>
+
+
+
+
                     <div class="tab-content" id="orders-table-tab-content">
                         <div class="app-card app-card-orders-table shadow-sm mb-5">
                             <div class="app-card-body">
@@ -212,23 +216,16 @@ if ($tipo_usuario == '1') {
                                                 [
                                                     'class' => 'yii\grid\ActionColumn',
                                                     'header' => 'Operaciones',
-                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{view}{update}{asignaciondetareas}{delete}</div>',
+                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{view}{update}</div>',
                                                     'buttons' => [
                                                         'view' => function ($url, $model, $key) {
                                                             return Html::a('<i class="toggle fa fa-eye"></i>', $url, ['class' => 'btn btn-primary',"title"=>"Ver"]);
                                                         },
-                                                        'asignaciondetareas' => function ($url, $model, $key) {
-                                                            return Html::a('<i class="toggle fa fa-list"></i>',  ['proyectos/asignaciondetareas', 'idproyecto' => $model->idproyecto], ['class' => 'btn btn-primary',"title"=>"Ver"]);
-                                                        },
+
                                                         'update' => function ($url, $model, $key) {
                                                             return Html::a('<i class="fa fa-pencil"></i>', $url, ['class' => 'btn btn-info',"title"=>"Editar"]);
                                                         },
-                                                        'delete' => function ($url, $model, $key) {
 
-                                                            return Html::a('<i class="fa fa-trash"></i>', $url, ['class' => 'btn btn-danger', 'data' => [
-                                                                'confirm' => 'Esta seguro?.'
-                                                            ], "title"=>"Eliminar"]);
-                                                        },
                                                     ],
                                                     'contentOptions' => ['class' => 'col-sm-2']
                                                 ],

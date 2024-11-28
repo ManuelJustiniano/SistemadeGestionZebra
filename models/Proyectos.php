@@ -24,6 +24,8 @@ class Proyectos extends \yii\db\ActiveRecord
 
             [['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin',  'prioridad','idcliente'], 'required'],
             [['descripcion', 'titulo', 'fecha_inicio', 'fecha_fin'], 'string'],
+            [['fecha_inicio', 'fecha_fin'], 'date', 'format' => 'php:Y-m-d'],
+            ['fecha_fin', 'validarFechaFin'],
             [['fecha_registro'], 'safe'],
             [['estado'], 'string', 'max' => 1],
 
@@ -47,6 +49,17 @@ class Proyectos extends \yii\db\ActiveRecord
 
         ];
     }
+    public function validarFechaFin($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $fechaInicio = strtotime($this->fecha_inicio);
+            $fechaFin = strtotime($this->fecha_fin);
+
+            if ($fechaFin < $fechaInicio) {
+                $this->addError($attribute, 'La fecha de fin no puede ser menor que la fecha de inicio.');
+            }
+        }
+    }
 
     public function getUsuario()
     {
@@ -56,6 +69,10 @@ class Proyectos extends \yii\db\ActiveRecord
     public function getGestor()
     {
         return $this->hasOne(Usuarios::className(), ['idusuario' => 'idgestor']);
+    }
+    public function getCliente()
+    {
+        return $this->hasOne(Usuarios::class, ['idusuario' => 'idcliente']);
     }
 
 

@@ -9,5 +9,6 @@ interface InterfaceAdmin
 
     public function nuevoUsuario($postData);
     public function actualizarUsuario($dates, $id);
+    public function cambiarEstadoUsuario($id);
 
 }

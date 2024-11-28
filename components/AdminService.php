@@ -82,8 +82,6 @@ class AdminService implements InterfaceAdmin
         //$this->notiService->agregarMensajeError('Error al validar usuario.');
         return ['exito' => false, 'model' => $model];
 
-
-
     }
 
 
@@ -93,11 +91,15 @@ class AdminService implements InterfaceAdmin
         $model = $this->findModel($id);
         if ($model->load($dates) && $model->validate()) {
             if ($model->save()) {
-                $this->notiService->agregarMensajeExito('El cliente ha sido actualizado correctamente.');
-                return [
-                    'exito' => true,
-                    'model' => $model
-                ];
+                $correoEnviado = $this->correoService->enviarCorreodeEditar($model);
+                if ($correoEnviado) {
+                    $this->notiService->agregarMensajeExito('El usuario ha sido Actualizado correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }
+
             } else {
                 $this->notiService->agregarMensajeError('Error al actualizar el cliente. Inténtelo más tarde.');
                 return [
@@ -106,11 +108,36 @@ class AdminService implements InterfaceAdmin
                 ];
             }
         }
-       /* $this->notiService->agregarMensajeError('Error al validar los datos del cliente.');
-        return [
-            'exito' => false,
-            'model' => $model
-        ];*/
+
+    }
+
+    public function cambiarEstadoUsuario($id)
+    {
+
+
+        // Intentamos encontrar el usuario por el ID
+        $model = $this->findModel($id);
+
+        if ($model === null) {
+            return [
+                'exito' => false,
+                'mensaje' => 'Usuario no encontrado.',
+            ];
+        }
+        // Cambiamos el estado del usuario
+        $model->estado = (string)!$model->estado;
+
+        if ($model->save()) {
+            return [
+                'exito' => true,
+                'mensaje' => 'El estado del usuario ha sido actualizado correctamente.',
+            ];
+        } else {
+            return [
+                'exito' => false,
+                'mensaje' => 'Hubo un error al actualizar el estado del usuario.',
+            ];
+        }
     }
 
 

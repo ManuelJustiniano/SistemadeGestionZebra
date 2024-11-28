@@ -83,8 +83,9 @@ class TareasController extends Controller
             return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
         }
 
-        $resultado = $this->tareaService->nuevaTarea(Yii::$app->request);
-        if ($resultado['success']) {
+
+        $resultado = $this->tareaService->nuevaTarea(Yii::$app->request->post());
+        if ($resultado['exito']) {
             return $this->redirect(['index']);
         }
         return $this->render('index', [
@@ -100,18 +101,17 @@ class TareasController extends Controller
      */
     public function actionUpdate($id)
     {
+
+
         $modelu = $this->tareaService->obtenerUsuarioSesion();
         if ($modelu === null) {
             Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
             return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
         }
-
-        $resultado = $this->tareaService->actualizarTarea($id);
-
-        if ($resultado['success']) {
-            return $this->redirect(['index']);
+        $resultado = $this->tareaService->actualizarTarea(Yii::$app->request->post(), $id);
+        if ($resultado['exito']) {
+            return $this->redirect(['index', 'id' => $id]);
         }
-
 
         return $this->render('index', [
             'model' => $resultado['model'],
@@ -121,6 +121,18 @@ class TareasController extends Controller
         ]);
 
 
+    }
+
+    public function actionEstado($id)
+    {
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }
+        $resultado = $this->tareaService->cambiarEstadoTarea($id);
+        return [
+            'exito' => $resultado['exito'],
+            'mensaje' => $resultado['mensaje'],
+        ];
     }
 
     /**

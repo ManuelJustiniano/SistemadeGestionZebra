@@ -50,6 +50,7 @@ if ($tipo_usuario == '1') {
         'lista' => [
             'items' => [
                 ['label' => 'Mi cuenta', 'url' => ['administrador/cuenta'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Usuarios', 'url' => ['administrador/usuarioslist'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Mensajes', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
@@ -121,7 +122,7 @@ if ($tipo_usuario == '1') {
                                                 [
                                                     'class' => 'yii\grid\ActionColumn',
                                                     'header' => 'Operaciones',
-                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{view}{update}{delete}</div>',
+                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{view}{update}</div>',
                                                     'buttons' => [
                                                         'view' => function ($url, $model, $key) {
                                                             return Html::a('<i class="toggle fa fa-eye"></i>', $url, ['class' => 'btn btn-primary',"title"=>"Ver"]);
@@ -129,14 +130,31 @@ if ($tipo_usuario == '1') {
                                                         'update' => function ($url, $model, $key) {
                                                             return Html::a('<i class="fa fa-pencil"></i>', $url, ['class' => 'btn btn-info',"title"=>"Editar"]);
                                                         },
-                                                        'delete' => function ($url, $model, $key) {
 
-                                                            return Html::a('<i class="fa fa-trash"></i>', $url, ['class' => 'btn btn-danger', 'data' => [
-                                                                'confirm' => 'Esta seguro?.'
-                                                            ], "title"=>"Eliminar"]);
-                                                        },
                                                     ],
                                                     'contentOptions' => ['class' => 'col-sm-2']
+                                                ],
+
+                                                [
+                                                    'class' => 'yii\grid\ActionColumn',
+                                                    'header' => 'Estado',
+                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{estado}</div>',
+                                                    'buttons' => [
+                                                        'estado' => function ($url, $model, $key) {
+                                                            return Html::a('<i class="toggle fa fa-unlock"></i>', "#", [
+                                                                'class' => 'btn btn-' . (($model->estado) ? 'success' : 'danger'),
+                                                                'title' => 'Estado',
+                                                                'data' => [
+                                                                    'confirm' => '¿Está seguro?',
+                                                                    'method' => 'post', // Define que será una acción POST
+                                                                    'pjax' => 0, // Evita problemas con PJAX si es necesario
+                                                                ],
+                                                                'onclick' => "{ action('{$url}'); } return false;"
+                                                            ]);
+                                                        },
+
+                                                    ],
+                                                    'contentOptions' => ['class' => 'col-sm-1']
                                                 ],
 
                                             ],

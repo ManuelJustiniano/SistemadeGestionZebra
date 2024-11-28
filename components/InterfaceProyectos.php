@@ -8,8 +8,8 @@ interface InterfaceProyectos
     public function obtenerUsuariosesion();
     public function listarProyectos($queryParams);
     public function nuevoProyecto($queryParams);
-    public function prepararModeloAsignacion($idproyecto);
-    public function procesarAsignacionTarea($model, $datosPost);
+    public function obtenerProyecto($id);
+    public function actualizarProyecto($dates, $id);
 }
 
 

@@ -126,7 +126,7 @@ class AdministradorController extends Controller
 
         $resultado = $this->adminService->nuevoUsuario(Yii::$app->request->post());
         if ($resultado['exito']) {
-            return $this->redirect(['index']);
+            return $this->redirect(['usuarioslist']);
         }
 
         return $this->render('cuenta', [
@@ -154,10 +154,6 @@ class AdministradorController extends Controller
             'render' => 'verusuario',
 
         ]);
-
-
-
-
     }
 
     public function actionUpdate($id)
@@ -167,16 +163,47 @@ class AdministradorController extends Controller
             Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
             return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
         }
+        $model = $this->adminService->findModel($id);
+        if ($model === null) {
+            Yii::$app->session->setFlash('error', 'El usuario no existe.');
+            return $this->redirect(['index']); // Redirige a donde corresponda
+        }
         $resultado = $this->adminService->actualizarUsuario(Yii::$app->request->post(), $id);
         if ($resultado['exito']) {
             return $this->redirect(['view', 'id' => $id]);
         }
         return $this->render('cuenta', [
-            'model' => $resultado['model'] ?? new Usuarios(),
+            'model' => $model,
             'render' => 'updateusuario',
 
         ]);
     }
+
+
+    public function actionEstado($id)
+    {
+        /*if (!Yii::$app->request->isAjax)
+            $this->redirect(['index']);
+        $model = new Usuarios();
+        $model = $model->findOne(['idusuario' => $id]);
+        $model->estado = (string)!$model->estado;
+        $model->save();
+
+        if (!Yii::$app->request->isAjax) {
+            return $this->redirect(['index']);
+        }*/
+
+        // Llamamos al servicio para cambiar el estado del usuario
+        $resultado = $this->adminService->cambiarEstadoUsuario($id);
+
+        // Devolvemos una respuesta adecuada
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'exito' => $resultado['exito'],
+            'mensaje' => $resultado['mensaje'],
+        ];
+    }
+
 
 
 

@@ -92,41 +92,13 @@ class Tareas extends \yii\db\ActiveRecord
         return $this->hasOne(Modulos::className(), ['idmodulo' => 'modulo']);
     }
 
+
+
+
     /*
      * funcion para sacar menu select2
      */
-    public static function getSelectMenu($modulo)
-    {
-        $cat = Tareas::find()->where(['=', 'modulo', Modulos::findOne(['alias' => $modulo])['idmodulo']])->all();
-        $result = [];
-        $temp = [];
-        foreach ($cat as $item) {
-            if (empty($item->idpadre)) {
-                array_push($temp, $item);
-            }
-        }
-        foreach ($temp as $key => $item) {
-            $temps = Tareas::find()->where(['=', 'idpadre', $item->idcategoria])->all();
 
-
-            if (count($temps) > 0) {
-                foreach ($temps as $value) {
-                    $temps2 = Tareas::find()->where(['=', 'idpadre', $value->idcategoria])->all();
-                    if (count($temps2) > 0) {
-                        foreach ($temps2 as $value2) {
-                            $result["<span class='fa fa-square'></span> " . $item->nombre]["<span class='fa fa-caret-right'></span> " . $value->nombre][$value2->idcategoria] = "<span class='fa fa-angle-double-right'></span> " . $value2->nombre;
-                        }
-                    } else {
-                        $result["<span class='fa fa-square'></span> " . $item->nombre][$value->idcategoria] = "<span class='fa fa-caret-right'></span> " . $value->nombre;
-                    }
-                }
-            } else {
-                $result[$item->idcategoria] = "<span class='fa fa-square'></span> " . $item->nombre;
-            }
-        }
-        return $result;
-
-    }
 
     /*
      * funcion para obtener categorias de primer nivel por alias

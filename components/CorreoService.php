@@ -40,7 +40,33 @@ class CorreoService implements InterfaceCorreos
     }
 
 
-        public function enviarCorreoRecuperacion($id, $password)
+    public function enviarCorreodeEditar($model)
+    {
+        $conf = Configuracion::find()->one();
+        $mensaje = Html::tag('h1', '¡Estimado: ' . $model->nombrecompleto . '!');
+        $mensaje .= Html::tag('p', 'Comentarle que sus datos personales fueron editados');
+        $mensaje .= Html::tag('p', 'Entrar al a su perfil ');
+
+        $result = Yii::$app->mailer->compose('layouts/template2', [
+            'content' => $mensaje,
+            'config' => $conf,
+        ])
+            ->setTo($model->email)
+            ->setFrom([$conf->email => $conf->titulo_pagina])
+            ->setSubject($conf->titulo_pagina . ' - Edicion de cuenta')
+            ->setHtmlBody($mensaje)
+            ->send();
+        if ($result) {
+            return true; // Retorna true si el envío fue exitoso.
+        } else {
+            Yii::error("El correo no pudo ser enviado por razones desconocidas.", __METHOD__);
+            return false;
+        }
+    }
+
+
+
+    public function enviarCorreoRecuperacion($id, $password)
     {
         $pass = Usuarios::findOne(['idusuario' => $id]);
         $conf = Configuracion::find()->one();
@@ -70,7 +96,59 @@ class CorreoService implements InterfaceCorreos
 
 
 
+    public function enviarCorreodeCreacionproyecto($model, $correoCliente)
+    {
+        $conf = Configuracion::find()->one();
+        $mensaje = Html::tag('h1', '¡Estimado: cliente');
+        $mensaje .= Html::tag('p', 'Comentarle que su proyecto fue creado');
+        $mensaje .= Html::tag('p', 'Entrar al a su perfil ');
 
+        $result = Yii::$app->mailer->compose('layouts/template2', [
+            'content' => $mensaje,
+            'config' => $conf,
+        ])
+            ->setTo($correoCliente)
+            ->setFrom([$conf->email => $conf->titulo_pagina])
+            ->setSubject($conf->titulo_pagina . ' - Edicion de cuenta')
+            ->setHtmlBody($mensaje)
+            ->send();
+        if ($result) {
+            return true; // Retorna true si el envío fue exitoso.
+        } else {
+            Yii::error("El correo no pudo ser enviado por razones desconocidas.", __METHOD__);
+            return false;
+        }
+
+    }
+
+
+
+
+
+    public function enviarCorreodeAsigncacionTarea($model, $correoCliente)
+    {
+        $conf = Configuracion::find()->one();
+        $mensaje = Html::tag('h1', '¡Estimado: Consultor');
+        $mensaje .= Html::tag('p', 'Comentarle que se le asigno una tarea');
+        $mensaje .= Html::tag('p', 'Entrar al a su perfil ');
+
+        $result = Yii::$app->mailer->compose('layouts/template2', [
+            'content' => $mensaje,
+            'config' => $conf,
+        ])
+            ->setTo($correoCliente)
+            ->setFrom([$conf->email => $conf->titulo_pagina])
+            ->setSubject($conf->titulo_pagina . ' - Edicion de cuenta')
+            ->setHtmlBody($mensaje)
+            ->send();
+        if ($result) {
+            return true; // Retorna true si el envío fue exitoso.
+        } else {
+            Yii::error("El correo no pudo ser enviado por razones desconocidas.", __METHOD__);
+            return false;
+        }
+
+    }
 
 
 }

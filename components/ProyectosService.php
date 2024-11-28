@@ -12,8 +12,15 @@ use yii\web\NotFoundHttpException;
 
 class ProyectosService implements InterfaceProyectos
 {
+    private $correoService;
+    private $notiService;
+    public function __construct(InterfaceCorreos $correoService, InterfaceNoti $notiService)
+    {
+        $this->correoService = $correoService;
+        $this->notiService = $notiService;
+    }
 
-        public function obtenerUsuarioSesion(): ?Usuarios
+    public function obtenerUsuarioSesion(): ?Usuarios
         {
             $user = Yii::$app->session->get('user');
 
@@ -42,6 +49,13 @@ class ProyectosService implements InterfaceProyectos
 
     }
 
+
+    public function obtenerProyecto($id)
+    {
+        return $this->findModel($id);
+    }
+
+
     public function nuevoProyecto($queryParams)
     {
 
@@ -49,74 +63,33 @@ class ProyectosService implements InterfaceProyectos
         $user = Yii::$app->session->get('user');
         $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
         $model->idgestor =  $usuario->idusuario;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('mensaje', [
-                'message' => 'Se creó el proyecto correctamente.',
-                'type' => 'success'
-            ]);
-            return [
-                'success' => true,
-                'model' => $model,
-            ];
-        }
-        return [
-            'success' => false,
-            'model' => $model,
-        ];
-
-
-
-    }
-
-
-    public function prepararModeloAsignacion($idproyecto)
-    {
-        $proyecto = Proyectos::findOne(['idproyecto' => $idproyecto]);
-        if ($proyecto === null) {
-            return null;
-        }
-
-        $model = new Asignacion();
-        $model->idcliente = $proyecto->idcliente;
-        $model->idproyecto = $idproyecto;
-
-        return $model;
-    }
-
-
-
-
-    public function procesarAsignacionTarea($model, $datosPost)
-    {
-
-
-
-
-
-
-
-        if ($model->load($datosPost) && $model->validate()) {
-
+        if ($model->load($queryParams) && $model->validate()) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('mensaje', [
-                    'message' => 'Se creó el proyecto correctamente.',
-                    'type' => 'success'
-                ]);
-                return [
-                    'success' => true,
-                    'model' => $model,
-                ];
-            }
-            return [
-                'success' => false,
-                'model' => $model,
-            ];
+                $cliente = $model->cliente;
+                if ($cliente !== null) {
+                    $correoCliente = $cliente->email; // Obtener el correo del cliente
+                    $correoEnviado = $this->correoService->enviarCorreodeCreacionproyecto($model, $correoCliente);
+                    if (!$correoEnviado) {
+                        $this->notiService->agregarMensajeError('Error al enviar el correo al cliente. Inténtelo más tarde.');
+                    }
+                }
+                if ($correoEnviado) {
+                    $this->notiService->agregarMensajeExito('Se creó el proyecto correctamente');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+
+                    return ['exito' => false, 'model' => $model];
+                }
+
+        } else {
+            $this->notiService->agregarMensajeError('Error al crear proyecto. Inténtelo más tarde.');
+            return ['exito' => false, 'model' => $model];
         }
-
-
+        }
+        //$this->notiService->agregarMensajeError('Error al validar usuario.');
+        return ['exito' => false, 'model' => $model];
     }
-
 
 
 
@@ -128,29 +101,35 @@ class ProyectosService implements InterfaceProyectos
     }
 
 
-    public function actualizarProyecto($id)
+    public function actualizarProyecto($dates, $id)
     {
+
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('mensaje', [
-                'message' => 'Se actualizo el proyecto correctamente.',
-                'type' => 'success'
-            ]);
+
+        if ($model->load($dates) && $model->validate()) {
+            if ($model->save()) {
+                $this->notiService->agregarMensajeExito('El proyecto ha sido Actualizado correctamente.');
+                return ['exito' => true];
+            } else {
+                $this->notiService->agregarMensajeError('Error al actualizar el proyecto, inténtelo más tarde.');
+                return ['exito' => false, 'model' => $model];
+            }
+
+        } else {
+            $this->notiService->agregarMensajeError('Error al actualizar el proyecto. Inténtelo más tarde.');
             return [
-                'success' => true,
-                'model' => $model,
+                'exito' => false,
+                'model' => $model
             ];
         }
-        return [
-            'success' => false,
-            'model' => $model,
-        ];
+
+        return ['exito' => false, 'model' => $model];
     }
 
     /**
      * @throws NotFoundHttpException
      */
-    public function findModel($id): ProyectosSearch
+    public function findModel($id)
     {
         if (($model = ProyectosSearch::findOne($id)) !== null) {
             return $model;

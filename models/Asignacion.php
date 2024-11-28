@@ -31,7 +31,8 @@ class Asignacion extends \yii\db\ActiveRecord
         return [
             [['idtarea', 'idgestor', 'idcliente'], 'required'],
             [['descripcion', 'idproyecto'], 'safe'],
-            [['fechainicio', 'fechafin'], 'string', 'max' => 250],
+            [['fechainicio', 'fechafin'], 'date', 'format' => 'php:Y-m-d'],
+            ['fechafin', 'validarFechaFin'],
             [['estado'], 'string', 'max' => 1],
         ];
     }
@@ -53,6 +54,25 @@ class Asignacion extends \yii\db\ActiveRecord
             'estado' => 'Estado',
         ];
     }
+
+
+    public function validarFechaFin($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $fechaInicio = strtotime($this->fechainicio);
+            $fechaFin = strtotime($this->fechafin);
+
+            if ($fechaFin < $fechaInicio) {
+                $this->addError($attribute, 'La fecha de fin no puede ser menor que la fecha de inicio.');
+            }
+        }
+    }
+
+    public function getConsultor()
+    {
+        return $this->hasOne(Usuarios::className(), ['idusuario' => 'idconsultor']);
+    }
+
 
     public function getCategoryMenu($limit = 0, $offset = 7)
     {

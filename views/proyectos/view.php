@@ -26,9 +26,8 @@ $this->title = 'MI CUENTA';
         </div>
         <div class="col-12 col-sm-6">
             <div class="app-card-footer p-4 mt-auto">
-                <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/create']) ?>">Crar nuevo proyecto</a>
-                <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/update']) ?>">Editar Proyecto</a>
-                <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/asignaciondetareas', 'idproyecto' => $model['idproyecto']]) ?>">Asignar Proyecto</a>
+                <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/update?id='.$model['idproyecto']]) ?>">Editar Proyecto</a>
+                <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/asignaciondetareas', 'idproyecto' => $model['idproyecto']]) ?>">Asignar tareas y consultores</a>
             </div><!--//app-card-footer-->
         </div>
 

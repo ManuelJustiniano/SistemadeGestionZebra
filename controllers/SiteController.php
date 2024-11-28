@@ -43,7 +43,7 @@ class SiteController extends BaseController
     /**
      * Login action.
      *
-     * @return string
+     * @return \yii\web\Response
      */
     public function actionLogin()
     {
@@ -65,13 +65,14 @@ class SiteController extends BaseController
     /**
      * Logout action.
      *
-     * @return string
+     * @return \yii\web\Response
      */
     public function actionLogout()
     {
         $this->authService->logout();
         return $this->redirect(['login']);
     }
+
 
 }
 

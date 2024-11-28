@@ -44,6 +44,7 @@ $this->title = 'PERFIL USUARIO';
         <div class="col-12 col-sm-6">
             <div class="app-card-footer p-4 mt-auto">
                 <a class="btn app-btn-secondary" href="<?= Url::to(['administrador/update?id='. $model['idusuario']]) ?>">Editar Perfil</a>
+                <a class="btn app-btn-secondary" href="<?= Url::to(['administrador/updatepassword?id='. $model['idusuario']]) ?>">Editar Contraseña</a>
             </div><!--//app-card-footer-->
         </div>
         <div class="row gy-4">

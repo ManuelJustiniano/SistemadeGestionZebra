@@ -59,6 +59,7 @@ class TareasSearch extends Tareas
         $query->andFilterWhere([
             'idtarea' => $this->idtarea,
             'modulo' => $this->modulo,
+            'estado' => $this->estado,
         ]);
 
         $query->andFilterWhere(['like', 'titulo', $this->titulo])

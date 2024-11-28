@@ -9,8 +9,10 @@ use yii\web\NotFoundHttpException;
 
 class TareasService implements InterfaceTarea
 {
+    private $notiService;
 
-        public function obtenerUsuarioSesion(): ?Usuarios
+
+    public function obtenerUsuarioSesion(): ?Usuarios
         {
             $user = Yii::$app->session->get('user');
 
@@ -24,6 +26,12 @@ class TareasService implements InterfaceTarea
 
             return null;
     }
+
+    public function __construct(InterfaceNoti $notiService)
+    {
+        $this->notiService = $notiService;
+    }
+
 
     public function listTareas($queryParams)
     {
@@ -43,50 +51,85 @@ class TareasService implements InterfaceTarea
     {
 
         $model = new Tareas();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('mensaje', [
-                'message' => 'Se creó la tarea correctamente.',
-                'type' => 'success'
-            ]);
-            return [
-                'success' => true,
-                'model' => $model,
-            ];
-        }
-        return [
-            'success' => false,
-            'model' => $model,
-        ];
+        if ($model->load($queryParams) && $model->validate()) {
+            if ($model->save()) {
+                    $this->notiService->agregarMensajeExito('La tarea ha sido creado correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error al crear tarea, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }
+            } else {
+                $this->notiService->agregarMensajeError('Error al crear usuario. Inténtelo más tarde.');
+                return ['exito' => false, 'model' => $model];
+            }
+        //$this->notiService->agregarMensajeError('Error al validar usuario.');
+        return ['exito' => false, 'model' => $model];
+
+
+       }
 
 
 
-    }
-
-
-
-    public function actualizarTarea($id)
+    public function actualizarTarea($dates, $id)
     {
+
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('mensaje', [
-                'message' => 'Se actualizo la tarea correctamente.',
-                'type' => 'success'
-            ]);
+        if ($model->load($dates) && $model->validate()) {
+            if ($model->save()) {
+                    $this->notiService->agregarMensajeExito('La ha sido Actualizado correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error al actualizar tarea, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }
+
+            } else {
+                $this->notiService->agregarMensajeError('Error al actualizar la tarea. Inténtelo más tarde.');
+                return [
+                    'exito' => false,
+                    'model' => $model
+                ];
+            }
+        }
+
+
+
+
+
+    public function cambiarEstadoTarea($id)
+    {
+
+        $model = $this->findModel($id);
+
+        if ($model === null) {
             return [
-                'success' => true,
-                'model' => $model,
+                'exito' => false,
+                'mensaje' => 'Usuario no encontrado.',
             ];
         }
-        return [
-            'success' => false,
-            'model' => $model,
-        ];
+
+        // Cambiamos el estado del usuario
+        $model->estado = (string)!$model->estado;
+        if ($model->save()) {
+            return [
+                'exito' => true,
+                'mensaje' => 'El estado del usuario ha sido actualizado correctamente.',
+            ];
+        } else {
+            return [
+                'exito' => false,
+                'mensaje' => 'Hubo un error al actualizar el estado del usuario.',
+            ];
+        }
     }
+
+
 
     /**
      * @throws NotFoundHttpException
      */
-    public function findModel($id): TareasSearch
+    public function findModel($id)
     {
         if (($model = TareasSearch::findOne($id)) !== null) {
             return $model;
