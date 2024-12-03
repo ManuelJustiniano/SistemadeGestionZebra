@@ -4,75 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 $this->title = 'TAREAS';
 ?>
-<?php
-$format = <<< SCRIPT
-function format(state) {
-if (!state.id) return state.text; // optgroup
-return state.text;
-}
-SCRIPT;
-$escape = new \yii\web\JsExpression("function(m) { return m; }");
-$this->registerJs($format, \yii\web\View::POS_HEAD);
 
 
-?>
-
-
-<?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
-    <?php /*= \kartik\widgets\Growl::widget([
-        'type' => (!empty($message['type'])) ? $message['type'] : 'danger',
-        'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
-        'delay' => 1, //This delay is how long before the message shows
-        'pluginOptions' => [
-            'delay' => (!empty($message['duration'])) ? $message['duration'] : 5000, //This delay is how long the message shows for
-            'placement' => [
-                'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-                'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
-            ]
-        ]
-    ]);*/
-    \yii2mod\alert\Alert::widget([
-        'useSessionFlash' => false,
-        'options' => [
-            'type' => (!empty($message['type'])) ? $message['type'] : 'error',
-            'title' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
-            'animation' => "slide-from-top",
-        ],
-    ]); ?>
-<?php endforeach; ?>
-
-
-
-<?php
-if ($tipo_usuario == '1') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['administrador/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Usuarios', 'url' => ['administrador/usuarioslist'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mensajes', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Materiales', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'administrador',
-    ]);
-} elseif ($tipo_usuario == '2') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['gestor/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'gestor',
-    ]);
-}
-?>
-
-
-    <div class="app-wrapper">
         <div class="app-content pt-3 p-md-3 p-lg-4">
             <div class="container-xl">
 
@@ -97,7 +30,7 @@ if ($tipo_usuario == '1') {
                                                 [
                                                     'attribute' => 'descripcion',
                                                     'value' => function ($model) {
-                                                        return  \yii\helpers\StringHelper::truncate(strip_tags($model->descripcion), 100) ;
+                                                        return \yii\helpers\StringHelper::truncate(html_entity_decode(strip_tags($model->descripcion)), 100);
                                                     },
                                                 ],
                                                 [
@@ -141,15 +74,13 @@ if ($tipo_usuario == '1') {
                                                     'template' => '<div class="btn-group btn-group-justified" role="group">{estado}</div>',
                                                     'buttons' => [
                                                         'estado' => function ($url, $model, $key) {
-                                                            return Html::a('<i class="toggle fa fa-unlock"></i>', "#", [
-                                                                'class' => 'btn btn-' . (($model->estado) ? 'success' : 'danger'),
+                                                            $iconClass = $model->estado ? 'fa fa-unlock' : 'fa fa-lock'; // Cambia el icono según el estado
+                                                            $btnClass = $model->estado ? 'btn btn-success sep' : 'btn btn-danger'; // Cambia el color del botón según el estado
+
+                                                            return Html::a("<i class='$iconClass'></i>", "#", [
+                                                                'class' => $btnClass,
                                                                 'title' => 'Estado',
-                                                                'data' => [
-                                                                    'confirm' => '¿Está seguro?',
-                                                                    'method' => 'post', // Define que será una acción POST
-                                                                    'pjax' => 0, // Evita problemas con PJAX si es necesario
-                                                                ],
-                                                                'onclick' => "{ action('{$url}'); } return false;"
+                                                                'onclick' => "cambiarEstadoTarea('{$url}'); return false;"
                                                             ]);
                                                         },
 
@@ -169,15 +100,9 @@ if ($tipo_usuario == '1') {
                 </div>
             </div>
         </div>
-</div>
 <?php
-$script = <<<JS
-    function action(url)
-    {
-    $.get(url, function(data) {
-      $.pjax.reload({container:"#table"});
-    });
-    }
-
-JS;
-$this->registerJs($script, \yii\web\View::POS_HEAD);
+$this->registerJsFile(
+    '@web/assets_b/js/estadosc.js',
+    ['depends' => [\yii\web\JqueryAsset::class]]
+);
+?>

@@ -64,7 +64,7 @@ class NumberValidator extends Validator
         parent::init();
         if ($this->message === null) {
             $this->message = $this->integerOnly ? Yii::t('yii', '{attribute} must be an integer.')
-                : Yii::t('yii', '{attribute} must be a number.');
+                : Yii::t('yii', '{attribute} debe ser en numero(s).');
         }
         if ($this->min !== null && $this->tooSmall === null) {
             $this->tooSmall = Yii::t('yii', '{attribute} must be no less than {min}.');

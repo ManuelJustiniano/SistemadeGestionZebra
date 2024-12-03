@@ -5,6 +5,7 @@ use app\models\Tareas;
 use app\models\TareasSearch;
 use app\models\Usuarios;
 use Yii;
+use yii\base\ExitException;
 use yii\web\NotFoundHttpException;
 
 class TareasService implements InterfaceTarea
@@ -12,24 +13,36 @@ class TareasService implements InterfaceTarea
     private $notiService;
 
 
-    public function obtenerUsuarioSesion(): ?Usuarios
-        {
-            $user = Yii::$app->session->get('user');
-
-            if (empty($user)) {
-                return null;
-            }
-            $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
-            if ($usuario !== null && in_array($usuario->tipo_usuario, ['1', '2'])) {
-                return $usuario;
-            }
-
-            return null;
-    }
-
     public function __construct(InterfaceNoti $notiService)
     {
         $this->notiService = $notiService;
+    }
+
+     public function obtenerUsuarioSesion()
+    {
+        $user = Yii::$app->session->get('user');
+        if (empty($user)) {
+            return null;
+        }
+        $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
+        if ($usuario !== null && in_array($usuario->tipo_usuario, ['1', '2'])) {
+            return $usuario;
+        }
+        return null;
+    }
+
+    /**
+     * @throws ExitException
+     */
+    public function verificarAccesoAdmin()
+    {
+        $usuario = $this->obtenerUsuarioSesion();
+        if ($usuario === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            Yii::$app->controller->redirect(Yii::$app->request->referrer ?: ['site/login']);
+            Yii::$app->end();
+        }
+        return $usuario;
     }
 
 
@@ -47,6 +60,7 @@ class TareasService implements InterfaceTarea
 
     }
 
+
     public function nuevaTarea($queryParams)
     {
 
@@ -59,11 +73,7 @@ class TareasService implements InterfaceTarea
                     $this->notiService->agregarMensajeError('Error al crear tarea, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
-            } else {
-                $this->notiService->agregarMensajeError('Error al crear usuario. Inténtelo más tarde.');
-                return ['exito' => false, 'model' => $model];
             }
-        //$this->notiService->agregarMensajeError('Error al validar usuario.');
         return ['exito' => false, 'model' => $model];
 
 
@@ -73,53 +83,47 @@ class TareasService implements InterfaceTarea
 
     public function actualizarTarea($dates, $id)
     {
-
         $model = $this->findModel($id);
         if ($model->load($dates) && $model->validate()) {
             if ($model->save()) {
-                    $this->notiService->agregarMensajeExito('La ha sido Actualizado correctamente.');
+                    $this->notiService->agregarMensajeExito('La Tarea ha sido actualizada correctamente.');
                     return ['exito' => true];
                 } else {
                     $this->notiService->agregarMensajeError('Error al actualizar tarea, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
-
-            } else {
-                $this->notiService->agregarMensajeError('Error al actualizar la tarea. Inténtelo más tarde.');
-                return [
-                    'exito' => false,
-                    'model' => $model
-                ];
             }
+                    return ['exito' => false, 'model' => $model];
         }
-
 
 
 
 
     public function cambiarEstadoTarea($id)
     {
-
         $model = $this->findModel($id);
-
         if ($model === null) {
             return [
                 'exito' => false,
-                'mensaje' => 'Usuario no encontrado.',
+                'mensaje' => 'Tarea no encontrado.',
             ];
         }
-
-        // Cambiamos el estado del usuario
+        $estadoAnterior = $model->estado;
         $model->estado = (string)!$model->estado;
         if ($model->save()) {
+            if ($estadoAnterior == '1') {
+                $mensaje = 'El estado de la tarea ha sido cambiado a bloqueada';
+            } else {
+                $mensaje = 'El estado de la tarea ha sido cambiado a activada';
+            }
             return [
                 'exito' => true,
-                'mensaje' => 'El estado del usuario ha sido actualizado correctamente.',
+                'mensaje' => $mensaje,
             ];
         } else {
             return [
                 'exito' => false,
-                'mensaje' => 'Hubo un error al actualizar el estado del usuario.',
+                'mensaje' => 'Hubo un error al actualizar el estado de la tarea.',
             ];
         }
     }

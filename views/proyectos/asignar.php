@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-$this->title = 'Asignar';
+$this->title = 'Asignar a : '. $model->proyecto->titulo;
 $this->params['breadcrumbs'][] = ['label' => 'Asignar', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="app-content pt-3 p-md-3 p-lg-4">
     <div class="container-xl">
         <h1 class="app-page-title"><?= Html::encode($this->title) ?></h1>
+        <hp class=""> <strong>Cliente:</strong> <?=  $model->proyecto->cliente->nombrecompleto;?> - <?=  $model->proyecto->cliente->empresa;?></hp>
         <hr class="mb-4">
         <div class="row g-4 settings-section">
             <div class="col-12">

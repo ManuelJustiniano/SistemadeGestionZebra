@@ -4,10 +4,9 @@ namespace app\components;
 use app\models\Asignacion;
 use app\models\Proyectos;
 use app\models\ProyectosSearch;
-use app\models\Tareas;
-use app\models\TareasSearch;
 use app\models\Usuarios;
 use Yii;
+use yii\base\ExitException;
 use yii\web\NotFoundHttpException;
 
 class ProyectosService implements InterfaceProyectos
@@ -20,20 +19,34 @@ class ProyectosService implements InterfaceProyectos
         $this->notiService = $notiService;
     }
 
-    public function obtenerUsuarioSesion(): ?Usuarios
-        {
-            $user = Yii::$app->session->get('user');
 
-            if (empty($user)) {
-                return null;
-            }
-            $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
-            if ($usuario !== null && in_array($usuario->tipo_usuario, ['1', '2'])) {
-                return $usuario;
-            }
-
+    public function obtenerUsuarioSesionadmingestor()
+    {
+        $user = Yii::$app->session->get('user');
+        if (empty($user)) {
             return null;
+        }
+        $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
+        if ($usuario !== null && in_array($usuario->tipo_usuario, ['1', '2'])) {
+            return $usuario;
+        }
+        return null;
     }
+
+    /**
+     * @throws ExitException
+     */
+    public function verificarAccesoAdmingestor()
+    {
+        $usuario = $this->obtenerUsuarioSesionadmingestor();
+        if ($usuario === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            Yii::$app->controller->redirect(Yii::$app->request->referrer ?: ['site/login']);
+            Yii::$app->end();
+        }
+        return $usuario;
+    }
+
 
     public function listarProyectos($queryParams)
     {
@@ -48,8 +61,6 @@ class ProyectosService implements InterfaceProyectos
         ];
 
     }
-
-
     public function obtenerProyecto($id)
     {
         return $this->findModel($id);
@@ -67,7 +78,7 @@ class ProyectosService implements InterfaceProyectos
             if ($model->save()) {
                 $cliente = $model->cliente;
                 if ($cliente !== null) {
-                    $correoCliente = $cliente->email; // Obtener el correo del cliente
+                    $correoCliente = $cliente->email;
                     $correoEnviado = $this->correoService->enviarCorreodeCreacionproyecto($model, $correoCliente);
                     if (!$correoEnviado) {
                         $this->notiService->agregarMensajeError('Error al enviar el correo al cliente. Inténtelo más tarde.');
@@ -87,7 +98,6 @@ class ProyectosService implements InterfaceProyectos
             return ['exito' => false, 'model' => $model];
         }
         }
-        //$this->notiService->agregarMensajeError('Error al validar usuario.');
         return ['exito' => false, 'model' => $model];
     }
 
@@ -105,26 +115,64 @@ class ProyectosService implements InterfaceProyectos
     {
 
         $model = $this->findModel($id);
-
+        $clienteOriginal = $model->getOldAttribute('idcliente');
         if ($model->load($dates) && $model->validate()) {
+            if ($model->idcliente != $clienteOriginal) {
+                $this->notiService->agregarMensajeError('El cliente no puede ser cambiado durante la actualización del proyecto.');
+                return ['exito' => false, 'model' => $model];
+            }
+
             if ($model->save()) {
-                $this->notiService->agregarMensajeExito('El proyecto ha sido Actualizado correctamente.');
-                return ['exito' => true];
+                $cliente = $model->cliente;
+                if ($cliente !== null) {
+                    $correoCliente = $cliente->email;
+                    $correoEnviado = $this->correoService->enviarCorreodeEdicionproyecto($model, $correoCliente);
+                    if (!$correoEnviado) {
+                        $this->notiService->agregarMensajeError('Error al enviar el correo al cliente. Inténtelo más tarde.');
+                    }
+                }
+                if ($correoEnviado) {
+                    $this->notiService->agregarMensajeExito('El proyecto ha sido Actualizado correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error al actualizar el proyecto, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }
+
             } else {
                 $this->notiService->agregarMensajeError('Error al actualizar el proyecto, inténtelo más tarde.');
                 return ['exito' => false, 'model' => $model];
             }
 
-        } else {
-            $this->notiService->agregarMensajeError('Error al actualizar el proyecto. Inténtelo más tarde.');
-            return [
-                'exito' => false,
-                'model' => $model
-            ];
         }
-
         return ['exito' => false, 'model' => $model];
     }
+
+
+
+    public function cambiarEstadoproyecto($id)
+    {
+        $model = $this->findModel($id);
+        $estadoAnterior = $model->estado;
+        $model->estado = (string)!$model->estado;
+        if ($model->save()) {
+            if ($estadoAnterior == '1') {
+                $mensaje = 'El estado del proyecto ha sido cambiado a bloqueado';
+            } else {
+                $mensaje = 'El estado del proyecto ha sido cambiado a activado';
+            }
+            return [
+                'exito' => true,
+                'mensaje' => $mensaje,
+            ];
+        } else {
+            return [
+                'exito' => false,
+                'mensaje' => 'Hubo un error al actualizar el estado del proyecto.',
+            ];
+        }
+    }
+
 
     /**
      * @throws NotFoundHttpException

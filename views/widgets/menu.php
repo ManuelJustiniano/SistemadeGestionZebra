@@ -113,7 +113,7 @@ $items = $lista['items'] ?? [];
 <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
     <li><a class="dropdown-item" href="<?= Url::to([$tipousuario.'/updateperfil']) ?>">Editar Perfil</a></li>
     <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="<?= Url::to([$tipousuario.'/changepasswordperfil']) ?>">Cambiar contraseña</a></li>
+    <li><a class="dropdown-item" href="<?= Url::to([$tipousuario.'/updatepasswordperfil']) ?>">Cambiar contraseña</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="<?= Url::to(['site/logout']) ?>">Cerrar Sesion</a></li>
 </ul>
@@ -129,13 +129,12 @@ $items = $lista['items'] ?? [];
     <div class="sidepanel-inner d-flex flex-column">
         <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
         <div class="app-branding">
-            <a class="app-logo" href="#"><img class="logo-icon me-2" src="<?= Url::to(['assets_b/images/logo.jpg']) ?>" alt="logo"><span class="logo-text">ZEBRA BRAND CONSULTING</span></a>
+            <a class="app-logo" href="#"><img class="logo-icon me-2" src="<?= Url::to(['assets_b/images/icon.png']) ?>" alt="logo"><span class="logo-text">ZEBRA BRAND CONSULTING</span></a>
 
         </div><!--//app-branding-->
 
         <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
             <?php
-
             echo Menu::widget([
                 'options' => ['class' => 'app-menu list-unstyled accordion', 'id' => 'menu-accordion'],
                 'activeCssClass' => 'active',
@@ -143,14 +142,8 @@ $items = $lista['items'] ?? [];
                 'encodeLabels' => false,
                 'lastItemCssClass' => '',
                 'submenuTemplate' => "\n<ul  role=\"menu\" class=\"mega-menu\" id=\"menu\" >\n{items}\n</ul>\n",
-
-
             ]);
             ?>
-
-
-
-
     </div><!--//sidepanel-inner-->
 </div><!--//app-sidepanel-->
 </header><!--//app-header-->

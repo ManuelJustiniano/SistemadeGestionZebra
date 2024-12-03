@@ -41,31 +41,47 @@ class AsignacionService implements InterfaceAsignacion
     public function prepararModeloAsignacion($idproyecto)
     {
         $proyecto = Proyectos::findOne(['idproyecto' => $idproyecto]);
-        if ($proyecto === null) {
+        if (!$proyecto) {
             return null;
         }
         $model = new Asignacion();
-        $model->idcliente = $proyecto->idcliente;
         $model->idproyecto = $idproyecto;
         return $model;
     }
 
     public function procesarAsignacionTarea($model, $datosPost)
     {
+
+
         if ($model->load($datosPost) && $model->validate()) {
             if ($model->save()) {
-                $this->notiService->agregarMensajeExito('Se Asigno correctamente');
-                return ['exito' => true];
+                $consultor = $model->consultor;
+
+                if ($consultor !== null) {
+                    $correoConsultor = $consultor->email;
+                    $correoEnviado = $this->correoService->enviarCorreodeAsignacionproyecto($model, $correoConsultor);
+                    if (!$correoEnviado) {
+                        $this->notiService->agregarMensajeError('Error al enviar el correo al consultor. Inténtelo más tarde.');
+                    }
+                }
+                if ($correoEnviado) {
+
+                    $this->notiService->agregarMensajeExito('Se Asigno correctamente');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+
+                    return ['exito' => false, 'model' => $model];
+                }
+
+
             }
             else {
                 $this->notiService->agregarMensajeError('Error al asignar, inténtelo más tarde.');
                 return ['exito' => false, 'model' => $model];
             }
         }
-        else {
-            $this->notiService->agregarMensajeError('Error al asignar. Inténtelo más tarde.');
-            return ['exito' => false, 'model' => $model];
-        }
+
     }
 
     public function obtenerAsignacionPorId($asignacionId)

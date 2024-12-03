@@ -13,8 +13,8 @@ $this->title = 'MI CUENTA';
         </div>
         <div class="col-12 col-sm-6">
             <div class="app-card-footer p-4 mt-auto">
-                <a class="btn app-btn-secondary" href="<?= Url::to(['tareas/create']) ?>">Crar nueva tareas</a>
-                <a class="btn app-btn-secondary" href="<?= Url::to(['tareas/update']) ?>">Editar Tarea</a>
+                <a class="btn app-btn-secondary" href="<?= Url::to(['tareas/create']) ?>">Crar nueva tarea</a>
+                <a class="btn app-btn-secondary" href="<?= Url::to(['tareas/update?id='.$model['idtarea']]) ?>">Editar Tarea</a>
             </div><!--//app-card-footer-->
         </div>
 

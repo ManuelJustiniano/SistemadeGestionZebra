@@ -29,9 +29,11 @@ class Asignacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idtarea', 'idgestor', 'idcliente'], 'required'],
+            [['idtarea', 'idconsultor' ], 'required'],
             [['descripcion', 'idproyecto'], 'safe'],
+            [['idconsultor', 'idtarea'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea'], 'message' => 'Este consultor ya tiene asignada esta tarea.'],
             [['fechainicio', 'fechafin'], 'date', 'format' => 'php:Y-m-d'],
+            ['fechainicio', 'validarFechaInicio'],
             ['fechafin', 'validarFechaFin'],
             [['estado'], 'string', 'max' => 1],
         ];
@@ -45,25 +47,42 @@ class Asignacion extends \yii\db\ActiveRecord
         return [
             'idasignartarea' => 'ID',
             'idtarea' => 'Tarea para Asignar',
-            'descripcion' => 'Descripcion complementaria',
+            'descripcion' => 'Descripcion u Objetivo',
             'fechainicio' => 'Fecha inicial',
-            'modufechainiciolo' => 'Fecha Final',
-            'idgestor' => 'Consultor',
+            'fechafin' => 'Fecha Final',
+            'idconsultor' => 'Consultor',
             'idproyecto' => 'Proyecto',
-            'idcliente' => 'Cliente',
             'estado' => 'Estado',
         ];
     }
 
 
+    public function validarFechaInicio($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $fechaInicioProyecto = strtotime($this->proyecto->fecha_inicio);
+            $fechaInicioAsignacion = strtotime($this->fechainicio);
+
+            if ($fechaInicioAsignacion < $fechaInicioProyecto) {
+                $this->addError($attribute, 'La fecha de inicio no puede ser menor que la fecha de inicio del proyecto.');
+            }
+        }
+    }
+
     public function validarFechaFin($attribute, $params)
     {
         if (!$this->hasErrors()) {
-            $fechaInicio = strtotime($this->fechainicio);
-            $fechaFin = strtotime($this->fechafin);
+            $fechaInicioAsignacion = strtotime($this->fechainicio);
+            $fechaFinAsignacion = strtotime($this->fechafin);
 
-            if ($fechaFin < $fechaInicio) {
+            $fechaFinProyecto = strtotime($this->proyecto->fecha_fin);
+
+            if ($fechaFinAsignacion < $fechaInicioAsignacion) {
                 $this->addError($attribute, 'La fecha de fin no puede ser menor que la fecha de inicio.');
+            }
+
+            if ($fechaFinAsignacion > $fechaFinProyecto) {
+                $this->addError($attribute, 'La fecha de fin no puede ser mayor que la fecha de fin del proyecto.');
             }
         }
     }
@@ -74,17 +93,17 @@ class Asignacion extends \yii\db\ActiveRecord
     }
 
 
-    public function getCategoryMenu($limit = 0, $offset = 7)
+    public function getProyecto()
     {
-        $data = Asignacion::find()->where(['estado' => 1, 'idpadre' => 0, 'modulo' => 29])->orderBy(['(idcategoria)' => SORT_ASC])->limit($offset, $limit)->all();
-        return $data;
+        return $this->hasOne(Proyectos::className(), ['idproyecto' => 'idproyecto']);
     }
 
-    public function getCategoryBy($idpadre = 0)
+    public function getCliente()
     {
-        $data = Asignacion::find()->where('idpadre=:idpadre AND estado = 1 AND modulo = 29', ['idpadre' => $idpadre])->orderBy(['(idcategoria)' => SORT_ASC])->all();
-        return $data;
+        return $this->hasOne(Proyectos::className(), ['idproyecto' => 'idproyecto']);
     }
+
+
 
     /*
      * seccion de relaciones entre tablas
@@ -94,62 +113,6 @@ class Asignacion extends \yii\db\ActiveRecord
         return $this->hasMany(Asignacion::className(), ['idpadre' => 'idcategoria']);
     }
 
-    public function getPadre()
-    {
-        return $this->hasOne(Asignacion::className(), ['idcategoria' => 'idpadre']);
-    }
-
-    public function getModulos()
-    {
-        return $this->hasOne(Modulos::className(), ['idmodulo' => 'modulo']);
-    }
-
-    /*
-     * funcion para sacar menu select2
-     */
-    public static function getSelectMenu($modulo)
-    {
-        $cat = Asignacion::find()->where(['=', 'modulo', Modulos::findOne(['alias' => $modulo])['idmodulo']])->all();
-        $result = [];
-        $temp = [];
-        foreach ($cat as $item) {
-            if (empty($item->idpadre)) {
-                array_push($temp, $item);
-            }
-        }
-        foreach ($temp as $key => $item) {
-            $temps = Asignacion::find()->where(['=', 'idpadre', $item->idcategoria])->all();
 
 
-            if (count($temps) > 0) {
-                foreach ($temps as $value) {
-                    $temps2 = Asignacion::find()->where(['=', 'idpadre', $value->idcategoria])->all();
-                    if (count($temps2) > 0) {
-                        foreach ($temps2 as $value2) {
-                            $result["<span class='fa fa-square'></span> " . $item->nombre]["<span class='fa fa-caret-right'></span> " . $value->nombre][$value2->idcategoria] = "<span class='fa fa-angle-double-right'></span> " . $value2->nombre;
-                        }
-                    } else {
-                        $result["<span class='fa fa-square'></span> " . $item->nombre][$value->idcategoria] = "<span class='fa fa-caret-right'></span> " . $value->nombre;
-                    }
-                }
-            } else {
-                $result[$item->idcategoria] = "<span class='fa fa-square'></span> " . $item->nombre;
-            }
-        }
-        return $result;
-
-    }
-
-    /*
-     * funcion para obtener categorias de primer nivel por alias
-     */
-    static public function getMenu($modulo, $limit = 0)
-    {
-        $data = Asignacion::find()
-            ->where(['modulo' => Modulos::findOne(['alias' => $modulo])['idmodulo'], 'estado' => '1'])
-            ->orderBy(['idcategoria' => SORT_ASC]);
-        if ($limit > 0)
-            $data->limit($limit);
-        return $data->all();
-    }
 }

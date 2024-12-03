@@ -56,8 +56,6 @@ class SiteController extends BaseController
             $user = Yii::$app->session->get('user');
             return $this->redirect($this->authService->getRedirectRoute($user));
         }
-
-
         return $this->render('login', [
             'model' => $model,
         ]);

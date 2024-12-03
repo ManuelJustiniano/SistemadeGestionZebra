@@ -1,6 +1,5 @@
 <?php
 namespace app\components;
-
 use app\models\Tareas;
 use app\models\TareasSearch;
 use app\models\Usuarios;
@@ -19,15 +18,14 @@ class GestionProyectoAService implements InterfaceGestionProyecto
         $this->asignacionService = $asignacionService;
     }
 
-    public function obtenerUsuarioSesion()
+    public function verificarAccesoAdmingestor()
     {
-        return $this->proyectosService->obtenerUsuarioSesion();
+        return $this->proyectosService->verificarAccesoAdmingestor();
     }
         public function listarProyectos($queryParams)
     {
         return $this->proyectosService->listarProyectos($queryParams);
     }
-
 
     public function nuevoProyecto($queryParams)
     {
@@ -49,10 +47,13 @@ class GestionProyectoAService implements InterfaceGestionProyecto
 
         return $this->asignacionService->prepararModeloAsignacion($idproyecto);
     }
-
     public function procesarAsignacionTarea($model, $datosPost)
     {
         return $this->asignacionService->procesarAsignacionTarea($model, $datosPost);
+    }
+    public function cambiarEstadoproyecto($id)
+    {
+        return $this->proyectosService->cambiarEstadoproyecto($id);
     }
     public function findModel($id)
     {

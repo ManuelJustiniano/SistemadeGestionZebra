@@ -1,11 +1,10 @@
 <?php
-
-
 use dosamigos\ckeditor\CKEditor;
 use kartik\form\ActiveForm;
 use kartik\select2\Select2;
 use kartik\widgets\DatePicker;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $format = <<< SCRIPT
 function format(state) {
@@ -29,17 +28,17 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 <div class="col-12 col-lg-6 col-md-6 col-sm-12 mspeo">
     <div class="mb-3">
-        <?= $form->field($model, 'nombrecompleto')->textInput(['class' => 'form-control', 'placeholder' => 'Nombre']) ?>
+        <?= $form->field($model, 'nombrecompleto')->textInput(['class' => 'form-control', 'placeholder' => '']) ?>
 
 
 
-        <?= $form->field($model, 'email')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Correo electronico']) ?>
+        <?= $form->field($model, 'email')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
 
 
 
-        <?= $form->field($model, 'usuario')->textInput(['class' => 'form-control', 'placeholder' => 'Usuario']) ?>
+        <?= $form->field($model, 'usuario')->textInput(['class' => 'form-control', 'placeholder' => '']) ?>
 
 
 
@@ -68,15 +67,15 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 
 
-        <?= $form->field($model, 'telefono')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Telefono']) ?>
+        <?= $form->field($model, 'telefono')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
 
 
-        <?= $form->field($model, 'movil')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Celular']) ?>
+        <?= $form->field($model, 'movil')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
-        <?= $form->field($model, 'direccion')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Ciudad']) ?>
+        <?= $form->field($model, 'direccion')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
 
@@ -88,7 +87,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
                 'Mujer' => 'Mujer',
             ],
             'options' => [
-                'placeholder' => 'Seleccione Sexo...',
+                'placeholder' => 'Seleccione sexo...',
             ],
             'pluginOptions' => [
                 'allowClear' => true, // Permitir limpiar la selección
@@ -105,7 +104,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
             'data' => \app\models\UsuariosSearch::getTipoUsuario(),
             'language' => 'es',
             'options' => [
-                'placeholder' => 'Tipo Usuario',
+                'placeholder' => 'Seleccion el tipo de Usuario',
                 //'multiple' => true,
             ],
             'pluginOptions' => [
@@ -122,7 +121,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
             // modify template for custom rendering
             'language' => 'es',
             'removeButton' => false,
-            'options' => ['class' => 'form-control input-lg', 'placeholder' => 'Fecha de Naciemiento'],
+            'options' => ['class' => 'form-control input-lg', 'placeholder' => ''],
             'pluginOptions' => [
                 'autoclose' => true,
                 'format' => 'yyyy-mm-dd',
@@ -136,23 +135,39 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 
 
-        <?= $form->field($model, 'empresa')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Empresa']) ?>
+        <?= $form->field($model, 'empresa')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
 
 
 
-        <?= $form->field($model, 'cargo')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Cargo']) ?>
+        <?= $form->field($model, 'cargo')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
 
 
-        <?= $form->field($model, 'pais')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Pais']) ?>
+        <?= $form->field($model, 'pais')->widget(Select2::classname(), [
+           'options' => [
+                'placeholder' => 'Seleccione un pais',
+            ],
+            'pluginOptions' => [
+                'allowClear' => true, // Permitir limpiar la selección
+            ],
+        ]) ?>
+
+        <?= $form->field($model, 'ciudad')->widget(Select2::classname(), [
+            'options' => [
+                'placeholder' => 'Seleccione una ciudad',
+            ],
+            'pluginOptions' => [
+                'allowClear' => true, // Permitir limpiar la selección
+            ],
+        ]) ?>
 
 
 
 
 
-        <?= $form->field($model, 'ciudad')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Ciudad']) ?>
+
 
 
 
@@ -174,3 +189,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
     <?php ActiveForm::end(); ?>
 
+<script>
+    // Definir la URL generada por Yii2 en una variable JavaScript global
+    var urlGetPaises = '<?= Url::to(['administrador/get-paises']) ?>';
+</script>

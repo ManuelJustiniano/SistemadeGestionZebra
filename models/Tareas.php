@@ -45,8 +45,8 @@ class Tareas extends \yii\db\ActiveRecord
         return [
             'idtarea' => 'ID',
             'titulo' => 'Nombre de la tarea',
-            'descripcion' => 'Descripcion especifica de la tarea',
-            'modulo' => 'Modulo a asignar',
+            'descripcion' => 'Descripcion de la tarea',
+            'modulo' => 'Modulo',
             'estado' => 'Estado',
         ];
     }
@@ -55,7 +55,7 @@ class Tareas extends \yii\db\ActiveRecord
     public static function getSelectTareas()
     {
         $result =[];
-        $temp = Tareas::find()->where([])->all();
+        $temp = Tareas::find()->where(['estado'=> '1'])->all();
         foreach ($temp as $item) {
             $result[$item->idtarea]="".$item->titulo;
         }

@@ -41,6 +41,9 @@ class ChangePasswordForm extends Model
         return [
             [['currentPassword', 'newPassword', 'confirmPassword'], 'required'],
             ['currentPassword', 'validateCurrentPassword'],
+            [['newPassword'], 'string', 'min' => 8, 'message' => 'La contraseña debe tener al menos 8 caracteres.'],
+            ['newPassword', 'match', 'pattern' => '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/', 'message' => 'La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un símbolo.'],
+
             ['confirmPassword', 'compare', 'compareAttribute' => 'newPassword', 'message' => 'La nueva contraseña y la confirmación deben coincidir.'],
         ];
     }
@@ -60,8 +63,15 @@ class ChangePasswordForm extends Model
     {
         // Validar que la contraseña actual sea correcta
         $user = Yii::$app->session->get('user');
-        if ($user && $user->contrasena !== md5($this->currentPassword)) {
-            $this->addError($attribute, 'La contraseña actual no es correcta.');
+
+        if ($user) {
+            $usuario = Usuarios::findOne(['idusuario' => $user['id']]); // Obtener el modelo de usuario para acceder a la contraseña hasheada
+
+            if (!$usuario || !password_verify($this->currentPassword, $usuario->contrasena)) {
+                $this->addError($attribute, 'La contraseña actual no es correcta.');
+            }
         }
-    }
+
+
+           }
 }

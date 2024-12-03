@@ -22,24 +22,15 @@ class CuentaService implements InterfaceCuenta
 
        public function actualizarUsuario($model, $datosPost)
     {
-
         if ($model->load($datosPost) && $model->validate()) {
             if ($model->save()) {
-                Yii::$app->session->set('user', $model);
-
-                $this->notiService->setFlashMensaje($mensajec, 'success');
-                return [
-                    'exito' => true,
-                    'mensaje' => $mensajec,
-                ];
-            }
-        }
-        $this->notiService->setFlashMensaje($mensajem, 'danger');
-        return [
-            'exito' => false,
-            'mensaje' => $mensajem,
-        ];
-
+                    Yii::$app->session->set('user', $model);
+                    $this->notiService->agregarMensajeExito('Datos actualizados correctamente!');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error al editar datos, inténtelo más tarde.');
+                    return ['exito' => false, 'model' => $model];
+                }        }
 
     }
 
@@ -75,27 +66,16 @@ class CuentaService implements InterfaceCuenta
     public function cambiarPassword($usuario, $newPassword)
     {
 
-
-        $mensajeExito = 'Tu contraseña ha sido actualizada correctamente.';
-        $mensajeError = 'Error al actualizar la contraseña. Verifica los datos ingresados.';
-
-
-        $usuario->contrasena = md5($newPassword);
-
+        $usuario->contrasena = Yii::$app->security->generatePasswordHash($newPassword);
         if ($usuario->save()) {
             Yii::$app->session->set('user', $usuario);
-            $this->notiService->setFlashMensaje($mensajeExito, 'success');
-            return [
-                'exito' => true,
-                'mensaje' => $mensajeExito,
-            ];
-        }
+            $this->notiService->agregarMensajeExito('Contraseña cambiada correctamente!');
+            return ['exito' => true];
+        } else  {
+        $this->notiService->agregarMensajeError('Error al validar el formulario. Verifica los datos ingresados');
+        return ['exito' => false];
+    }
 
-        $this->notiService->setFlashMensaje($mensajeError, 'danger');
-        return [
-            'exito' => false,
-            'mensaje' => $mensajeError,
-        ];
     }
 
 
@@ -107,14 +87,8 @@ class CuentaService implements InterfaceCuenta
             return $this->cambiarPassword($usuario, $changePasswordForm->newPassword);
         }
 
-        $mensajeErrorValidacion = 'Error al validar el formulario. Verifica los datos ingresados.';
-        $this->notiService->setFlashMensaje($mensajeErrorValidacion, 'danger');
 
-        return [
-            'exito' => false,
-            'mensaje' => $mensajeErrorValidacion,
-            'formModel' => $changePasswordForm,
-        ];
+
     }
 
 

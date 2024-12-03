@@ -33,6 +33,6 @@ $this->params['breadcrumbs'][] = 'Update';
     </div><!--//app-content-->
 
 
-
+<script src="../assets_b/js/paisciud.js"></script>
 
 

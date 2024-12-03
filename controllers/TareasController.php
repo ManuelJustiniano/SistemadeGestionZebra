@@ -36,23 +36,15 @@ class TareasController extends Controller
 
     public function actionIndex()
     {
-       $modelu = $this->tareaService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
-
+        $this->tareaService->verificarAccesoAdmin();
         $resultadoBusqueda = $this->tareaService->listTareas(Yii::$app->request->queryParams);
-        return $this->render('listap', [
+        return $this->render('index', [
             'searchModel' => $resultadoBusqueda['searchModel'],
             'dataProvider' => $resultadoBusqueda['dataProvider'],
-            'render' => 'listap',
-            'tipo_usuario' => $modelu->tipo_usuario,
+            'render' => 'listatotaltareas',
         ]);
 
     }
-
 
     /**
      * @throws NotFoundHttpException
@@ -61,29 +53,17 @@ class TareasController extends Controller
 
     public function actionView($id)
     {
-        $modelu = $this->tareaService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
+        $this->tareaService->verificarAccesoAdmin();
         $model = $this->tareaService->findModel($id);
         return $this->render('index', [
             'model' => $model,
             'render' => 'view',
-            'tipo_usuario' => $modelu->tipo_usuario,
         ]);
     }
 
     public function actionCreate()
     {
-        $modelu = $this->tareaService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
-
+        $this->tareaService->verificarAccesoAdmin();
         $resultado = $this->tareaService->nuevaTarea(Yii::$app->request->post());
         if ($resultado['exito']) {
             return $this->redirect(['index']);
@@ -91,7 +71,6 @@ class TareasController extends Controller
         return $this->render('index', [
             'model' => $resultado['model'],
             'render' => 'create',
-            'tipo_usuario' => $modelu->tipo_usuario,
 
         ]);
     }
@@ -102,33 +81,26 @@ class TareasController extends Controller
     public function actionUpdate($id)
     {
 
-
-        $modelu = $this->tareaService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->tareaService->verificarAccesoAdmin();
         $resultado = $this->tareaService->actualizarTarea(Yii::$app->request->post(), $id);
         if ($resultado['exito']) {
-            return $this->redirect(['index', 'id' => $id]);
+            return $this->redirect(['view', 'id' => $id]);
         }
-
         return $this->render('index', [
             'model' => $resultado['model'],
             'render' => 'update',
-            'tipo_usuario' => $modelu->tipo_usuario,
-
         ]);
 
 
     }
 
+
+
     public function actionEstado($id)
     {
-        if (!Yii::$app->request->isAjax) {
-            return $this->redirect(['index']);
-        }
+        $this->tareaService->verificarAccesoAdmin();
         $resultado = $this->tareaService->cambiarEstadoTarea($id);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
             'exito' => $resultado['exito'],
             'mensaje' => $resultado['mensaje'],
@@ -141,11 +113,7 @@ class TareasController extends Controller
      */
     public function actionDelete($id): \yii\web\Response
     {
-        $modelu = $this->tareaService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->tareaService->verificarAccesoAdmin();
         $this->findModel($id)->delete();
         return $this->redirect(['index']);
 

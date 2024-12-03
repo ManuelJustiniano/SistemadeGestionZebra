@@ -1,10 +1,19 @@
 <?php
 
 use kartik\form\ActiveForm;
+use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\helpers\Url;
 $this->title = 'ACTUALIZAR CUENTA';
+$format = <<< SCRIPT
+function format(state) {
+if (!state.id) return state.text; // optgroup
+return state.text;
+}
+SCRIPT;
+$escape = new \yii\web\JsExpression("function(m) { return m; }");
+$this->registerJs($format, \yii\web\View::POS_HEAD);
 ?>
-
 
 
 <div class="app-content pt-3 p-md-3 p-lg-4">
@@ -18,127 +27,156 @@ $this->title = 'ACTUALIZAR CUENTA';
 
                     <div class="app-card-body">
 
-                            <?php $form = ActiveForm::begin([
-                                'id' => 'frmContact',
-                                'class' => 'settings-form',
-                                'action' => ['administrador/updateperfil'],
-                                'method' => 'post'
-                            ]); ?>
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
+
+                        <?php $form = ActiveForm::begin([
+                            'options' => ['enctype' => 'multipart/form-data'],
+                            'class' => 'settings-form',
+                            'action' => ['administrador/updateperfil'],
+
+                            'type' => ActiveForm::TYPE_HORIZONTAL,
+                            'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL
+                            ] // important
+                        ]); ?>
+
+
+
+                        <div class="col-12 col-lg-6 col-md-6 col-sm-12 mspeo">
                             <div class="mb-3">
-                                <?= $form->field($model, 'nombrecompleto')->textInput(['class' => 'form-control', 'placeholder' => 'Nombre']) ?>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'usuario')->textInput(['class' => 'form-control', 'placeholder' => 'Usuario']) ?>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'email')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Correo electronico']) ?>
-
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'telefono')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Telefono']) ?>
-
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'movil')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Celular']) ?>
-
-                            </div>
-                        </div>
+                                <?= $form->field($model, 'nombrecompleto')->textInput(['class' => 'form-control', 'placeholder' => '']) ?>
 
 
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'sexo')->dropDownList(
-                                    [
+
+                                <?= $form->field($model, 'email')->textInput(['class' => 'form-control input-lg', 'placeholder' => ' ']) ?>
+
+
+
+
+
+                                <?= $form->field($model, 'usuario')->textInput(['class' => 'form-control', 'placeholder' => '']) ?>
+
+
+
+
+
+
+                                <?= $form->field($model, 'telefono')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
+
+
+
+
+                                <?= $form->field($model, 'movil')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
+
+
+                                <?= $form->field($model, 'direccion')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
+
+
+
+
+
+                                <?= $form->field($model, 'sexo')->widget(Select2::classname(), [
+                                    'data' => [
                                         'Hombre' => 'Hombre',
                                         'Mujer' => 'Mujer',
                                     ],
-                                    [
-                                        'prompt' => 'Sexo',
+                                    'options' => [
+                                        'placeholder' => 'Seleccione Sexo...',
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true, // Permitir limpiar la selección
+                                    ],
+                                ]) ?>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-6 col-md-6 col-sm-12 ">
+                            <div class="mb-3">
+                                <?php echo $form->field($model, 'tipo_usuario')->widget(Select2::classname(), [
+
+                                    'data' => \app\models\UsuariosSearch::getTipoUsuario(),
+                                    'language' => 'es',
+                                    'options' => [
+                                        'placeholder' => 'Seleccion el tipo de usuario',
+                                        //'multiple' => true,
+                                    ],
+                                    'pluginOptions' => [
+                                        'templateResult' => new \yii\web\JsExpression('format'),
+                                        'templateSelection' => new \yii\web\JsExpression('format'),
+                                        'escapeMarkup' => $escape,
+                                        'allowClear' => true
+                                    ],
+                                ]); ?>
+
+
+                                <?= $form->field($model, 'fecha_nacimiento')->widget(
+                                    \kartik\widgets\DatePicker::className(), [
+                                    // modify template for custom rendering
+                                    'language' => 'es',
+                                    'removeButton' => false,
+                                    'options' => ['class' => 'form-control input-lg', 'placeholder' => ''],
+                                    'pluginOptions' => [
+                                        'autoclose' => true,
+                                        'format' => 'yyyy-mm-dd',
+                                        'todayBtn' => "linked",
+                                        //'keyboardNavigation' => false,
+                                        //'forceParse' => false
                                     ]
-                                ) ?>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="">
-
-
-                        <?= $form->field($model, 'fecha_nacimiento')->widget(
-                            \kartik\widgets\DatePicker::className(), [
-                            // modify template for custom rendering
-                            'language' => 'es',
-                            'removeButton' => false,
-                            'options' => ['class' => 'form-control input-lg', 'placeholder' => 'Fecha de Naciemiento'],
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'yyyy-mm-dd',
-                                'todayBtn' => "linked",
-                                //'keyboardNavigation' => false,
-                                //'forceParse' => false
-                            ]
-                        ]); ?>
-
-                            </div>
-                        </div>
+                                ]) ?>
 
 
 
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'empresa')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Empresa']) ?>
-
-                            </div>
-                        </div>
 
 
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'cargo')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Cargo']) ?>
+                                <?= $form->field($model, 'empresa')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
 
-                            </div>
-                        </div>
 
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'pais')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Pais']) ?>
+
+
+
+                                <?= $form->field($model, 'cargo')->textInput(['class' => 'form-control input-lg', 'placeholder' => '']) ?>
+
+
+
+                                <?= $form->field($model, 'pais')->widget(Select2::classname(), [
+                                    'options' => [
+                                        'placeholder' => 'Seleccione un pais',
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true, // Permitir limpiar la selección
+                                    ],
+                                ]) ?>
+
+                                <?= $form->field($model, 'ciudad')->widget(Select2::classname(), [
+                                    'options' => [
+                                        'placeholder' => 'Seleccione una ciudad',
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true, // Permitir limpiar la selección
+                                    ],
+                                ]) ?>
 
                             </div>
                         </div>
 
 
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'ciudad')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Ciudad']) ?>
+                        <div class="form-group clsgua" >
 
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12" align="center">
+
+                                <div class="mb-3">
+                                    <?= Html::submitButton($model->isNewRecord ? 'GUARDAR' : 'ACTUALIZAR',    ['class' => 'btn app-btn-primary btform']
+                                    ) ?>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="col-12 col-lg-6  " style="padding-left: 0">
-                            <div class="mb-3">
-                                <?= $form->field($model, 'direccion')->textInput(['class' => 'form-control input-lg', 'placeholder' => 'Ciudad']) ?>
-
-                            </div>
-                        </div>
-
-
-
-
-
-
-                        <?= Html::submitButton('Actualizar', ['class' => 'btn app-btn-primary', 'name' => 'contact-button']) ?>
 
                         <?php ActiveForm::end(); ?>
+
+                        <script>
+                            // Definir la URL generada por Yii2 en una variable JavaScript global
+                            var urlGetPaises = '<?= Url::to(['administrador/get-paises']) ?>';
+                        </script>
+
 
 
                     </div><!--//app-card-body-->
@@ -156,3 +194,4 @@ $this->title = 'ACTUALIZAR CUENTA';
 
 
 
+<script src="../assets_b/js/paisciud.js"></script>

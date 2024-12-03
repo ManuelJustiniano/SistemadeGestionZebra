@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\components\InterfaceAdmin;
 use app\components\InterfaceCuenta;
+use app\components\InterfaceLib;
 use app\components\InterfaceNoti;
 use app\models\ChangePasswordForm;
 use app\models\Configuracion;
@@ -23,7 +24,7 @@ class AdministradorController extends Controller
 
     private $adminService;
     private $cuentaService;
-    private $notiService;
+    private $paisesService;
     /**
      * @inheritdoc
      */
@@ -39,10 +40,11 @@ class AdministradorController extends Controller
 
 
 
-    public function __construct($id, $module, InterfaceAdmin $adminService,  InterfaceCuenta $cuentaService,$config = [])
+    public function __construct($id, $module, InterfaceAdmin $adminService, InterfaceLib $paisesService,  InterfaceCuenta $cuentaService,$config = [])
     {
         $this->adminService = $adminService;
         $this->cuentaService = $cuentaService;
+        $this->paisesService = $paisesService;
         parent::__construct($id, $module, $config);
     }
 
@@ -52,11 +54,7 @@ class AdministradorController extends Controller
     }
     public function actionCuenta()
     {
-        $model = $this->adminService->obtenerUsuarioSesion();
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $model = $this->adminService->verificarAccesoAdmin();
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'perfil',
@@ -65,17 +63,11 @@ class AdministradorController extends Controller
 
     public function actionUpdateperfil()
     {
-        $model = $this->adminService->obtenerUsuarioSesion();
-        if ($model === null) {
-            return $this->redirect(['site/login']);
-        }
-
+        $model = $this->adminService->verificarAccesoAdmin();
         $resultado = $this->cuentaService->actualizarUsuario($model, Yii::$app->request->post());
-
         if ($resultado['exito']) {
             return $this->redirect(['cuenta']);
         }
-
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'updateperfil',
@@ -84,14 +76,11 @@ class AdministradorController extends Controller
 
     public function actionUpdatepasswordperfil()
     {
-        $model = $this->adminService->obtenerUsuarioSesion();
-        if ($model === null) {
-            return $this->redirect(['site/login']);       }
+        $model = $this->adminService->verificarAccesoAdmin();
         $resultado = $this->cuentaService->procesarFormularioCambioPassword($model, Yii::$app->request->post());
         if ($resultado['exito']) {
             return $this->redirect(['cuenta']);
         }
-
         return $this->render('cuenta', [
             'model' => $resultado['formModel'] ?? new ChangePasswordForm(),
             'render' => 'updatepasswordperfil',
@@ -99,36 +88,27 @@ class AdministradorController extends Controller
     }
 
 
+
+
     public function actionUsuarioslist()
     {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->adminService->verificarAccesoAdmin();
         $resultadoBusqueda = $this->adminService->listUsuarios(Yii::$app->request->queryParams);
-        return $this->render('listau', [
+        return $this->render('cuenta', [
+
             'searchModel' => $resultadoBusqueda['searchModel'],
             'dataProvider' => $resultadoBusqueda['dataProvider'],
             'render' => 'listau',
         ]);
 
     }
-
-
     public function actionCreate()
     {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
+        $this->adminService->verificarAccesoAdmin();
         $resultado = $this->adminService->nuevoUsuario(Yii::$app->request->post());
         if ($resultado['exito']) {
             return $this->redirect(['usuarioslist']);
         }
-
         return $this->render('cuenta', [
             'model' => $resultado['model'] ?? new Usuarios(),
             'render' => 'createusuario',
@@ -138,17 +118,8 @@ class AdministradorController extends Controller
 
     public function actionView($id)
     {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->adminService->verificarAccesoAdmin();
         $model = $this->adminService->obtenerCliente($id);
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'Cliente no encontrado.');
-            return $this->redirect(['index']);
-        }
-
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'verusuario',
@@ -158,16 +129,8 @@ class AdministradorController extends Controller
 
     public function actionUpdate($id)
     {
-        $modelu = $this->adminService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->adminService->verificarAccesoAdmin();
         $model = $this->adminService->findModel($id);
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'El usuario no existe.');
-            return $this->redirect(['index']); // Redirige a donde corresponda
-        }
         $resultado = $this->adminService->actualizarUsuario(Yii::$app->request->post(), $id);
         if ($resultado['exito']) {
             return $this->redirect(['view', 'id' => $id]);
@@ -182,21 +145,9 @@ class AdministradorController extends Controller
 
     public function actionEstado($id)
     {
-        /*if (!Yii::$app->request->isAjax)
-            $this->redirect(['index']);
-        $model = new Usuarios();
-        $model = $model->findOne(['idusuario' => $id]);
-        $model->estado = (string)!$model->estado;
-        $model->save();
 
-        if (!Yii::$app->request->isAjax) {
-            return $this->redirect(['index']);
-        }*/
-
-        // Llamamos al servicio para cambiar el estado del usuario
+        $this->adminService->verificarAccesoAdmin();
         $resultado = $this->adminService->cambiarEstadoUsuario($id);
-
-        // Devolvemos una respuesta adecuada
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
             'exito' => $resultado['exito'],
@@ -204,7 +155,11 @@ class AdministradorController extends Controller
         ];
     }
 
-
+    public function actionGetPaises()
+    {
+        $paises = $this->paisesService->obtenerPaises();
+        return json_encode($paises);
+    }
 
 
 }

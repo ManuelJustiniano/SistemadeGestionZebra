@@ -41,24 +41,18 @@ class ProyectosController extends Controller
     public function __construct($id, $module, InterfaceGestionProyecto $gestionProyectAService, $config = [])
     {
         $this->gestionProyectAService = $gestionProyectAService;
-
         parent::__construct($id, $module, $config);
     }
 
 
     public function actionIndex()
     {
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
         $resultadoBusqueda = $this->gestionProyectAService->listarProyectos(Yii::$app->request->queryParams);
-        return $this->render('listap', [
+        return $this->render('index', [
             'searchModel' => $resultadoBusqueda['searchModel'],
             'dataProvider' => $resultadoBusqueda['dataProvider'],
             'render' => 'listap',
-            'tipo_usuario' => $modelu->tipo_usuario,
         ]);
     }
 
@@ -68,28 +62,17 @@ class ProyectosController extends Controller
      */
     public function actionView($id)
     {
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
 
         $model = $this->gestionProyectAService->obtenerProyecto($id);
-
         return $this->render('index', [
             'model' => $model,
             'render' => 'view',
-            'tipo_usuario' => $modelu->tipo_usuario,
         ]);
     }
 
     public function actionCreate()
     {
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+       $this->gestionProyectAService->verificarAccesoAdmingestor();
         $resultado = $this->gestionProyectAService->nuevoProyecto(Yii::$app->request->post());
         if ($resultado['exito']) {
             return $this->redirect(['index']);
@@ -97,7 +80,6 @@ class ProyectosController extends Controller
         return $this->render('index', [
             'model' => $resultado['model'],
             'render' => 'create',
-            'tipo_usuario' => $modelu->tipo_usuario,
 
         ]);
     }
@@ -106,72 +88,67 @@ class ProyectosController extends Controller
     public function actionAsignaciondetareas($idproyecto)
     {
 
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
         $model = $this->gestionProyectAService->prepararModeloAsignacion($idproyecto);
-
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'El proyecto especificado no existe.');
-            return $this->redirect(['index']);
-        }
-
         if (Yii::$app->request->isPost) {
             $resultado = $this->gestionProyectAService->procesarAsignacionTarea($model, Yii::$app->request->post());
             if ($resultado['exito']) {
-                return $this->redirect(['index']);
+                return $this->redirect(['view', 'id' => $idproyecto]);
             } else {
-                Yii::$app->session->setFlash('error', 'Error al asignar la tarea. Verifica los datos ingresados.');
+                Yii::$app->session->setFlash('error', 'Error al asginar. Inténtelo más tarde.');
             }
         }
-
         return $this->render('index', [
             'model' => $model,
             'render' => 'asignar',
-            'tipo_usuario' => $modelu->tipo_usuario,
         ]);
-
-
     }
 
     /**
      */
     public function actionUpdate($id)
     {
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
         $resultado = $this->gestionProyectAService->actualizarProyecto(Yii::$app->request->post(), $id);
         if ($resultado['exito']) {
             return $this->redirect(['index']);
         }
-
-
         return $this->render('index', [
             'model' => $resultado['model'],
             'render' => 'update',
-            'tipo_usuario' => $modelu->tipo_usuario,
 
         ]);
     }
 
+    public function actionEstado($id)
+    {
+        $model = $this->gestionProyectAService->verificarAccesoAdmingestor();
+        $resultado = $this->gestionProyectAService->cambiarEstadoproyecto($id);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'exito' => $resultado['exito'],
+            'mensaje' => $resultado['mensaje'],
+        ];
+    }
+
+
+    public function actionProgreso($id)
+    {
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
+        $resultado = $this->gestionProyectAService->cambiarEstadoproyecto($id);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'exito' => $resultado['exito'],
+            'mensaje' => $resultado['mensaje'],
+        ];
+    }
     /**
      * @throws StaleObjectException
      * @throws NotFoundHttpException
      */
     public function actionDelete($id)
     {
-        $modelu = $this->gestionProyectAService->obtenerUsuarioSesion();
-        if ($modelu === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
+        $modelu = $this->gestionProyectAService->verificarAccesoAdmingestor();
         //$this->gestionProyectAService->eliminarProyecto($id);
        // return $this->redirect(['index']);
     }

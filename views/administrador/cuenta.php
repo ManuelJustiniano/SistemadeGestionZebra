@@ -1,42 +1,34 @@
-<?php
-$user = Yii::$app->session->get('user');
-?>
 
-<?= $this->render('../widgets/menu', [
-    'lista' => [
-        'items' => [
-            ['label' => 'Mi cuenta', 'url' => ['administrador/cuenta'], 'options' => ['class' => 'nav-item']],
-            ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-            ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-            ['label' => 'Mensajes', 'url' => ['/administrador/perfil'], 'options' => ['class' => 'nav-item']],
-            ['label' => 'Materiales', 'url' => ['/administrador/perfil'], 'options' => ['class' => 'nav-item']],
-            ['label' => 'Usuarios', 'url' => ['/administrador/usuarioslist'], 'options' => ['class' => 'nav-item']],
+<?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
+    <?= \yii2mod\alert\Alert::widget([
+        'useSessionFlash' => false,
+        'options' => [
+            'type' => (!empty($message['type'])) ? $message['type'] : 'error',
+            'title' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : '¡Algo salió mal!',
+            'animation' => "slide-from-top",
         ],
-    ], 'tipousuario' => 'administrador',
-]) ?>
+    ]); ?>
+<?php endforeach; ?>
 
 
+
+<?= $this->render('../widgets/opciones') ?>
 <div class="app-wrapper">
-
-
-
                 <?php
                 if (isset($render)) {
                     switch ($render) {
                         case 'listau':
-                            echo $this->render('listau', ['model' => $model]);
+                            echo $this->render('listau', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
                             break;
                         case 'verusuario':
                             echo $this->render('verusuario', ['model' => $model]);
                             break;
-
                         case 'createusuario':
                             echo $this->render('createusuario', ['model' => $model]);
                             break;
                         case 'updateusuario':
                             echo $this->render('updateusuario', ['model' => $model]);
                             break;
-
                         case 'perfil':
                             echo $this->render('perfil', ['model' => $model]);
                             break;
@@ -46,11 +38,8 @@ $user = Yii::$app->session->get('user');
                         case 'updatepasswordperfil':
                             echo $this->render('updatepasswordperfil', ['model' => $model]);
                             break;
-
                     }
                 }
                 ?>
                 <!--/container-main-->
-
-
             </div><!--//app-wrapper-->

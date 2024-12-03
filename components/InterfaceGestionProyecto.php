@@ -4,7 +4,7 @@ namespace app\components;
 interface InterfaceGestionProyecto
 {
     public function listarProyectos($queryParams);
-    public function obtenerUsuarioSesion();
+    public function verificarAccesoAdmingestor();
     public function nuevoProyecto($queryParams);
     public function actualizarProyecto($dates, $id);
     public function prepararModeloAsignacion($idproyecto);

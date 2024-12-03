@@ -47,6 +47,8 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
             [['usuario'], 'unique', 'message' => 'Este usuario ya se encuentra registrado.'],
             [['fecha_nacimiento', 'fecha_registro', 'cargo'], 'safe'],
             [['nombrecompleto', 'contrasena'], 'string', 'max' => 250],
+            [['telefono', 'movil'], 'string', 'min' => 8, 'max' => 15],
+            [['telefono', 'movil'], 'match', 'pattern' => '/^[0-9]+$/', 'message' => 'Solo se permiten números.'],
             [['direccion', 'email', 'movil'], 'string', 'max' => 100],
             [['telefono', 'pais', 'ciudad'], 'string', 'max' => 50],
             ['contrasena', 'string', 'min' => 8, 'max' => 255], // Asegúrate de que la longitud máxima sea suficiente
@@ -85,6 +87,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $result =[];
         $prioridad = [
+            '1' =>'Administrador',
             '2' =>'Gestor de Proyecto',
             '3' => 'Consultor de Marketing',
             '4' => 'Cliente',
@@ -97,7 +100,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getSelectCliente()
     {
         $result =[];
-        $temp = Usuarios::find()->where(['tipo_usuario' => '4'])->all();
+        $temp = Usuarios::find()->where(['tipo_usuario' => '4', 'estado' => '1',])->all();
         foreach ($temp as $item) {
             $result[$item->idusuario]="".$item->nombrecompleto." - ".$item->empresa;
         }
@@ -108,7 +111,7 @@ class Usuarios extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getSelectConsultor()
     {
         $result =[];
-        $temp = Usuarios::find()->where(['tipo_usuario' => '3'])->all();
+        $temp = Usuarios::find()->where(['tipo_usuario' => '3', 'estado' => '1'])->all();
         foreach ($temp as $item) {
             $result[$item->idusuario]="".$item->nombrecompleto." - ".$item->empresa;
         }

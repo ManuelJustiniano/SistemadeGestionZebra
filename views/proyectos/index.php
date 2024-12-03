@@ -17,37 +17,29 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 ?>
 
-<?php
-if ($tipo_usuario == '1') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['administrador/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mensajes', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Materiales', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'administrador',
-    ]);
-} elseif ($tipo_usuario == '2') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['gestor/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'gestor',
-    ]);
-}
-?>
+<?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
+    <?= \yii2mod\alert\Alert::widget([
+        'useSessionFlash' => false,
+        'options' => [
+            'type' => (!empty($message['type'])) ? $message['type'] : 'error',
+            'title' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : '¡Algo salió mal!',
+            'animation' => "slide-from-top",
+        ],
+    ]); ?>
+<?php endforeach; ?>
+
+
+<?= $this->render('../widgets/opciones') ?>
 
     <div class="app-wrapper">
 
         <?php
         if (isset($render)) {
             switch ($render) {
+                case 'listap':
+                    echo $this->render('listap', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
+                    break;
+                    break;
                 case 'view':
                     echo $this->render('view', ['model' => $model]);
                     break;

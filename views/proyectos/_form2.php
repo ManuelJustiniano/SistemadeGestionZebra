@@ -35,7 +35,7 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
             'data' => \app\models\Tareas::getSelectTareas(),
             'language' => 'es',
             'options' => [
-                'placeholder' => 'Tareas',
+                'placeholder' => 'Tarea',
                 //'multiple' => true,
             ],
             'pluginOptions' => [
@@ -48,30 +48,11 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
     </div>
 </div>
 
+
 <div class="col-12 " >
     <div class="mb-3">
 
-        <?php echo $form->field($model, 'idcliente')->widget(Select2::classname(), [
-
-            'data' => \app\models\Usuarios::getSelectCliente(),
-            'language' => 'es',
-            'options' => [
-                'placeholder' => 'Cliente',
-                //'multiple' => true,
-            ],
-            'pluginOptions' => [
-                'templateResult' => new \yii\web\JsExpression('format'),
-                'templateSelection' => new \yii\web\JsExpression('format'),
-                'escapeMarkup' => $escape,
-                'allowClear' => true
-            ],
-        ]); ?>
-    </div>
-</div>
-<div class="col-12 " >
-    <div class="mb-3">
-
-        <?php echo $form->field($model, 'idgestor')->widget(Select2::classname(), [
+        <?php echo $form->field($model, 'idconsultor')->widget(Select2::classname(), [
 
             'data' => \app\models\Usuarios::getSelectConsultor(),
             'language' => 'es',

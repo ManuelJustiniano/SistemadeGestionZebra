@@ -42,10 +42,6 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
     </div>
 </div>
 
-
-
-
-
 <div class="col-12 " >
     <div class="mb-3">
         <?= $form->field($model, 'descripcion')->widget(CKEditor::className(), [

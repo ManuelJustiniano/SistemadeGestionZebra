@@ -34,7 +34,6 @@ class CuentaController extends Controller
     }
 
 
-
     public function __construct($id, $module, InterfaceCuenta $cuentaService, $config = [])
     {
         $this->cuentaService = $cuentaService;
@@ -42,25 +41,8 @@ class CuentaController extends Controller
     }
 
 
-    public function actionCuenta()
+      public function actionUpdateperfil()
     {
-        $model = $this->cuentaService->obtenerUsuarioSesion();
-        if ($model === null) {
-            return $this->redirect(['site/login']);
-        }
-        return $this->render('perfil', [
-            'model' => $model,
-            'render' => 'perfil',
-        ]);
-    }
-
-
-    public function actionUpdateperfil()
-    {
-        $model = $this->cuentaService->obtenerUsuarioSesion();
-        if ($model === null) {
-            return $this->redirect(['site/login']);
-        }
 
         if ($model->load(Yii::$app->request->post())) {
             if ($this->cuentaService->actualizarUsuario($model)) {
@@ -68,7 +50,6 @@ class CuentaController extends Controller
                 return $this->redirect(['cuenta']);
             }
         }
-
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'updateperfil',

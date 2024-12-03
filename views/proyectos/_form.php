@@ -32,13 +32,12 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 <div class="col-12 " >
     <div class="mb-3">
-
         <?php echo $form->field($model, 'idcliente')->widget(Select2::classname(), [
-
             'data' => \app\models\Usuarios::getSelectCliente(),
             'language' => 'es',
             'options' => [
                 'placeholder' => 'Cliente',
+                'disabled' => !$model->isNewRecord, // Deshabilitar si el modelo ya existe (es una actualización)
                 //'multiple' => true,
             ],
             'pluginOptions' => [

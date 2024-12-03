@@ -1,4 +1,5 @@
 <?php
+
 namespace app\components;
 
 use app\models\Tareas;
@@ -26,18 +27,24 @@ class AdminService implements InterfaceAdmin
         if (empty($user)) {
             return null;
         }
-
         $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
-
         // Verificar si el usuario existe y si su tipo de usuario es '1'
         if ($usuario !== null && $usuario->tipo_usuario == '1') {
             return $usuario;
         }
-
         return null;
-
     }
 
+    public function verificarAccesoAdmin()
+    {
+        $usuario = $this->obtenerUsuarioSesion();
+        if ($usuario === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            Yii::$app->controller->redirect(Yii::$app->request->referrer ?: ['site/login']);
+            Yii::$app->end(); // Termina la ejecución del script, ya que la redirección se realizará aquí
+        }
+        return $usuario;
+    }
 
     public function listUsuarios($queryParams)
     {
@@ -85,7 +92,6 @@ class AdminService implements InterfaceAdmin
     }
 
 
-
     public function actualizarUsuario($dates, $id)
     {
         $model = $this->findModel($id);
@@ -115,22 +121,29 @@ class AdminService implements InterfaceAdmin
     {
 
 
-        // Intentamos encontrar el usuario por el ID
         $model = $this->findModel($id);
-
         if ($model === null) {
             return [
                 'exito' => false,
                 'mensaje' => 'Usuario no encontrado.',
             ];
         }
-        // Cambiamos el estado del usuario
+
+        $estadoAnterior = $model->estado;
         $model->estado = (string)!$model->estado;
 
         if ($model->save()) {
+            if ($estadoAnterior == '1') {
+                $correoEnviado = $this->correoService->enviarCorreoDeBloqueo($model);
+                $mensaje = 'El estado del usuario ha sido cambiado a bloqueado y se ha enviado el correo de notificación.';
+            } else {
+                $correoEnviado = $this->correoService->enviarCorreoDedesBloqueo($model);
+                $mensaje = 'El estado del usuario ha sido cambiado a activado.';
+            }
+
             return [
                 'exito' => true,
-                'mensaje' => 'El estado del usuario ha sido actualizado correctamente.',
+                'mensaje' => $mensaje,
             ];
         } else {
             return [

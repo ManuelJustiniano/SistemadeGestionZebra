@@ -3,8 +3,6 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 $this->title = 'PROYECTOS';
-?>
-<?php
 $format = <<< SCRIPT
 function format(state) {
 if (!state.id) return state.text; // optgroup
@@ -17,59 +15,6 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
 
 ?>
 
-
-<?php foreach (Yii::$app->session->getAllFlashes() as $message): ?>
-    <?php /*= \kartik\widgets\Growl::widget([
-        'type' => (!empty($message['type'])) ? $message['type'] : 'danger',
-        'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
-        'body' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
-        'delay' => 1, //This delay is how long before the message shows
-        'pluginOptions' => [
-            'delay' => (!empty($message['duration'])) ? $message['duration'] : 5000, //This delay is how long the message shows for
-            'placement' => [
-                'from' => (!empty($message['positonY'])) ? $message['positonY'] : 'top',
-                'align' => (!empty($message['positonX'])) ? $message['positonX'] : 'right',
-            ]
-        ]
-    ]);*/
-    \yii2mod\alert\Alert::widget([
-        'useSessionFlash' => false,
-        'options' => [
-            'type' => (!empty($message['type'])) ? $message['type'] : 'error',
-            'title' => (!empty($message['message'])) ? \yii\helpers\Html::encode($message['message']) : 'Message Not Set!',
-            'animation' => "slide-from-top",
-        ],
-    ]); ?>
-<?php endforeach; ?>
-
-<?php
-if ($tipo_usuario == '1') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['administrador/list'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Usuarios', 'url' => ['administrador/usuarioslist'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mensajes', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Materiales', 'url' => ['/cuenta/perfil'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'administrador',
-    ]);
-} elseif ($tipo_usuario == '2') {
-    echo $this->render('../widgets/menu', [
-        'lista' => [
-            'items' => [
-                ['label' => 'Mi cuenta', 'url' => ['gestor/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Proyectos', 'url' => ['/proyectos/index'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Tareas', 'url' => ['/tareas/index'], 'options' => ['class' => 'nav-item']],
-            ],
-        ], 'tipousuario' => 'gestor',
-    ]);
-}
-?>
-
-    <div class="app-wrapper">
         <div class="app-content pt-3 p-md-3 p-lg-4">
             <div class="container-xl">
 
@@ -230,6 +175,26 @@ if ($tipo_usuario == '1') {
                                                     'contentOptions' => ['class' => 'col-sm-2']
                                                 ],
 
+                                                [
+                                                    'class' => 'yii\grid\ActionColumn',
+                                                    'header' => 'Estado',
+                                                    'template' => '<div class="btn-group btn-group-justified" role="group">{estado}</div>',
+                                                    'buttons' => [
+                                                        'estado' => function ($url, $model, $key) {
+                                                            $iconClass = $model->estado ? 'fa fa-unlock' : 'fa fa-lock'; // Cambia el icono según el estado
+                                                            $btnClass = $model->estado ? 'btn btn-success sep' : 'btn btn-danger'; // Cambia el color del botón según el estado
+
+                                                            return Html::a("<i class='$iconClass'></i>", "#", [
+                                                                'class' => $btnClass,
+                                                                'title' => 'Estado',
+                                                                'onclick' => "cambiarEstadoProyecto('{$url}'); return false;"
+                                                            ]);
+                                                        },
+
+                                                    ],
+                                                    'contentOptions' => ['class' => 'col-sm-1']
+                                                ],
+
                                             ],
                                         ]); ?>
                                     </div>
@@ -242,15 +207,10 @@ if ($tipo_usuario == '1') {
                 </div>
             </div>
         </div>
-</div>
 <?php
-$script = <<<JS
-    function action(url)
-    {
-    $.get(url, function(data) {
-      $.pjax.reload({container:"#table"});
-    });
-    }
+$this->registerJsFile(
+    '@web/assets_b/js/estadosc.js',
+    ['depends' => [\yii\web\JqueryAsset::class]]
+);
+?>
 
-JS;
-$this->registerJs($script, \yii\web\View::POS_HEAD);
