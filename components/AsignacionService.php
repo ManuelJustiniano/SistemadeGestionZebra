@@ -56,7 +56,6 @@ class AsignacionService implements InterfaceAsignacion
         if ($model->load($datosPost) && $model->validate()) {
             if ($model->save()) {
                 $consultor = $model->consultor;
-
                 if ($consultor !== null) {
                     $correoConsultor = $consultor->email;
                     $correoEnviado = $this->correoService->enviarCorreodeAsignacionproyecto($model, $correoConsultor);
@@ -84,9 +83,41 @@ class AsignacionService implements InterfaceAsignacion
 
     }
 
+
+    public function procesarEdicionAsignacion($id, $datosPost)
+    {
+        $model = $this->findModel($id);
+
+        // Carga de datos y validación
+        if ($model->load($datosPost) && $model->validate()) {
+            try {
+                if ($model->save()) {
+                    $consultor = $model->consultor;
+                    if ($consultor !== null) {
+                        $correoConsultor = $consultor->email;
+                        $correoEnviado = $this->correoService->enviarCorreodeActualizacionAsignacion($model, $correoConsultor);
+                        if (!$correoEnviado) {
+                            $this->notiService->agregarMensajeError('Error al enviar el correo al consultor. Inténtelo más tarde.');
+                        }
+                    }
+                    $this->notiService->agregarMensajeExito('La asignación se actualizó correctamente.');
+                    return ['exito' => true];
+                } else {
+                    $this->notiService->agregarMensajeError('Error al actualizar la asignación. Inténtelo más tarde.');
+                }
+            } catch (\yii\db\IntegrityException $e) {
+                $model->addError('idconsultor', 'Esta combinación de tarea y consultor ya existe.');
+                $model->addError('idtarea', 'Esta combinación de tarea y consultor ya existe.');
+            }
+        }
+        Yii::$app->session->setFlash('error', 'Error al editar la asginacion, el consultor ya fue asginado a esta tarea');
+        return ['exito' => false, 'model' => $model];
+    }
+
+
     public function obtenerAsignacionPorId($asignacionId)
     {
-        return Asignacion::findOne(['idasignacion' => $asignacionId]);
+        return $this->findModel($asignacionId);
     }
 
     /**

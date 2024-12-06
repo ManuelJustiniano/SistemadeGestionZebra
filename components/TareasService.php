@@ -10,12 +10,12 @@ use yii\web\NotFoundHttpException;
 
 class TareasService implements InterfaceTarea
 {
-    private $notiService;
+    private $alertService;
 
 
-    public function __construct(InterfaceNoti $notiService)
+    public function __construct(InterfaceAlert $alertService)
     {
-        $this->notiService = $notiService;
+        $this->alertService = $alertService;
     }
 
      public function obtenerUsuarioSesion()
@@ -67,10 +67,10 @@ class TareasService implements InterfaceTarea
         $model = new Tareas();
         if ($model->load($queryParams) && $model->validate()) {
             if ($model->save()) {
-                    $this->notiService->agregarMensajeExito('La tarea ha sido creado correctamente.');
+                    $this->alertService->agregarMensajeExito('La tarea ha sido creado correctamente.');
                     return ['exito' => true];
                 } else {
-                    $this->notiService->agregarMensajeError('Error al crear tarea, inténtelo más tarde.');
+                    $this->alertService->agregarMensajeError('Error al crear tarea, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
             }
@@ -86,10 +86,10 @@ class TareasService implements InterfaceTarea
         $model = $this->findModel($id);
         if ($model->load($dates) && $model->validate()) {
             if ($model->save()) {
-                    $this->notiService->agregarMensajeExito('La Tarea ha sido actualizada correctamente.');
+                    $this->alertService->agregarMensajeExito('La Tarea ha sido actualizada correctamente.');
                     return ['exito' => true];
                 } else {
-                    $this->notiService->agregarMensajeError('Error al actualizar tarea, inténtelo más tarde.');
+                    $this->alertService->agregarMensajeError('Error al actualizar tarea, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
             }

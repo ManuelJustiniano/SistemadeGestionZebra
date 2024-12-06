@@ -39,6 +39,8 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
                 case 'listap':
                     echo $this->render('listap', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
                     break;
+                case 'milista':
+                    echo $this->render('milista', ['searchModel' => $searchModel, 'dataProvider' => $dataProvider]);
                     break;
                 case 'view':
                     echo $this->render('view', ['model' => $model]);
@@ -51,6 +53,9 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
                     break;
                 case 'asignar':
                     echo $this->render('asignar', ['model' => $model]);
+                    break;
+                case 'editasignar':
+                    echo $this->render('editasignar', ['model' => $model]);
                     break;
 
 

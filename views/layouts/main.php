@@ -31,7 +31,7 @@ $conf = \app\models\Configuracion::find()->one();
     <body>
     <?php $this->beginBody() ?>
     <body class="app">
-    <?php //foreach (Yii::$app->session->getAllFlashes() as $message): ?>
+    <div class="wrapperesa">
 
 
             <?= $content ?>
@@ -45,7 +45,7 @@ $conf = \app\models\Configuracion::find()->one();
     </footer><!--//app-footer-->
 
 
-
+    </div>
 
     <?php $this->endBody() ?>
 

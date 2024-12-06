@@ -5,7 +5,7 @@ namespace app\models;
 /**
  * This is the model class for table "categoria".
  *
- * @property integer $idcategoria
+ * @property integer $idconsultor
  * @property string $nombre
  * @property string $descripcion
  * @property string $imagen
@@ -29,9 +29,14 @@ class Asignacion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idtarea', 'idconsultor' ], 'required'],
+            [['idtarea', 'idconsultor', 'prioridad' ], 'required'],
             [['descripcion', 'idproyecto'], 'safe'],
-            [['idconsultor', 'idtarea'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea'], 'message' => 'Este consultor ya tiene asignada esta tarea.'],
+            //[['idconsultor', 'idtarea'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea'], 'message' => 'Este consultor ya tiene asignada esta tarea.'],
+            [['idconsultor', 'idtarea', 'idproyecto'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea', 'idproyecto'], 'filter' => function ($query) {
+                if (!$this->isNewRecord) {
+                    $query->andWhere(['not', ['idasignartarea' => $this->id]]);
+                }
+            }, 'message' => 'Este consultor ya tiene asignada esta tarea en este proyecto.'],
             [['fechainicio', 'fechafin'], 'date', 'format' => 'php:Y-m-d'],
             ['fechainicio', 'validarFechaInicio'],
             ['fechafin', 'validarFechaFin'],
@@ -52,6 +57,7 @@ class Asignacion extends \yii\db\ActiveRecord
             'fechafin' => 'Fecha Final',
             'idconsultor' => 'Consultor',
             'idproyecto' => 'Proyecto',
+            'prioridad' => 'Prioridad',
             'estado' => 'Estado',
         ];
     }
@@ -87,6 +93,22 @@ class Asignacion extends \yii\db\ActiveRecord
         }
     }
 
+
+    public function validarTareaConsultor($attribute, $params)
+    {
+        $query = self::find()
+            ->where(['idtarea' => $this->idtarea, 'idconsultor' => $this->idconsultor]);
+
+        // Excluir el registro actual si es edición
+        if (!$this->isNewRecord) {
+            $query->andWhere(['not', ['idasignartarea' => $this->id]]);
+        }
+
+        if ($query->exists()) {
+            $this->addError($attribute, 'Este consultor ya tiene asignada esta tarea.');
+        }
+    }
+
     public function getConsultor()
     {
         return $this->hasOne(Usuarios::className(), ['idusuario' => 'idconsultor']);
@@ -103,7 +125,10 @@ class Asignacion extends \yii\db\ActiveRecord
         return $this->hasOne(Proyectos::className(), ['idproyecto' => 'idproyecto']);
     }
 
-
+    public function getTareas()
+    {
+        return $this->hasOne(Tareas::className(), ['idtarea' => 'idtarea']);
+    }
 
     /*
      * seccion de relaciones entre tablas

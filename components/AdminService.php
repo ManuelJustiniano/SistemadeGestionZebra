@@ -13,12 +13,12 @@ class AdminService implements InterfaceAdmin
 {
 
     private $correoService;
-    private $notiService;
+    private $alertService;
 
-    public function __construct(InterfaceCorreos $correoService, InterfaceNoti $notiService)
+    public function __construct(InterfaceCorreos $correoService, InterfaceAlert $alertService)
     {
         $this->correoService = $correoService;
-        $this->notiService = $notiService;
+        $this->alertService = $alertService;
     }
 
     public function obtenerUsuarioSesion()
@@ -60,7 +60,7 @@ class AdminService implements InterfaceAdmin
 
     }
 
-    public function obtenerCliente($id)
+    public function obtenerUsuario($id)
     {
         return $this->findModel($id);
     }
@@ -75,14 +75,14 @@ class AdminService implements InterfaceAdmin
             if ($model->save()) {
                 $correoEnviado = $this->correoService->enviarCorreodeBienvenida($model);
                 if ($correoEnviado) {
-                    $this->notiService->agregarMensajeExito('El usuario ha sido creado correctamente.');
+                    $this->alertService->agregarMensajeExito('El usuario ha sido creado correctamente.');
                     return ['exito' => true];
                 } else {
-                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+                    $this->alertService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
             } else {
-                $this->notiService->agregarMensajeError('Error al crear usuario. Inténtelo más tarde.');
+                $this->alertService->agregarMensajeError('Error al crear usuario. Inténtelo más tarde.');
                 return ['exito' => false, 'model' => $model];
             }
         }
@@ -99,15 +99,15 @@ class AdminService implements InterfaceAdmin
             if ($model->save()) {
                 $correoEnviado = $this->correoService->enviarCorreodeEditar($model);
                 if ($correoEnviado) {
-                    $this->notiService->agregarMensajeExito('El usuario ha sido Actualizado correctamente.');
+                    $this->alertService->agregarMensajeExito('El usuario ha sido Actualizado correctamente.');
                     return ['exito' => true];
                 } else {
-                    $this->notiService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
+                    $this->alertService->agregarMensajeError('Error en el envío de correo, inténtelo más tarde.');
                     return ['exito' => false, 'model' => $model];
                 }
 
             } else {
-                $this->notiService->agregarMensajeError('Error al actualizar el cliente. Inténtelo más tarde.');
+                $this->alertService->agregarMensajeError('Error al actualizar el cliente. Inténtelo más tarde.');
                 return [
                     'exito' => false,
                     'model' => $model

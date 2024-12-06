@@ -40,7 +40,7 @@ class CuentaService implements InterfaceCuenta
         // Buscar el usuario por correo electrónico y estado.
         $usuario = Usuarios::findOne(['email' => $email, 'estado' => '1']);
         if (!$usuario) {
-            return ['exito' => false, 'mensaje' => 'Correo no registrado'];
+            return ['exito' => false, 'mensaje' => 'Correo no registrado o cuenta bloqueada'];
         }
         $nuevaContrasena = $this->generarContrasenaAleatoria();
         $usuario->contrasena = Yii::$app->security->generatePasswordHash($nuevaContrasena);

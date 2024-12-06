@@ -195,6 +195,7 @@ body {
     -webkit-text-size-adjust: 100%;
     background: #e4e4e4;
 
+
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
 
 }
@@ -4034,18 +4035,26 @@ textarea.form-control-lg {
     margin-bottom: calc(-1 * var(--bs-nav-tabs-border-width));
     border: var(--bs-nav-tabs-border-width) solid rgba(0, 0, 0, 0);
     border-top-left-radius: var(--bs-nav-tabs-border-radius);
-    border-top-right-radius: var(--bs-nav-tabs-border-radius)
+    border-top-right-radius: var(--bs-nav-tabs-border-radius);
+    padding: 10px;
+    border-color: #1078c0;
+    border-radius: 0;
+    font-weight: 600;
 }
 
 .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
     isolation: isolate;
-    border-color: var(--bs-nav-tabs-link-hover-border-color)
+    border-color: var(--bs-nav-tabs-link-hover-border-color);
+    background: #1078c0;
+    color: white;
 }
 
 .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
     color: var(--bs-nav-tabs-link-active-color);
     background-color: var(--bs-nav-tabs-link-active-bg);
-    border-color: var(--bs-nav-tabs-link-active-border-color)
+    border-color: var(--bs-nav-tabs-link-active-border-color);
+    background: #1078c0;
+    color: white;
 }
 
 .nav-tabs .dropdown-menu {
@@ -4602,6 +4611,7 @@ textarea.form-control-lg {
 }
 
 .card {
+
     --bs-card-spacer-y: 1rem;
     --bs-card-spacer-x: 1rem;
     --bs-card-title-spacer-y: 0.5rem;
@@ -4631,7 +4641,8 @@ textarea.form-control-lg {
     background-color: var(--bs-card-bg);
     background-clip: border-box;
     border: var(--bs-card-border-width) solid var(--bs-card-border-color);
-    border-radius: var(--bs-card-border-radius)
+    border-radius: var(--bs-card-border-radius);
+    border-color:transparent!important;
 }
 
 .card > hr {
@@ -5834,7 +5845,8 @@ textarea.form-control-lg {
     background-clip: padding-box;
     border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
     border-radius: var(--bs-modal-border-radius);
-    outline: 0
+    outline: 0;
+    background: white!important;
 }
 
 .modal-backdrop {
@@ -5874,6 +5886,7 @@ textarea.form-control-lg {
 }
 
 .modal-title {
+    font-size: 18px!important;
     margin-bottom: 0;
     line-height: var(--bs-modal-title-line-height)
 }
@@ -14394,7 +14407,8 @@ button.close:focus {
 }
 
 .app-card-account {
-    height: 100%
+    height: 100%;
+    /*padding: 20px 0px;*/
 }
 
 .app-card-account .item {
@@ -14864,4 +14878,353 @@ margin-top: 20px;  }
 
 .tab-content .input-group-addon {
     font-size: 13px!important;
+}
+
+.cardtareas h6  {
+    font-size: 18px;
+}
+.cardtareas   .svg-inline--fa{
+    color: #000!important;
+}
+.cardtareas   {
+    padding: 20px 0px;
+}
+.colon{
+    font-weight: 300!important;
+}
+.cardtareas .card.info-card{
+    border-radius: 7px;
+
+
+background: white;
+padding: 10px;
+box-shadow: var(--bs-box-shadow-sm) !important;}
+
+
+.desproyecto p{
+padding: 5px;
+}
+
+.inlesblo {
+    display: inline-block;
+}
+
+.btmopr{
+    background: transparent!important;
+    padding: 0 10px;
+    color: #1078c0!important;
+    text-decoration: underline;
+    margin-top: -5px;
+}
+
+
+.cardtareas .card-title{
+    font-size: 15px;
+}
+
+#container {
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+
+
+
+
+/*PROGRESSBAR*/
+
+.about {
+    padding: 25px;
+    background: hsl(0, 0%, 22%);
+    color: hsl(0, 0%, 92%);
+    border-radius: 0 0 3px 3px;
+}
+
+.about a {
+    color: hsl(210, 100%, 60%);
+}
+
+.about a:hover,
+.about a:focus {
+    color: hsl(240, 90%, 80%);
+}
+
+.about h1 {
+    text-align: center;
+}
+
+
+.example-figure {
+    width: -moz-min-content;
+    width: min-content;
+    margin: auto;
+}
+
+@media screen and (min-width: 50rem) {
+    .example-figure {
+        padding-top: 2.4rem;
+        padding-right: 80px;
+    }
+
+    .example-code-block {
+        flex: 1;
+    }
+}
+.circle-progress-value {
+    stroke-width: 6px;
+    stroke: hsl(39, 100%, 50%);
+}
+.circle-progress-circle {
+    stroke-width: 6px;
+    stroke: hsl(39, 100%, 85%);
+}
+.circle-progress-text {
+    fill: hsl(39, 100%, 50%);
+}
+
+circle-progress::part(base) {
+    width: 300px;
+    height: 300px;
+}
+
+
+/* Circle progress controls */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.controls input {
+    display: block;
+    width: 4em;
+    padding: .3em .6em;
+    text-align: left;
+    background: hsl(0, 0%, 85%);
+    border: 0;
+    font-size: .85em;
+}
+
+.controls input:focus {
+    background: hsl(0, 0%, 70%);
+    outline: none;
+}
+
+.controls label {
+    font-weight: bold;
+    color: hsl(0, 0%, 40%);
+}
+
+.controls label:nth-of-type(2) {
+    text-align: center;
+}
+
+.controls label:last-of-type {
+    text-align: right;
+}
+
+
+.example h3 {
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+    margin: 1rem 0 0;
+    color: hsl(14, 80%, 50%);
+}
+
+
+/* Code */
+.code-container {
+    position: relative;
+}
+
+.code {
+    background: hsl(0, 0%, 22%);
+    -moz-tab-size: 4;
+    tab-size: 4;
+}
+
+.copy-code-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 1.8em;
+    height: 1.8em;
+    display: grid;
+    place-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    opacity: 0;
+    transition: opacity .3s;
+    cursor: pointer;
+}
+
+.code-container:hover .copy-code-btn {
+    opacity: .4;
+}
+
+.copy-code-btn.copy-code-btn:is(:hover, :focus-visible) {
+    opacity: 1;
+}
+
+.icon {
+    width: 1.2em;
+    height: 1.2em;
+    fill: hsl(0, 0%, 92%);
+    vertical-align: middle;
+}
+
+
+
+/*
+
+Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-license.org/
+
+*/
+
+.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+    background: #23241f;
+}
+
+.hljs,
+.hljs-tag,
+.hljs-subst {
+    color: #f8f8f2;
+}
+
+.hljs-strong,
+.hljs-emphasis {
+    color: #a8a8a2;
+}
+
+.hljs-bullet,
+.hljs-quote,
+.hljs-number,
+.hljs-regexp,
+.hljs-literal,
+.hljs-link {
+    color: #ae81ff;
+}
+
+.hljs-code,
+.hljs-title,
+.hljs-section,
+.hljs-selector-class {
+    color: #a6e22e;
+}
+
+.hljs-strong {
+    font-weight: bold;
+}
+
+.hljs-emphasis {
+    font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-name,
+.hljs-attr {
+    color: #f92672;
+}
+
+.hljs-symbol,
+.hljs-attribute {
+    color: #66d9ef;
+}
+
+.hljs-params,
+.hljs-class .hljs-title {
+    color: #f8f8f2;
+}
+
+.hljs-string,
+.hljs-type,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-selector-id,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-addition,
+.hljs-variable,
+.hljs-template-variable {
+    color: #e6db74;
+}
+
+.hljs-comment,
+.hljs-deletion,
+.hljs-meta {
+    color: #75715e;
+}
+
+
+.tablesckai  .card-body{
+    padding: 20px;
+}
+.tablesckai  .card{
+
+    background: white;
+    border-radius: 7px;
+    border: 1px solid;
+    box-shadow: var(--bs-box-shadow-sm) !important;
+}
+
+.consultoresasi  {
+    font-size: 11px!important;
+}
+
+.tablesckai  .card p
+{
+
+box-shadow: var(--bs-box-shadow-sm) !important;
+border: 1px solid #ebe8e8;
+padding-bottom: 10px;
+padding-top: 10px;
+border-radius: 5px;
+padding: 15px 10px; }
+
+.finalizada {
+    background: #0c6f0c;
+    color: white;
+    display: initial;
+    padding: 0px 5px;
+}
+
+.hacendo {
+    background:  #2196f3;
+    color: white;
+    display: initial;
+    padding: 0px 5px;
+
+}
+
+.pohacer {
+
+    background:  #ababab;
+    color: white;
+    display: initial;
+    padding: 0px 5px;
+}
+
+
+.pralta svg.svg-inline--fa{
+    color: #FF6347!important; /* Texto blanco para mejor contraste */
+}
+
+.prmedia svg.svg-inline--fa{
+    color: #FFD700!important; /* Texto negro para buen contraste */
+}
+
+.prbaja svg.svg-inline--fa{
+    color: #ADD8E6!important; /* Texto negro para buen contraste */
+}
+
+.tanlaprusi {
+    background: white;
+    padding: 25px;
 }

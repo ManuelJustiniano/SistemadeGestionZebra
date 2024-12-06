@@ -4,7 +4,7 @@ namespace app\components;
 use app\models\Usuarios;
 use Yii;
 
-class AlertService implements InterfaceNoti
+class AlertService implements InterfaceAlert
 {
 
     public function agregarMensajeExito($mensaje)

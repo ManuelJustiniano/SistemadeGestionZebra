@@ -152,6 +152,7 @@ Yii::$container->set('app\components\InterfaceAuth', 'app\components\AuthService
 Yii::$container->set('app\components\InterfaceCuenta', 'app\components\CuentaService');
 Yii::$container->set('app\components\InterfaceTarea', 'app\components\TareasService');
 Yii::$container->set('app\components\InterfaceAdmin', 'app\components\AdminService');
+Yii::$container->set('app\components\InterfaceConsultor', 'app\components\ConsultorService');
 Yii::$container->set('app\components\InterfaceNoti', 'app\components\NotiService');
 Yii::$container->set('app\components\InterfaceCorreos', 'app\components\CorreoService');
 Yii::$container->set('app\components\InterfaceGestor', 'app\components\GestorService');
@@ -160,4 +161,5 @@ Yii::$container->set('app\components\InterfaceCorreos', 'app\components\CorreoSe
 Yii::$container->set('app\components\InterfaceAsignacion', 'app\components\AsignacionService');
 Yii::$container->set('app\components\InterfaceGestionProyecto', 'app\components\GestionProyectoAService');
 Yii::$container->set('app\components\InterfaceLib', 'app\components\LibService');
+Yii::$container->set('app\components\InterfaceAlert', 'app\components\AlertService');
 return $config;

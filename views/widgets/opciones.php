@@ -36,8 +36,8 @@ elseif ($user->tipo_usuario == '3') {
             'items' => [
                 ['label' => 'Inicio', 'url' => ['/consultor/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Mi cuenta', 'url' => ['/consultor/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mis proyectos', 'url' => ['/proyectos/listaproyectos'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mensajes', 'url' => ['/consultor/mensajes'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Mis proyectos', 'url' => ['/proyectos/misproyectos'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Mensajes', 'url' => ['/consultor/mismensajes'], 'options' => ['class' => 'nav-item']],
             ],
         ], 'tipousuario' => 'consultor',
     ]);
@@ -49,8 +49,8 @@ elseif ($user->tipo_usuario == '4') {
             'items' => [
                 ['label' => 'Inicio', 'url' => ['/cliente/index'], 'options' => ['class' => 'nav-item']],
                 ['label' => 'Mi cuenta', 'url' => ['/cliente/cuenta'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mis proyectos', 'url' => ['/proyectos/listaproyectos'], 'options' => ['class' => 'nav-item']],
-                ['label' => 'Mensajes', 'url' => ['/clientes/mensajes'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Mis proyectos', 'url' => ['/proyectos/misproyectos'], 'options' => ['class' => 'nav-item']],
+                ['label' => 'Mensajes', 'url' => ['/clientes/mismensajes'], 'options' => ['class' => 'nav-item']],
             ],
         ], 'tipousuario' => 'cliente',
     ]);

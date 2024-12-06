@@ -224,4 +224,31 @@ class CorreoService implements InterfaceCorreos
     }
 
 
+
+    public function enviarCorreodeActualizacionAsignacion($id, $correoConsultor)
+    {
+        $conf = Configuracion::find()->one();
+        $mensaje = Html::tag('h1', '¡Estimado: Consultor');
+        $mensaje .= Html::tag('p', 'Comentarle que se le asigno, o modifico una tarea del proyecto');
+        $mensaje .= Html::tag('p', 'Entrar al a su perfil ');
+
+        $result = Yii::$app->mailer->compose('layouts/template2', [
+            'content' => $mensaje,
+            'config' => $conf,
+        ])
+            ->setTo($correoConsultor)
+            ->setFrom([$conf->email => $conf->titulo_pagina])
+            ->setSubject($conf->titulo_pagina . ' - Actualizacion de Asignacion de proyecto  ')
+            ->setHtmlBody($mensaje)
+            ->send();
+        if ($result) {
+            return true; // Retorna true si el envío fue exitoso.
+        } else {
+            Yii::error("El correo no pudo ser enviado por razones desconocidas.", __METHOD__);
+            return false;
+        }
+
+    }
+
+
 }

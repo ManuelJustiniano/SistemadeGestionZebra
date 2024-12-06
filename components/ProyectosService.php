@@ -7,6 +7,8 @@ use app\models\ProyectosSearch;
 use app\models\Usuarios;
 use Yii;
 use yii\base\ExitException;
+use yii\data\ActiveDataProvider;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 class ProyectosService implements InterfaceProyectos
@@ -33,6 +35,20 @@ class ProyectosService implements InterfaceProyectos
         return null;
     }
 
+
+    public function obtenerUsuarioSesioncons()
+    {
+        $user = Yii::$app->session->get('user');
+        if (empty($user)) {
+            return null;
+        }
+        $usuario = Usuarios::findOne(['idusuario' => $user['id']]);
+        if ($usuario !== null && in_array($usuario->tipo_usuario, ['3', '4'])) {
+            return $usuario;
+        }
+        return null;
+    }
+
     /**
      * @throws ExitException
      */
@@ -47,6 +63,17 @@ class ProyectosService implements InterfaceProyectos
         return $usuario;
     }
 
+
+    public function verificarAccesoCons()
+    {
+        $usuario = $this->obtenerUsuarioSesioncons();
+        if ($usuario === null) {
+            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
+            Yii::$app->controller->redirect(Yii::$app->request->referrer ?: ['site/login']);
+            Yii::$app->end();
+        }
+        return $usuario;
+    }
 
     public function listarProyectos($queryParams)
     {
@@ -65,6 +92,22 @@ class ProyectosService implements InterfaceProyectos
     {
         return $this->findModel($id);
     }
+    public function obtenerProyectoasignado($id)
+    {
+        $consultorId = Yii::$app->session->get('user')['id'];
+        $proyecto = Proyectos::findOne($id);
+        if ($proyecto === null) {
+            throw new NotFoundHttpException('El proyecto solicitado no existe.');
+        }
+        $asignacion = Asignacion::find()
+            ->where(['idproyecto' => $proyecto->idproyecto, 'idconsultor' => $consultorId])
+            ->one();
+        if ($asignacion === null) {
+            throw new ForbiddenHttpException('No tiene permiso para acceder a este proyecto.');
+        }
+        return $proyecto;
+    }
+
 
 
     public function nuevoProyecto($queryParams)
@@ -171,6 +214,32 @@ class ProyectosService implements InterfaceProyectos
                 'mensaje' => 'Hubo un error al actualizar el estado del proyecto.',
             ];
         }
+    }
+
+
+
+    public function listarmisProyectos($params)
+    {
+
+        $consultorId = Yii::$app->session->get('user')['id'];
+
+        $asignaciones = Asignacion::find()
+            ->select(['idproyecto'])
+            ->where(['idconsultor' => $consultorId])
+            ->distinct()
+            ->column();
+
+        $query = Proyectos::find()->where(['idproyecto' => $asignaciones]);
+        $searchModel = new ProyectosSearch();
+        $dataProvider = $searchModel->search($params, $query);
+        $dataProvider->setSort([
+            'defaultOrder' => ['idproyecto' => SORT_DESC]
+        ]);
+        return [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ];
+
     }
 
 

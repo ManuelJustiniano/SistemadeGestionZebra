@@ -10,5 +10,6 @@ interface InterfaceCorreos
     public function enviarCorreodeCreacionproyecto($model, $correoCliente);
     public function enviarCorreodeEdicionproyecto($model, $correoCliente);
     public function enviarCorreodeAsignacionproyecto($model, $correoConsultor);
+    public function enviarCorreodeActualizacionAsignacion($id, $correoConsultor);
     public function enviarCorreoRecuperacion($id, $password);
 }

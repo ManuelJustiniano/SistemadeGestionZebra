@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use app\components\InterfaceAdmin;
+use app\components\InterfaceConsultor;
 use app\components\InterfaceCuenta;
 use app\components\InterfaceGestor;
+use app\components\InterfaceLib;
 use app\components\InterfaceNoti;
 use app\models\ChangePasswordForm;
 use app\models\Configuracion;
@@ -19,11 +21,12 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
-class GestorController extends Controller
+class ConsultorController extends Controller
 {
 
+    private $consultorService;
     private $cuentaService;
-    private $gestorService;
+    private $paisesService;
     /**
      * @inheritdoc
      */
@@ -39,26 +42,21 @@ class GestorController extends Controller
 
 
 
-    public function __construct($id, $module, InterfaceGestor $gestorService, InterfaceCuenta $cuentaService, $config = [])
+    public function __construct($id, $module, InterfaceConsultor $consultorService, InterfaceLib $paisesService,  InterfaceCuenta $cuentaService,$config = [])
     {
-        $this->gestorService = $gestorService;
+        $this->consultorService = $consultorService;
         $this->cuentaService = $cuentaService;
+        $this->paisesService = $paisesService;
         parent::__construct($id, $module, $config);
     }
 
     public function actionIndex()
     {
-        return $this->redirect(['gestor/cuenta']);
+        return $this->redirect(['consultor/cuenta']);
     }
     public function actionCuenta()
     {
-       
-        $model = $this->gestorService->obtenerUsuarioSesion();
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(Yii::$app->request->referrer ?: ['site/login']);
-        }
-
+        $model = $this->consultorService->verificarAccesoAdmin();
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'perfil',
@@ -68,18 +66,11 @@ class GestorController extends Controller
 
     public function actionUpdateperfil()
     {
-        $model = $this->gestorService->obtenerUsuarioSesion();
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(['site/login']);
-        }
-
+        $model = $this->consultorService->verificarAccesoAdmin();
         $resultado = $this->cuentaService->actualizarUsuario($model, Yii::$app->request->post());
-
         if ($resultado['exito']) {
             return $this->redirect(['cuenta']);
         }
-
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'updateperfil',
@@ -90,27 +81,22 @@ class GestorController extends Controller
 
     public function actionUpdatepasswordperfil()
     {
-        $model = $this->gestorService->obtenerUsuarioSesion();
-        if ($model === null) {
-            Yii::$app->session->setFlash('error', 'No tienes permiso para acceder a esta sección.');
-            return $this->redirect(['site/login']);
-        }
-                $resultado = $this->cuentaService->procesarFormularioCambioPassword($model, Yii::$app->request->post());
+        $model = $this->consultorService->verificarAccesoAdmin();
+        $resultado = $this->cuentaService->procesarFormularioCambioPassword($model, Yii::$app->request->post());
         if ($resultado['exito']) {
             return $this->redirect(['cuenta']);
         }
-
         return $this->render('cuenta', [
             'model' => $resultado['formModel'] ?? new ChangePasswordForm(),
             'render' => 'updatepasswordperfil',
         ]);
     }
 
-
-
-
-
-
+    public function actionGetPaises()
+    {
+        $paises = $this->paisesService->obtenerPaises();
+        return json_encode($paises);
+    }
 
 
 

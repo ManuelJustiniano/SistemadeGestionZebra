@@ -37,15 +37,21 @@ class ProyectosSearch extends Proyectos
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $query  = null)
     {
-        $query = Proyectos::find();
 
-        // add conditions that should always apply here
-
+        if ($query === null) {
+            $query = Proyectos::find();
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
+
+
+
 
         $this->load($params);
 

@@ -22,9 +22,19 @@ class GestionProyectoAService implements InterfaceGestionProyecto
     {
         return $this->proyectosService->verificarAccesoAdmingestor();
     }
+
+    public function verificarAccesoCons()
+    {
+        return $this->proyectosService->verificarAccesoCons();
+    }
         public function listarProyectos($queryParams)
     {
         return $this->proyectosService->listarProyectos($queryParams);
+    }
+
+    public function listarmisProyectos($params)
+    {
+        return $this->proyectosService->listarmisProyectos($params);
     }
 
     public function nuevoProyecto($queryParams)
@@ -36,11 +46,15 @@ class GestionProyectoAService implements InterfaceGestionProyecto
     {
         return $this->proyectosService->actualizarProyecto($dates, $id);
     }
-
     public function obtenerProyecto($id)
     {
-
         return $this->proyectosService->obtenerProyecto($id);
+    }
+
+
+    public function obtenerProyectoasignado($id)
+    {
+        return $this->proyectosService->obtenerProyectoasignado($id);
     }
     public function prepararModeloAsignacion($idproyecto)
     {
@@ -51,10 +65,24 @@ class GestionProyectoAService implements InterfaceGestionProyecto
     {
         return $this->asignacionService->procesarAsignacionTarea($model, $datosPost);
     }
+
+    public function procesarEdicionAsignacion($id, $datosPost)
+    {
+        return $this->asignacionService->procesarEdicionAsignacion($id, $datosPost);
+    }
+
+
     public function cambiarEstadoproyecto($id)
     {
         return $this->proyectosService->cambiarEstadoproyecto($id);
     }
+
+    public function obtenerAsignacionPorId($id)
+    {
+        return $this->asignacionService->obtenerAsignacionPorId($id);
+    }
+
+
     public function findModel($id)
     {
         return $this->proyectosService->obtenerProyecto($id);

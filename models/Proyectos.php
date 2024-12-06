@@ -65,7 +65,10 @@ class Proyectos extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Usuarios::className(), ['idusuario' => 'idcliente']);
     }
-
+    public function getAsignartareas()
+    {
+        return $this->hasMany(Asignacion::className(), ['idproyecto' => 'idproyecto']);
+    }
     public function getGestor()
     {
         return $this->hasOne(Usuarios::className(), ['idusuario' => 'idgestor']);

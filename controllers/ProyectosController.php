@@ -62,8 +62,19 @@ class ProyectosController extends Controller
      */
     public function actionView($id)
     {
-
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
         $model = $this->gestionProyectAService->obtenerProyecto($id);
+        return $this->render('index', [
+            'model' => $model,
+            'render' => 'view',
+        ]);
+    }
+
+
+    public function actionViewproyect($id)
+    {
+
+        $model = $this->gestionProyectAService->obtenerProyectoasignado($id);
         return $this->render('index', [
             'model' => $model,
             'render' => 'view',
@@ -103,6 +114,31 @@ class ProyectosController extends Controller
             'render' => 'asignar',
         ]);
     }
+
+
+
+    public function actionEditasignaciondetareas($id)
+    {
+        $this->gestionProyectAService->verificarAccesoAdmingestor();
+        $model = $this->gestionProyectAService->obtenerAsignacionPorId($id);
+        if (Yii::$app->request->isPost) {
+            $resultado = $this->gestionProyectAService->procesarEdicionAsignacion($id, Yii::$app->request->post());
+            if ($resultado['exito']) {
+                return $this->redirect(['view', 'id' => $model->idproyecto]);
+            } else {
+
+                Yii::$app->session->setFlash('error', 'Error al editar la asginacion');
+            }
+        }
+        return $this->render('index', [
+            'model' => $model,
+            'render' => 'editasignar',
+        ]);
+    }
+
+
+
+
 
     /**
      */
@@ -152,5 +188,23 @@ class ProyectosController extends Controller
         //$this->gestionProyectAService->eliminarProyecto($id);
        // return $this->redirect(['index']);
     }
+
+
+
+
+/*CONSULTOR*/
+        public function actionMisproyectos()
+        {
+
+
+            $this->gestionProyectAService->verificarAccesoCons();
+            $resultadoBusqueda = $this->gestionProyectAService->listarmisProyectos(Yii::$app->request->queryParams);
+            return $this->render('index', [
+                'searchModel' => $resultadoBusqueda['searchModel'],
+                'dataProvider' => $resultadoBusqueda['dataProvider'],
+                'render' => 'milista',
+            ]);
+        }
+
 
 }

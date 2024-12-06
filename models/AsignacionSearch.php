@@ -16,8 +16,8 @@ class AsignacionSearch extends Asignacion
     public function rules()
     {
         return [
-            [['idasignartarea',  'idtarea', 'idtareaidusuario', ], 'integer'],
-            [['descripcion', 'fechainicio', 'fechafin', 'estado'], 'safe'],
+            [['idasignartarea',  'idtarea', 'idconsultor', ], 'integer'],
+            [['descripcion', 'fechainicio', 'fechafin', 'estado', 'prioridad'], 'safe'],
         ];
     }
 
@@ -59,9 +59,13 @@ class AsignacionSearch extends Asignacion
         $query->andFilterWhere([
             'idasignartarea' => $this->idasignartarea,
             'idtarea' => $this->idtarea,
+            'idconsultor ' => $this->idconsultor ,
         ]);
 
         $query->andFilterWhere(['like', 'fechainicio', $this->fechainicio])
+            ->andFilterWhere(['like', 'idtarea', $this->idtarea])
+            ->andFilterWhere(['like', 'prioridad', $this->prioridad])
+            ->andFilterWhere(['like', 'idconsultor', $this->idconsultor])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'estado', $this->estado]);
 

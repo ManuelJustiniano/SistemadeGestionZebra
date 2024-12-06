@@ -24,7 +24,7 @@ class AdministradorController extends Controller
 
     private $adminService;
     private $cuentaService;
-    private $paisesService;
+    private $libService;
     /**
      * @inheritdoc
      */
@@ -40,11 +40,11 @@ class AdministradorController extends Controller
 
 
 
-    public function __construct($id, $module, InterfaceAdmin $adminService, InterfaceLib $paisesService,  InterfaceCuenta $cuentaService,$config = [])
+    public function __construct($id, $module, InterfaceAdmin $adminService, InterfaceLib $libService,  InterfaceCuenta $cuentaService,$config = [])
     {
         $this->adminService = $adminService;
         $this->cuentaService = $cuentaService;
-        $this->paisesService = $paisesService;
+        $this->libService = $libService;
         parent::__construct($id, $module, $config);
     }
 
@@ -119,7 +119,7 @@ class AdministradorController extends Controller
     public function actionView($id)
     {
         $this->adminService->verificarAccesoAdmin();
-        $model = $this->adminService->obtenerCliente($id);
+        $model = $this->adminService->obtenerUsuario($id);
         return $this->render('cuenta', [
             'model' => $model,
             'render' => 'verusuario',
@@ -157,7 +157,7 @@ class AdministradorController extends Controller
 
     public function actionGetPaises()
     {
-        $paises = $this->paisesService->obtenerPaises();
+        $paises = $this->libService->obtenerPaises();
         return json_encode($paises);
     }
 
