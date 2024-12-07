@@ -147,7 +147,6 @@ if (YII_ENV_DEV) {
         //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
-
 Yii::$container->set('app\components\InterfaceAuth', 'app\components\AuthService');
 Yii::$container->set('app\components\InterfaceCuenta', 'app\components\CuentaService');
 Yii::$container->set('app\components\InterfaceTarea', 'app\components\TareasService');
@@ -162,4 +161,5 @@ Yii::$container->set('app\components\InterfaceAsignacion', 'app\components\Asign
 Yii::$container->set('app\components\InterfaceGestionProyecto', 'app\components\GestionProyectoAService');
 Yii::$container->set('app\components\InterfaceLib', 'app\components\LibService');
 Yii::$container->set('app\components\InterfaceAlert', 'app\components\AlertService');
+Yii::$container->set('app\components\Interface', 'app\components\AlertService');
 return $config;

@@ -11,6 +11,7 @@ interface InterfaceProyectos
     public function listarmisProyectos($params);
     public function nuevoProyecto($queryParams);
     public function obtenerProyecto($id);
+
     public function obtenerProyectoasignado($id);
     public function actualizarProyecto($dates, $id);
     public function cambiarEstadoproyecto($id);

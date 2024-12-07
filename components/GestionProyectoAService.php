@@ -50,11 +50,19 @@ class GestionProyectoAService implements InterfaceGestionProyecto
     {
         return $this->proyectosService->obtenerProyecto($id);
     }
-
-
     public function obtenerProyectoasignado($id)
     {
         return $this->proyectosService->obtenerProyectoasignado($id);
+    }
+
+    public function aceptarTarea($id)
+    {
+        return $this->asignacionService->aceptarTarea($id);
+    }
+
+    public function confirmarAceptacion($idTarea, $estadoTarea, $comentarioTarea)
+    {
+        return $this->asignacionService->confirmarAceptacion($idTarea, $estadoTarea, $comentarioTarea);
     }
     public function prepararModeloAsignacion($idproyecto)
     {

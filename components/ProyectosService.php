@@ -2,6 +2,7 @@
 namespace app\components;
 
 use app\models\Asignacion;
+use app\models\AsignacionSearch;
 use app\models\Proyectos;
 use app\models\ProyectosSearch;
 use app\models\Usuarios;
@@ -222,7 +223,6 @@ class ProyectosService implements InterfaceProyectos
     {
 
         $consultorId = Yii::$app->session->get('user')['id'];
-
         $asignaciones = Asignacion::find()
             ->select(['idproyecto'])
             ->where(['idconsultor' => $consultorId])
@@ -243,6 +243,9 @@ class ProyectosService implements InterfaceProyectos
     }
 
 
+
+
+
     /**
      * @throws NotFoundHttpException
      */
@@ -254,5 +257,8 @@ class ProyectosService implements InterfaceProyectos
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
+
 
 }

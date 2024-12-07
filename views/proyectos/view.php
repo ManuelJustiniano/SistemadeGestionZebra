@@ -22,12 +22,17 @@ $this->title = 'PROYECTO';
 
 
         </div>
+            <?php if ($user->tipo_usuario == '1' || $user->tipo_usuario == '2') : ?>
+
         <div class="col-12 col-sm-6">
             <div class="app-card-footer p-4 mt-auto">
                 <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/update?id='.$model['idproyecto']]) ?>">Editar Proyecto</a>
                 <a class="btn app-btn-secondary" href="<?= Url::to(['proyectos/asignaciondetareas', 'idproyecto' => $model['idproyecto']]) ?>">Asignar tareas y consultores</a>
             </div>
         </div>
+
+    <?php endIf; ?>
+
         </div>
         <div class="col-12">
             <div class="row">

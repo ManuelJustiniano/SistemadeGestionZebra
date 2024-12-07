@@ -120,6 +120,43 @@ class AsignacionService implements InterfaceAsignacion
         return $this->findModel($asignacionId);
     }
 
+
+    public function aceptarTarea($id)
+    {
+        $model = $this->findModel($id); // Busca el modelo por ID
+        $model->estado = 2; // Cambia el estado a 2
+        if ($model->save()) {
+            return [
+                'success' => true,
+                'message' => 'Tarea aceptada correctamente, en espera de confirmacion al admin.',
+            ];
+        } else {
+            return [
+                'success' => false,
+                'message' => 'No se pudo aceptar la tarea.',
+            ];
+        }
+    }
+
+
+    public function confirmarAceptacion($idTarea, $estadoTarea, $comentarioTarea)
+    {
+        $model = $this->findModel($idTarea);
+        $model->aceptacionadmin = $estadoTarea;
+        $model->comentario = $comentarioTarea;
+        if ($model->save()) {
+            return [
+                'success' => true,
+                'message' => 'Tarea gestionada correctamente.',
+            ];
+        }
+        return [
+            'success' => false,
+            'message' => 'No se pudo gestionar la tarea.',
+        ];
+    }
+
+
     /**
      * @throws NotFoundHttpException
      */

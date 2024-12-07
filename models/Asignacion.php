@@ -30,7 +30,7 @@ class Asignacion extends \yii\db\ActiveRecord
     {
         return [
             [['idtarea', 'idconsultor', 'prioridad' ], 'required'],
-            [['descripcion', 'idproyecto'], 'safe'],
+            [['descripcion', 'idproyecto', 'aceptacionadmin'], 'safe'],
             //[['idconsultor', 'idtarea'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea'], 'message' => 'Este consultor ya tiene asignada esta tarea.'],
             [['idconsultor', 'idtarea', 'idproyecto'], 'unique', 'targetAttribute' => ['idconsultor', 'idtarea', 'idproyecto'], 'filter' => function ($query) {
                 if (!$this->isNewRecord) {
@@ -52,6 +52,7 @@ class Asignacion extends \yii\db\ActiveRecord
         return [
             'idasignartarea' => 'ID',
             'idtarea' => 'Tarea para Asignar',
+            'aceptacionadmin' => 'Estado de la tarea',
             'descripcion' => 'Descripcion u Objetivo',
             'fechainicio' => 'Fecha inicial',
             'fechafin' => 'Fecha Final',

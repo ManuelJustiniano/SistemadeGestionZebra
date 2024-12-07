@@ -20,6 +20,7 @@ use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 class ProyectosController extends Controller
@@ -96,6 +97,10 @@ class ProyectosController extends Controller
     }
 
 
+
+
+
+
     public function actionAsignaciondetareas($idproyecto)
     {
 
@@ -154,6 +159,31 @@ class ProyectosController extends Controller
             'render' => 'update',
 
         ]);
+    }
+
+    public function actionAceptarTarea($id)
+    {
+        $resultado = $this->gestionProyectAService->aceptarTarea($id);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'success' => $resultado['success'], // Asegúrate que el índice es 'success' y no 'exito'
+            'message' => $resultado['message'], // Igual para 'message'
+        ];
+    }
+
+
+    public function actionConfirmarAceptacion($id)  {
+
+        $idTarea = Yii::$app->request->post('idTarea');
+        $estadoTarea = Yii::$app->request->post('estadoTarea');
+        $comentarioTarea = Yii::$app->request->post('comentarioTarea');
+        $resultado = $this->gestionProyectAService->confirmarAceptacion($idTarea, $estadoTarea, $comentarioTarea);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'success' => $resultado['success'],
+            'message' => $resultado['message'],
+        ];
     }
 
     public function actionEstado($id)
