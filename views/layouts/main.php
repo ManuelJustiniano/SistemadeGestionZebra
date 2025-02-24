@@ -8,8 +8,6 @@ use yii\bootstrap\NavBar;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Menu;
-AppAsset::register($this);
-//\app\assets_b\AssetAdmin::register($this);
 $conf = \app\models\Configuracion::find()->one();
 ?>
 <?php $this->beginPage() ?>

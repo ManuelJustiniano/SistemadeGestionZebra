@@ -32,7 +32,7 @@ use yii\web\JsExpression;
  * @property LatLng[] path The ordered sequence of coordinates of the Polyline. This path may be specified using either
  * a simple array of LatLngs, or an MVCArray of LatLngs. Note that if you pass a simple array, it will be converted to
  * an MVCArray Inserting or removing LatLngs in the MVCArray will automatically update the polyline on the map.
- * @propperty string strokeColor The stroke color. All CSS3 colors are supported except for extended named colors.
+ * @property string strokeColor The stroke color. All CSS3 colors are supported except for extended named colors.
  * @property int strokeOpacity The stroke opacity between 0.0 and 1.0
  * @property int strokeWeight The stroke width in pixels.
  * @property boolean visible Whether this polygon is visible on the map. Defaults to true.
@@ -103,10 +103,10 @@ class PolylineOptions extends ObjectAbstract
      *
      * @param LatLng[] $coords
      */
-    public function setPath($coords)
+/*    public function setPath($coords)
     {
         foreach ($coords as $coord) {
             $this->addCoord($coord);
         }
-    }
+    }*/
 } 

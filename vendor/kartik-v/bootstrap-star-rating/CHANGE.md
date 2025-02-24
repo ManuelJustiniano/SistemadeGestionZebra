@@ -1,10 +1,112 @@
 Change Log: `bootstrap-star-rating`
 ===================================
 
+## Version 4.1.2
+
+**Date:** 20-Sep-2021
+
+- Simplify NPM module handling.
+
+## Version 4.1.1
+
+**Date:** 11-Sep-2021
+
+- (enh #215): Correct NPM module handling.
+
+## Version 4.1.0
+
+**Date:** 25-Jul-2021
+
+- (bug #213): Correct `mousenter` event to `mouseenter`.
+- (enh #212): Enhance caption badge styles.
+- (enh #211): Correct keyboard arrow keys behavior for RTL oriented inputs.
+- (enh #210): Revamp themes - set default theme to Krajee SVG.
+
+## Version 4.0.9
+
+**Date:** 21-May-2021
+
+- Correct `minThreshold` default value.
+
+## Version 4.0.8
+
+**Date:** 21-May-2021
+
+- (enh #209): Enhancements to support BS 5.x (and 4.x/3.x).
+
+## Version 4.0.7
+
+**Date:** 20-May-2021
+
+- (enh #208): Corrected positioning of the base input on which the rating is triggered.
+- (enh #205): Add Dutch Translations.
+- (enh #200): Activate Open Collective.
+- (enh #199): Add Greek Translations.
+- (enh #145): Minimum value threshold validation.
+    - New property `minThreshold` which allows a star rated with minimum value always. The initial value
+      of the rating is set to `minThreshold` if it has a value undefined or a value less than `minThreshold`
+    - The `minThreshold` value must be a value between the `min` and `max` values 
+    - If `minThreshold` is set to less than `min` the plugin will default `minThreshold` to the `min` value
+    - If `minThreshold` is set to greater than `max` the plugin will default `minThreshold` to the `max` value
+- (enh #129): Enhance accessibility & make the  stars keyboard focusable.
+    - New property `keyboardEnabled` - defaults to `true`
+        - allow use of `tab` keyboard button to navigate to the rating
+        - allow use of arrow `right` and arrow `left` keyboard buttons to change the rating value
+    - New property `mouseEnabled` - defaults to `true` 
+        - when set to false - the mouse cannot be used to change the ratings
+- (enh #111): Add titles to individual star elements.
+  - New config property `starTitles` (can be set as object or function) - will set the title for each star
+- (enh #110): Hover events reworked. New events added `rating:mouseenter` and `rating:mouseleave`
+```
+$('#ratingInput').on('rating:mouseenter rating:mouseleave', function(e, index, status, $star) {
+    console.log(index); // the index number of the star where the event was triggered
+    console.log(status); // whether the mouse event was triggered on `empty-star` or `filled-star`
+    console.log($star); // the current star jquery object where event was triggered 
+    console.log($star.attr('title')); // can get properties of the star object
+}); 
+```  
+
+## Version 4.0.6
+
+**Date:** 25-May-2019
+
+- (enh #195): Update Bootstrap dependency.
+- (enh #194, enh #180): Allow StarCaptionClasses CSS classes to also be set by Percentage width.
+- (enh #190): Update German Translations.
+- Implement stale bot.
+
+## Version 4.0.5
+
+**Date:** 04-Oct-2018
+
+- (enh #189): Add Bengali Translations.
+- (enh #188): Allow `showCaption` when `displayOnly` is `true`.
+
+## Version 4.0.4
+
+**Date:** 15-Sep-2018
+
+- Enhancements to support Bootstrap v4.x.
+- Better styling of stars for the 5 rating sizes and maintain consistency across themes.
+- (enh #187): Add Kazakh translations.
+- (enh #184): Correct rating-input style to keep it hidden - yet trigger required validation.
+- (enh #182): New Krajee Font Awesome 5.x `fas` theme.
+- (bug #177, enh #179): New property `showCaptionAsTitle`
+    - Useful for caption to be displayed as title for readonly ratings. 
+
+## Version 4.0.3
+
+**Date:** 03-Nov-2017
+
+- (bug #173): Correct `rating:change` event.
+- (enh #171): Rename events to start with `rating:` instead of `rating`.
+- (enh #170): Enhancements to support Bootstrap v4.x framework.
+
 ## Version 4.0.2
 
 **Date:** 27-Aug-2017
 
+- (enh #170): Enhancements to support Bootstrap v4.x framework.
 - Chronological sorting of issues and enhancements in the CHANGE log.
 - (enh #164): Add Turkish Translations.
 - (enh #163): Add Korean Translations.

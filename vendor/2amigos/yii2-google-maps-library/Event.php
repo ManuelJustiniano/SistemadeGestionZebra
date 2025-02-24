@@ -138,4 +138,4 @@ class Event extends BaseObject
                 return $this->getEventJs($name);
         }
     }
-} 
+}

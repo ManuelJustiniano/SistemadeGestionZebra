@@ -2,6 +2,7 @@
 
 namespace Zelenin\yii\SemanticUI\assets;
 
+use Yii;
 use yii\web\AssetBundle;
 
 class SemanticUICSSAsset extends AssetBundle

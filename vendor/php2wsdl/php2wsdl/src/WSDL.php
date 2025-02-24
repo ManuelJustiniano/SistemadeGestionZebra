@@ -62,7 +62,8 @@ class WSDL
         'anytype' => 'xsd:anyType',
         'unknown_type' => 'xsd:anyType',
         'mixed' => 'xsd:anyType',
-        'object' => 'xsd:struct'
+        'object' => 'xsd:struct',
+        'base64binary' => 'xsd:base64Binary'
     );
 
     /**
@@ -551,12 +552,34 @@ class WSDL
     /**
      * Dump the WSDL as XML string.
      *
-     * @return string
+     * @param bool $formatOutput Format output
+     * @return mixed
      */
-    public function dump()
+    public function dump($formatOutput = true)
     {
-        $this->dom->formatOutput = true;
+        // Format output
+        if ($formatOutput === true) {
+            $this->dom->formatOutput = true;
+        }
+
         return $this->dom->saveXML();
+    }
+
+    /**
+     * Dump the WSDL as file.
+     *
+     * @param string $filename Filename to dump
+     * @param bool $formatOutput Format output
+     * @return mixed
+     */
+    public function save($filename, $formatOutput = true)
+    {
+        // Format output
+        if ($formatOutput === true) {
+            $this->dom->formatOutput = true;
+        }
+
+        return $this->dom->save($filename);
     }
 
     /**

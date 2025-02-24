@@ -12,6 +12,13 @@
             "homepage": "http://www.krajee.com/"
         }
     ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+
     "support": {
         "issues": "https://github.com/yiisoft/yii2/issues?state=open",
         "forum": "http://www.yiiframework.com/forum/",
@@ -22,8 +29,8 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=5.4.0",
-        "yiisoft/yii2": "2.0.10",
+        "php": ">=8.0.0",
+        "yiisoft/yii2": "2.0.45",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "dmstr/yii2-adminlte-asset" : "2.*",
@@ -45,27 +52,34 @@
         "bigpaulie/yii2-social-share": "dev-master",
         "yii2mod/yii2-sweet-alert": "*",
         "yii2mod/yii2-ion-slider": "*",
-        "linslin/yii2-curl": "*"
-        "himiklab/yii2-recaptcha-widget" : "*"
+        "linslin/yii2-curl": "*",
+        "himiklab/yii2-recaptcha-widget" : "*",
+        "bower-asset/jquery": "^3.6"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0",
         "yiisoft/yii2-faker": "~2.0.0",
-
-        "codeception/base": "^2.2.3",
-        "codeception/verify": "~0.3.1",
-        "codeception/specify": "~0.4.3"
+        "codeception/codeception": "^5.0",
+        "codeception/verify": "^1.1",
+        "codeception/specify": "^1.0"
     },
     "config": {
         "process-timeout": 1800,
         "fxp-asset":{
+            "enabled": false,
             "installer-paths": {
                 "npm-asset-library": "vendor/npm",
                 "bower-asset-library": "vendor/bower"
             }
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     },
+
+
+
     "scripts": {
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"

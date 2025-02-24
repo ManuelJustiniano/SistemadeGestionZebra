@@ -110,6 +110,20 @@ class PHPClass2WSDL
     }
 
     /**
+     *
+     * Set the OperiationBodyStyle style.
+     *
+     * @param array $options
+     * @return PHPClass2WSDL
+     */
+    public function setOperationBodyStyle($options = array())
+    {
+        $this->operationBodyStyle = $options;
+
+        return $this;
+    }
+
+    /**
      * Generate the WSDL DOMDocument.
      *
      * @param boolean $withAnnotation Flag if only the methods with '@soap' annotation should be added.
@@ -124,11 +138,6 @@ class PHPClass2WSDL
         $binding = $this->wsdl->addBinding($qNameClassName . 'Binding', 'tns:' . $qNameClassName . 'Port');
 
         $this->wsdl->addSoapBinding($binding, $this->bindingStyle['style'], $this->bindingStyle['transport']);
-        $this->wsdl->addService(
-            $qNameClassName . 'Service', $qNameClassName . 'Port',
-            'tns:' . $qNameClassName . 'Binding',
-            $this->uri
-        );
 
         $ref = new ReflectionClass($this->class);
         foreach ($ref->getMethods() as $method) {
@@ -136,6 +145,12 @@ class PHPClass2WSDL
                 $this->addMethodToWsdl($method, $port, $binding);
             }
         }
+
+        $this->wsdl->addService(
+            $qNameClassName . 'Service', $qNameClassName . 'Port',
+            'tns:' . $qNameClassName . 'Binding',
+            $this->uri
+        );
     }
 
     /**
@@ -235,7 +250,7 @@ class PHPClass2WSDL
 
         // Add any documentation for the operation.
         $description = $method->getReflectionDocComment()->getFullDescription();
-        if (strlen($description) > 0) {
+        if (isset($description) && (strlen($description) > 0)) {
             $this->wsdl->addDocumentation($portOperation, $description);
         }
 
@@ -257,10 +272,23 @@ class PHPClass2WSDL
     /**
      * Dump the WSDL as XML string.
      *
-     * @return string
+     * @param bool $formatOutput Format output
+     * @return mixed
      */
-    public function dump()
+    public function dump($formatOutput = true)
     {
-        return $this->wsdl->dump();
+        return $this->wsdl->dump($formatOutput);
+    }
+
+    /**
+     * Dump the WSDL as file.
+     *
+     * @param string $filename Filename to dump
+     * @param bool $formatOutput Format output
+     * @return mixed
+     */
+    public function save($filename, $formatOutput = true)
+    {
+        return $this->wsdl->save($filename, $formatOutput);
     }
 }

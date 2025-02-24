@@ -9,6 +9,7 @@ namespace dosamigos\google\maps\services;
 use dosamigos\google\maps\ObjectAbstract;
 use dosamigos\google\maps\OptionsTrait;
 use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
  * StreetViewPov

@@ -1,11 +1,12 @@
 SOAP Server Extension for Yii 2
-==============================
+===============================
 
 Note, PHP SOAP extension is required.
 
-[![Latest Stable Version](https://poser.pugx.org/mongosoft/yii2-soap-server/v/stable.png)](https://packagist.org/packages/mongosoft/yii2-soap-server)
-[![Total Downloads](https://poser.pugx.org/mongosoft/yii2-soap-server/downloads.png)](https://packagist.org/packages/mongosoft/yii2-soap-server)
-[![Build Status](https://travis-ci.org/mongosoft/yii2-soap-server.png)](https://travis-ci.org/mongosoft/yii2-soap-server)
+[![Latest Version](https://img.shields.io/github/release/mohorev/yii2-soap-server?style=flat)](https://github.com/mohorev/yii2-soap-server/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](docs/LICENSE.md)
+[![Build Status](https://github.com/mohorev/yii2-soap-server/actions/workflows/build.yml/badge.svg)](https://github.com/mohorev/yii2-soap-server/actions/workflows/build.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/mongosoft/yii2-soap-server?style=flat)](https://packagist.org/packages/mongosoft/yii2-soap-server)
 
 Installation
 ------------
@@ -59,21 +60,41 @@ class ApiController extends Controller
 }
 ```
 
-In case you want to disable the WSDL mode of SoapServer, you can specify this in the `serviceOptions` parameter as indicated below. You can use this when the request is to complex for the WSDL generator.
+In case you want to disable the WSDL mode of SoapServer, you can specify this in the `serviceOptions` parameter as indicated below.
+You can use this when the request is to complex for the WSDL generator.
 
 ```php
     /**
      * @inheritdoc
      */
-    public function actions() {
+    public function actions()
+    {
         return [
             'index' => [
                 'class' => 'mongosoft\soapserver\Action',
                 'serviceOptions' => [
-                    'disableWsdlMode' => true
+                    'disableWsdlMode' => true,
                 ]
             ]
         ];
     }
 ```
 
+Testing
+-------
+
+``` bash
+$ vendor/bin/codecept run Unit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](docs/CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security related issues, please email instead of using the issue tracker.
+
+## License
+
+The MIT License (MIT). Please see [License File](docs/LICENSE.md) for more information.

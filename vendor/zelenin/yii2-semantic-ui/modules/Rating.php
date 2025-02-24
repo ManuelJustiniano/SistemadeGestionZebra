@@ -2,6 +2,7 @@
 
 namespace Zelenin\yii\SemanticUI\modules;
 
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use Zelenin\yii\SemanticUI\Widget;

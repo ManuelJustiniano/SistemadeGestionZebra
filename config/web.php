@@ -7,16 +7,25 @@ $config = [
     'id' => 'proyecto',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    /*'aliases'=>[
-        '@assets'=> '/assets_b/web',
-        '@images'=> __DIR__.'/../imagen',
-        '@imagesUrl'=>'/imagen',
-    ],*/
+    'aliases' => [
+        '@bower' => '@vendor/bower-asset',
+        '@npm'   => '@vendor/npm-asset',
+    ],
     'components' => [
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
+                    'sourcePath' => '@bower/jquery/dist', // Ruta correcta
+                    'js' => [
+                        YII_ENV_DEV ? 'jquery.js' : 'jquery.min.js',
+                    ],
                     'jsOptions' => ['position' => \yii\web\View::POS_HEAD],
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'sourcePath' => '@bower/bootstrap/dist', // Ruta para Bootstrap si es necesario
+                    'css' => [
+                        'css/bootstrap.min.css',
+                    ],
                 ],
                 'dosamigos\google\maps\MapAsset' => [
                     'options' => [

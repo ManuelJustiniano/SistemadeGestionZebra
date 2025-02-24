@@ -5,6 +5,7 @@ namespace insolita\wgadminlte;
 use yii\bootstrap\ButtonGroup;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 
 /**
  * @deprecated use LteBox or CollapseBox instead

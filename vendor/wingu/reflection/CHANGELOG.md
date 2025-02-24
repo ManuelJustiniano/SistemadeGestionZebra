@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 - 2021-07-13
+
+### Changed
+- PHP 8.0 compatibility
+
+## 1.0.6 - 2021-02-10
+
+### Changed
+- Look into parent classes when reflection doc comments
+
 ## 1.0.5 - 2017-02-15
 
 ### Changed

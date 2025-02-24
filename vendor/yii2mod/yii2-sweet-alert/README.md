@@ -1,5 +1,11 @@
-Alert Widget for Yii 2
-======================
+<p align="center">
+    <a href="https://github.com/yiisoft" target="_blank">
+        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
+    </a>
+    <h1 align="center">Yii2 Alert Widget</h1>
+    <br>
+</p>
+
 Alert widget based on [SweetAlert](http://t4t5.github.io/sweetalert/)
 
 [![Latest Stable Version](https://poser.pugx.org/yii2mod/yii2-sweet-alert/v/stable)](https://packagist.org/packages/yii2mod/yii2-sweet-alert) [![Total Downloads](https://poser.pugx.org/yii2mod/yii2-sweet-alert/downloads)](https://packagist.org/packages/yii2mod/yii2-sweet-alert) [![License](https://poser.pugx.org/yii2mod/yii2-sweet-alert/license)](https://packagist.org/packages/yii2mod/yii2-sweet-alert)
@@ -18,7 +24,7 @@ php composer.phar require --prefer-dist yii2mod/yii2-sweet-alert "*"
 
 or add
 
-```json
+```
 "yii2mod/yii2-sweet-alert": "*"
 ```
 
@@ -85,6 +91,31 @@ To change the theme, you can configure the assetManager array in your applicatio
     ],
 ]
 ```
+
+**You can override the Yii2 default data-confirm popup by the following code:**
+
+The basics are to include the asset, then add this JS:
+
+```js
+/**
+ * Override the default yii confirm dialog. This function is
+ * called by yii when a confirmation is requested.
+ *
+ * @param message the message to display
+ * @param okCallback triggered when confirmation is true
+ * @param cancelCallback callback triggered when cancelled
+ */
+yii.confirm = function (message, okCallback, cancelCallback) {
+    swal({
+        title: message,
+        type: 'warning',
+        showCancelButton: true,
+        closeOnConfirm: true,
+        allowOutsideClick: true
+    }, okCallback);
+};
+```
+
 
 Alert Options 
 ----------------

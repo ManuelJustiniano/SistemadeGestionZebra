@@ -2,8 +2,8 @@
 
 namespace insolita\wgadminlte;
 
-use yii\bootstrap\Widget;
 use yii\helpers\Html;
+use yii\bootstrap\Widget;
 
 /**
  * InfoBox for AdminLte

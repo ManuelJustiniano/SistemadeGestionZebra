@@ -32,9 +32,17 @@ class ReflectionParameter extends \ReflectionParameter
      *
      * @return \Wingu\OctopusCore\Reflection\ReflectionClass
      */
-    public function getClass()
+    public function getClass(): ?ReflectionClass
     {
-        $class = parent::getClass();
+        $class = null;
+        if (PHP_VERSION_ID < 80000) {
+            $class = parent::getClass();
+        } else {
+            $type = parent::getType();
+            if ($type instanceof \ReflectionNamedType && class_exists($type->getName())) {
+                $class = $type;
+            }
+        }
         if ($class !== null) {
             $class = new ReflectionClass($class->getName());
         }
@@ -47,7 +55,7 @@ class ReflectionParameter extends \ReflectionParameter
      *
      * @return \Wingu\OctopusCore\Reflection\ReflectionClass
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass(): ?ReflectionClass
     {
         $class = parent::getDeclaringClass();
         if ($class !== null) {
@@ -62,7 +70,7 @@ class ReflectionParameter extends \ReflectionParameter
      *
      * @return \Wingu\OctopusCore\Reflection\ReflectionMethod|\Wingu\OctopusCore\Reflection\ReflectionFunction
      */
-    public function getDeclaringFunction()
+    public function getDeclaringFunction(): \ReflectionFunctionAbstract
     {
         if (is_array($this->function) === true) {
             return new ReflectionMethod($this->function[0], $this->function[1]);

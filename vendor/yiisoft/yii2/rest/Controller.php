@@ -25,6 +25,8 @@ use yii\web\Response;
  * 4. Rate limiting (see [[RateLimiter]]);
  * 5. Formatting response data (see [[serializeData()]]).
  *
+ * For more details and usage information on Controller, see the [guide article on rest controllers](guide:rest-controllers).
+ *
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
@@ -35,13 +37,13 @@ class Controller extends \yii\web\Controller
      */
     public $serializer = 'yii\rest\Serializer';
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public $enableCsrfValidation = false;
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -67,7 +69,7 @@ class Controller extends \yii\web\Controller
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function afterAction($action, $result)
     {

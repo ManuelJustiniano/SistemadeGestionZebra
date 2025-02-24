@@ -7,8 +7,9 @@
 namespace dosamigos\google\maps\services;
 
 use dosamigos\google\maps\ClientAbstract;
-use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\base\InvalidConfigException;
+use Yii;
 
 /**
  * DirectionsClient
