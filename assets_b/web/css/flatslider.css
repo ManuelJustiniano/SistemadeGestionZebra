@@ -1,0 +1,84 @@
+/*
+body {
+  background-color: #f0f0f0;
+}*/
+
+
+
+.ui-corner-all { border-radius: 0px; }
+
+.ui-widget-content a { color: #222222; }
+
+.ui-widget-content {
+  color: #222222;
+  background-color: #000;
+  background-image: none;
+  border-width: 0;
+}
+
+.ui-widget-header {
+  background-color: white;
+  border-color: white;
+  background-image: none;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+ .ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus { background-image: url('../images/rango.png'); }
+
+.ui-slider {
+  position: relative;
+  text-align: left;
+}
+
+.ui-slider-horizontal { height: 0.4rem; }
+
+.ui-slider-handle {
+  cursor: pointer;
+  position: absolute;
+  z-index: 2;
+  background-color: #fff;
+  background-image: url('../images/rango.png');
+  /*border-color: #fff;*/
+  /*border-radius: 20px;*/
+  height: 1rem;
+  top: -0.3rem;
+  width: 1rem;
+}
+
+.min,
+.max,
+ .min_value,
+.max_value,
+.value {
+  margin-top: 0.3em;
+  font-size: 1.125em;
+  white-space: nowrap;
+  -webkit-transition-duration: 0.35s;
+  -moz-transition-duration: 0.35s;
+  -o-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+  -webkit-transition-property: opacity;
+  -moz-transition-property: opacity;
+  -o-transition-property: opacity;
+  transition-property: opacity;
+}
+
+.min,
+.max {
+  font-size: 0.7rem;
+  color: #c4c4c4;
+}
+
+.min { float: left; }
+
+.max { float: right; }
+
+.min_value,
+.max_value,
+.value { position: absolute; }
+
+:after { clear: both; }

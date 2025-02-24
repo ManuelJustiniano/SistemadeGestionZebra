@@ -1,0 +1,174 @@
+@media screen and (max-width:320px) {}
+@media screen and (min-width:321px) and (max-width:639px) {}
+@media screen and (min-width:640px) and (max-width:959px) {}
+@media screen and (min-width:960px) and (max-width:1279px) {}
+@media screen and (min-width:1280px) and (max-width:1599px) {}
+@media screen and (min-width:1600px) {}
+@media screen and (min-width:1920px) {}
+
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+  /* Styles */
+  .search-form input[type="text"]{
+    width: 50%;
+  }
+  .banner{
+    margin-top: 10px;
+  }
+  .menu{
+    position: relative;
+  }
+  #widthbanner{
+    position: relative;
+  }
+  #encabezado{
+    position: relative; 
+  }
+  #sociales{
+    position: relative;
+    text-align: left;
+  }
+
+  .first1 a{
+    padding-left: 15px !important; 
+  }
+  .vcenter-top{
+    margin-top: 0px;
+  }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-width : 360px) and (max-width : 480px){
+  /* Styles */
+ 
+}
+@media only screen and (min-width : 480px) and (max-width : 768px){
+  /* Styles */
+  
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+  /* Styles */
+  
+
+}
+
+@media screen and (max-width : 1024px) {
+  /* Styles */
+   
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1224px) {
+  /* Styles */
+  .precios p.text-ailerol14 .margin-right15 {
+    margin-right: 5px;
+   } 
+  .precios p.text-ailerol14 {
+    font-size: 12px;
+  }
+  .margin-left15{
+    margin-left: 0px;
+  }
+  .btn-listadeseos{
+    padding: 15px 5px;
+  }
+  .add-carrito span{
+    padding: 5px;
+  }
+  .precios2 p{
+    font-size: 12px;
+  }
+  .precios2 p > img.margin-right15{
+    margin-right: 2px;
+  }
+  .btn-descarga{
+    padding: 15px;
+  }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+  /* Styles */
+}
+
+/* iPhone 4+ ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+  /* Styles */
+}
+
+/* 20%%%%%%*/
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.col-xs-15 {
+    width: 20%;
+    float: left;
+}
+
+/*14,28%%%%*/
+.col-xs-02,
+.col-sm-02,
+.col-md-02,
+.col-lg-02 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.col-xs-02 {
+    width: 14.28%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+  .col-sm-15 {
+        width: 20%;
+        float: left;
+    }
+    .col-sm-3{
+      width: 20%;
+        float: left;  
+    }
+
+    .col-sm-02 {
+        width: 14.28%;
+        float: left;
+    }
+    .col-sm-2{
+        width: 14.28%;
+        float: left;    
+    }
+
+}
+@media (min-width: 992px) {
+    .col-md-15 {
+        width: 20%;
+        float: left;
+    }
+    
+}
+@media (min-width: 1200px) {
+    .col-lg-15 {
+        width: 20%;
+        float: left;
+    }
+    .col-lg-02 {
+        width: 14.28%;
+        float: left;
+    }
+}
+
+@media (min-width: 1500px) {
+  
+}

@@ -1,0 +1,57 @@
+.u-vmenu ul li {
+	width: auto;
+	list-style: none;
+}
+.u-vmenu ul ul{
+	display: none;
+}
+.u-vmenu > ul > li {
+	/*background: url(../zakladka.png) left top no-repeat;*/
+	background-size: 100% auto;
+	width: auto;
+}
+.u-vmenu ul li a {
+	height: 42px;
+	line-height: 42px;
+	display: block;
+	font-size: 12px;
+	color: #000;
+	text-decoration: none;
+	outline: none;
+}
+.u-vmenu > ul > li > a {
+	height: 42px;
+	line-height: 42px;
+	 border-bottom: 1px solid #e2dfda;
+	/*padding-left: 35px;*/
+}
+.u-vmenu > ul > li > ul > li > a {
+	/*padding-left: 70px;*/
+	 border-bottom: 1px solid #e2dfda;
+	 color: #858585;
+	 background: url(../arrow_left_gray.png) right center no-repeat;
+}
+.u-vmenu > ul > li > ul > li > a:hover,
+.u-vmenu > ul > li > ul > li > a:focus,
+.u-vmenu > ul > li > ul > li > a.active {
+	color: #000;
+	background: url(../arrow_right_gray.png) right center no-repeat;
+}
+
+.u-vmenu > ul > li > ul > li.active > a {
+	color: #000;
+	background: url(../arrow_right_gray.png) right center no-repeat;
+}
+
+.u-vmenu > ul > li > ul > li > ul > li > a {
+	padding-left: 100px;
+}
+.u-vmenu > ul > li > ul > li > ul > li > ul > li > a {
+	padding-left: 135px;
+}
+.u-vmenu ul li a[data-option='on']{
+	background: url(../on.png) right center no-repeat;
+}
+.u-vmenu ul li a[data-option='off'] {
+	background: url(../off.png) right center no-repeat;
+}
