@@ -13418,7 +13418,7 @@ button.close:focus {
 .form-control {
     padding-top: 1.7rem;
     padding-bottom: 1.7rem;
-    height: 3rem;
+    height: 4rem;
     border-color: #e7e9ed;
     color: #5d6778
 }
@@ -14588,9 +14588,9 @@ button.close:focus {
 
 .app-auth-wrapper .app-auth-body {
 
-    width: 360px;
+    width: 390px;
     background: white;
-    padding: 23px;
+    padding: 40px 25PX;
     border-top: 0;
     color: #666;
     margin: 7% auto;
@@ -14779,7 +14779,7 @@ th a, td, th {
 }
 
 .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 

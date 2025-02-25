@@ -9,7 +9,7 @@
 namespace insolita\wgadminlte;
 
 
-use yii\base\Object;
+use yii\base\BaseObject;
 
 /**You can extend this object with any other property, getters and setters**/
 class TimelineItem extends Object

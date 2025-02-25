@@ -6,21 +6,20 @@
 
 use yii\helpers\Html;
 
-//\app\assets_b\AssetAdmin::register($this);
+\app\assets_b\AssetAdmin::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="">
+<body class="hold-transition login-page">
 <?php $this->beginBody() ?>
-
 <?= $content ?>
 
 <?php $this->endBody() ?>

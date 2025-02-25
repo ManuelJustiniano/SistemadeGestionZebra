@@ -120,37 +120,10 @@ $this->registerJs($format, \yii\web\View::POS_HEAD);
             </div>
         </div>
 <?php
-$script = <<<JS
-    function action(url)
-    {
-    $.get(url, function(data) {
-      $.pjax.reload({container:"#table"});
-    });
-    }
-    
-       
-    function cambiarEstadoUsuario(url) {
-    if (confirm('¿Está seguro de que desea cambiar el estado del usuario?')) {
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            success: function(response) {
-                if (response.exito) {
-                    alert(response.mensaje);
-                    location.reload(); 
-                } else {
-                    alert('Error: ' + response.mensaje);
-                }
-            },
-            error: function() {
-                alert('Hubo un problema al cambiar el estado del usuario.');
-            }
-        });
-    } else {
-        console.log('Cambio de estado cancelado por el usuario.');
-    }
-}
 
-JS;
-$this->registerJs($script, \yii\web\View::POS_HEAD);
+
+
+$this->registerJsFile(
+    '@web/assets_b/js/estadosc.js',
+    ['depends' => [\yii\web\JqueryAsset::class]]
+);

@@ -2,7 +2,7 @@
 namespace app\components;
 use Yii;
 
-class AuthService implements InterfaceAuth
+class   AuthService implements InterfaceAuth
 {
     public function login($model)
     {

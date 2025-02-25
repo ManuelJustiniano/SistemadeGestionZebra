@@ -9,13 +9,24 @@ $this->params['breadcrumbs'][] = $this->title;
 AppAsset::register($this);
 ?>
 
+
+
 <div class="container">
     <div class="row g-0 app-auth-wrapper">
         <div class="col-12 auth-main-col text-center p-5">
             <div class="d-flex flex-column align-content-end">
                 <div class="app-auth-body mx-auto">
+
+                   <img class="logo-icon me-2" src="<?= Url::to(['assets_b/images/logozebra.jpg']) ?>" alt="logo">
+
+
+
                     <h2 class="auth-heading text-center mb-5">INICIAR SESION</h2>
                     <div class="auth-form-container text-start">
+
+
+
+
 
 
 

@@ -135,6 +135,7 @@ $items = $lista['items'] ?? [];
 
         <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
             <?php
+
             echo Menu::widget([
                 'options' => ['class' => 'app-menu list-unstyled accordion', 'id' => 'menu-accordion'],
                 'activeCssClass' => 'active',
@@ -144,6 +145,7 @@ $items = $lista['items'] ?? [];
                 'submenuTemplate' => "\n<ul  role=\"menu\" class=\"mega-menu\" id=\"menu\" >\n{items}\n</ul>\n",
             ]);
             ?>
+
     </div><!--//sidepanel-inner-->
 </div><!--//app-sidepanel-->
 </header><!--//app-header-->
